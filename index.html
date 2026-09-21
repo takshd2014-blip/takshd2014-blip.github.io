@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>FunBox ⚡</title>
+  <link rel="icon" type="image/png" href="22.png">
 
   <style>
     * {
@@ -29,9 +31,19 @@
       text-align: center;
     }
 
+    .logo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
     h1 {
       font-size: 52px;
       margin-bottom: 8px;
+      letter-spacing: -2px;
     }
 
     .subtitle {
@@ -41,12 +53,12 @@
     }
 
     .box {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 24px;
       padding: 30px;
       backdrop-filter: blur(15px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
     }
 
     input {
@@ -75,6 +87,8 @@
       font-size: 15px;
       font-weight: bold;
       transition: 0.2s;
+      background: #ffffff;
+      color: #111827;
     }
 
     button:hover {
@@ -82,12 +96,18 @@
       opacity: 0.9;
     }
 
+    .surprise {
+      grid-column: 1 / -1;
+      background: linear-gradient(90deg, #7c3aed, #ec4899);
+      color: white;
+    }
+
     .result {
       margin-top: 25px;
       min-height: 90px;
       padding: 20px;
       border-radius: 15px;
-      background: rgba(0,0,0,0.25);
+      background: rgba(0, 0, 0, 0.25);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -118,7 +138,7 @@
     }
 
     .recent-item {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       padding: 10px;
       border-radius: 10px;
       margin-top: 7px;
@@ -141,8 +161,17 @@
         grid-template-columns: 1fr;
       }
 
+      .surprise {
+        grid-column: auto;
+      }
+
       .box {
         padding: 20px;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
       }
     }
   </style>
@@ -152,7 +181,10 @@
 
   <div class="container">
 
-    <h1>⚡ FunBox</h1>
+    <img src="22.png" alt="FunBox Logo" class="logo">
+
+    <h1>FunBox ⚡</h1>
+
     <p class="subtitle">
       Bored ho? Ek button dabao. Kuch interesting mil jayega.
     </p>
@@ -166,11 +198,27 @@
       >
 
       <div class="buttons">
-        <button onclick="generate('excuse')">📝 Creative Excuse</button>
-        <button onclick="generate('future')">🔮 Future Prediction</button>
-        <button onclick="generate('fact')">🧠 Interesting Fact</button>
-        <button onclick="generate('roast')">😈 Roast Me</button>
-        <button onclick="surprise()">✨ Surprise Me</button>
+
+        <button onclick="generate('excuse')">
+          📝 Creative Excuse
+        </button>
+
+        <button onclick="generate('future')">
+          🔮 Future Prediction
+        </button>
+
+        <button onclick="generate('fact')">
+          🧠 Interesting Fact
+        </button>
+
+        <button onclick="generate('roast')">
+          😈 Roast Me
+        </button>
+
+        <button class="surprise" onclick="surprise()">
+          ✨ Surprise Me
+        </button>
+
       </div>
 
       <div class="result" id="result">
@@ -219,7 +267,7 @@
         "Tum kuch naya seekhoge aur pehle sochoge: ye pehle kyun nahi seekha?",
         "Tumhari ek chhoti si decision future mein kaafi useful ho sakti hai.",
         "Kisi random moment mein tumhe ek surprisingly smart idea aayega.",
-        "Tumhara next achievement shayad utna dramatic na ho, par kaafi satisfying hoga.",
+        "Tumhara next achievement kaafi satisfying ho sakta hai.",
         "Jaldi hi tum kisi problem ka simple solution discover karoge."
       ],
 
@@ -231,7 +279,7 @@
         "Space mein sound travel nahi karta kyunki wahan air nahi hoti.",
         "Koalas ke fingerprints humans ke fingerprints se surprisingly similar hote hain.",
         "Lightning ka temperature surface of the Sun se bhi zyada ho sakta hai.",
-        "A day on Venus is longer than a Venus year."
+        "Venus par ek day uske ek year se bhi lamba hota hai."
       ],
 
       roast: [
