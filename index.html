@@ -354,6 +354,271 @@
 
 <script>
 
+
+const MAKER_NAMES = ["TAKSH", "DHRUVI", "RUPAL", "CHERRY"];
+
+const FREE_LIMIT = 3;
+
+const ACCESS_TIME = 24 * 60 * 60 * 1000;
+
+let unlimitedUntil =
+  Number(localStorage.getItem("funboxUnlimitedUntil")) || 0;
+
+let freeUses =
+  Number(localStorage.getItem("funboxFreeUses")) || 0;
+
+let makerJokeIndex =
+  Number(localStorage.getItem("funboxMakerJokeIndex")) || 0;
+
+
+// Aaj ka random Maker Name
+function getDailyMaker() {
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  const savedDate =
+    localStorage.getItem("funboxMakerDate");
+
+  const savedName =
+    localStorage.getItem("funboxMakerName");
+
+  // Agar aaj ka name already selected hai
+  if (savedDate === today && savedName) {
+    return savedName;
+  }
+
+  // Naya random name
+  const randomName =
+    MAKER_NAMES[
+      Math.floor(Math.random() * MAKER_NAMES.length)
+    ];
+
+  localStorage.setItem("funboxMakerDate", today);
+  localStorage.setItem("funboxMakerName", randomName);
+
+  // Naye din jokes phir se start
+  localStorage.setItem("funboxMakerJokeIndex", "0");
+
+  makerJokeIndex = 0;
+
+  return randomName;
+}
+
+
+const todayMaker = getDailyMaker();
+
+
+// Check unlimited access
+function hasUnlimitedAccess() {
+
+  return Date.now() < unlimitedUntil;
+
+}
+
+
+// Access status update
+function updateAccessStatus() {
+
+  const status =
+    document.getElementById("accessStatus");
+
+  if (!status) return;
+
+  if (hasUnlimitedAccess()) {
+
+    status.textContent =
+      "♾️ Unlimited access active hai!";
+
+  } else {
+
+    const remaining =
+      Math.max(0, FREE_LIMIT - freeUses);
+
+    status.textContent =
+      `🎟️ Free uses remaining: ${remaining}`;
+  }
+}
+
+
+// Generator access check
+function checkAccess() {
+
+  if (hasUnlimitedAccess()) {
+    return true;
+  }
+
+  if (freeUses < FREE_LIMIT) {
+
+    freeUses++;
+
+    localStorage.setItem(
+      "funboxFreeUses",
+      freeUses
+    );
+
+    updateAccessStatus();
+
+    return true;
+  }
+
+  const message =
+    document.getElementById("redeemMessage");
+
+  if (message) {
+
+    message.textContent =
+      "🔒 Free access khatam! Aaj ka redeem code enter karo.";
+  }
+
+  return false;
+}
+
+
+// Redeem code
+function redeemCode() {
+
+  const input =
+    document
+      .getElementById("redeemInput")
+      .value
+      .trim()
+      .toUpperCase();
+
+  const message =
+    document.getElementById("redeemMessage");
+
+  if (input === todayMaker) {
+
+    unlimitedUntil =
+      Date.now() + ACCESS_TIME;
+
+    localStorage.setItem(
+      "funboxUnlimitedUntil",
+      unlimitedUntil
+    );
+
+    makerJokeIndex = 0;
+
+    localStorage.setItem(
+      "funboxMakerJokeIndex",
+      "0"
+    );
+
+    message.textContent =
+      "✅ Correct! 24 hours unlimited access unlocked.";
+
+    document.getElementById(
+      "makerJokeButton"
+    ).style.display = "inline-block";
+
+    updateAccessStatus();
+
+  } else {
+
+    message.textContent =
+      "❌ Wrong code! Aaj ka code nahi hai.";
+  }
+}
+
+
+// Maker jokes
+const makerJokes = {
+
+  TAKSH: [
+    "T se Talent... aur homework ke time talent gayab. 😭",
+    "T se Time bhi hota hai, lekin Taksh ke paas homework ke liye kabhi nahi hota.",
+    "T se Tension bhi hoti hai, especially jab teacher bole: homework dikhao.",
+    "T se Topper bol sakte the... par result ne mana kar diya.",
+    "T se Taksh. Mystery solved! 😂"
+  ],
+
+  DHRUVI: [
+    "D se Dimaag hota hai, lekin kabhi-kabhi Dhr uvi ka loading pe hota hai. 😂",
+    "D se Drama bhi hota hai, aur excuses mein full HD drama.",
+    "D se Deadline hoti hai, par deadline ko suggestion samjho.",
+    "D se Decision hota hai: homework karna hai... kal.",
+    "D se Dhruvi. Ek letter aur reveal! 😎",
+    "D se naam shuru hua, ab mystery almost khatam."
+  ],
+
+  RUPAL: [
+    "R se Rupal, aur R se Result... dono ka connection suspense hai. 😂",
+    "R se Routine hota hai, par Rupal ka routine roz update hota hai.",
+    "R se Rocket hota hai, par homework abhi launch nahi hua.",
+    "R se Reason hota hai, aur Rupal ke paas excuses ke reasons ready hain.",
+    "R se Rupal. Mystery complete! 😎"
+  ],
+
+  CHERRY: [
+    "C se Cherry, aur C se Confidence... dono full power. 😂",
+    "C se Clever hota hai, lekin common sense kabhi-kabhi vacation pe.",
+    "C se Class bhi hoti hai, jahan homework ka sawaal dangerous hota hai.",
+    "C se Calculator, par simple maths mein bhi investigation.",
+    "C se Chill bhi hota hai, jo homework ke time priority ban jata hai.",
+    "C se Cherry. Mystery complete! 😎"
+  ]
+
+};
+
+
+// Maker Joke button
+function makerJoke() {
+
+  if (!hasUnlimitedAccess()) {
+
+    document.getElementById(
+      "makerJokeResult"
+    ).style.display = "block";
+
+    document.getElementById(
+      "makerJokeResult"
+    ).textContent =
+      "⏰ 24-hour access expire ho gaya.";
+
+    return;
+  }
+
+  const jokes = makerJokes[todayMaker];
+
+  const result =
+    document.getElementById("makerJokeResult");
+
+  result.style.display = "flex";
+
+  if (makerJokeIndex >= jokes.length) {
+
+    result.innerHTML =
+      `🎉 Full Maker Name: <strong>${todayMaker}</strong>`;
+
+    return;
+  }
+
+  const letter =
+    todayMaker[makerJokeIndex];
+
+  result.innerHTML = `
+    <div>
+      <strong>😂 Joke ${makerJokeIndex + 1}</strong>
+      <br><br>
+      ${jokes[makerJokeIndex]}
+      <br><br>
+      🔤 Letter ${makerJokeIndex + 1}:
+      <strong>${letter}</strong>
+    </div>
+  `;
+
+  makerJokeIndex++;
+
+  localStorage.setItem(
+    "funboxMakerJokeIndex",
+    makerJokeIndex
+  );
+}
+
+
+updateAccessStatus();
+
+
 const data = {
 
   excuse: [
@@ -445,6 +710,10 @@ function showResult(text) {
 
 function generate(type) {
 
+  if (!checkAccess()) {
+    return;
+  }
+
   const text = getRandom(type);
 
   showResult(text);
@@ -498,7 +767,9 @@ function getRhyme(name) {
 
 
 function generateShayari() {
-
+if (!checkAccess()) {
+  return;
+}
   const input = document.getElementById("nameInput").value.trim();
 
   if (!input) {
