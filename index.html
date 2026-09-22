@@ -178,7 +178,42 @@
     <h1>⚡ FunBox</h1>
     <p class="tagline">Because boring is overrated.</p>
   </header>
+<section class="glass">
 
+  <h2>🔐 Daily Access</h2>
+
+  <p id="accessStatus">
+    🎟️ Limited access active hai.
+  </p>
+
+  <input
+    type="text"
+    id="redeemInput"
+    placeholder="Enter today's redeem code"
+    autocomplete="off"
+  >
+
+  <button onclick="redeemCode()">
+    🔓 Redeem Code
+  </button>
+
+  <p id="redeemMessage" style="margin-top:12px;"></p>
+
+  <button
+    onclick="makerJoke()"
+    id="makerJokeButton"
+    style="display:none; margin-top:12px;"
+  >
+    😂 Get Maker Joke
+  </button>
+
+  <div
+    id="makerJokeResult"
+    class="result"
+    style="display:none;"
+  ></div>
+
+</section>
 
   <section class="glass">
 
