@@ -1,2150 +1,2982 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>FunBox — Boredom? Not Today.</title>
-  <meta name="description" content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer and more.">
-  <meta name="theme-color" content="#09090f">
-
-  <link rel="icon" href="222.png">
-
-  <!-- =========================
-       GOOGLE ANALYTICS 4
-  ========================== -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag("js", new Date());
-
-    gtag("config", "G-JB6ZCD4C07");
-  </script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top left, #24133c 0%, transparent 35%),
-        radial-gradient(circle at bottom right, #111b42 0%, transparent 35%),
-        #07070b;
-      color: #fff;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .container {
-      width: min(1100px, 92%);
-      margin: auto;
-    }
-
-    /* =========================
-       HEADER
-    ========================== */
-
-    header {
-      text-align: center;
-      padding: 35px 0 20px;
-    }
-
-    .logo-img {
-      width: min(520px, 90%);
-      max-height: 220px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 10px;
-      filter: drop-shadow(0 0 20px rgba(170, 80, 255, .25));
-    }
-
-    .tagline {
-      color: #aaa;
-      font-size: 14px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    /* =========================
-       GLASS CARD
-    ========================== */
-
-    .card {
-      background: rgba(255, 255, 255, .055);
-      border: 1px solid rgba(255, 255, 255, .10);
-      border-radius: 22px;
-      padding: 22px;
-      margin: 18px 0;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 20px 50px rgba(0,0,0,.20);
-    }
-
-    .card h2 {
-      margin-bottom: 8px;
-      font-size: 22px;
-    }
-
-    .muted {
-      color: #999;
-      font-size: 14px;
-    }
-
-    /* =========================
-       PROFILE
-    ========================== */
-
-    .profile {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 12px;
-    }
-
-    .stat {
-      background: rgba(255,255,255,.05);
-      border-radius: 16px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 23px;
-      margin-bottom: 4px;
-    }
-
-    .stat span {
-      color: #999;
-      font-size: 12px;
-    }
-
-    /* =========================
-       LEVEL SELECTOR
-    ========================== */
-
-    .level-card {
-      margin-top: 20px;
-    }
-
-    .level-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .level-title {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .level-current {
-      padding: 7px 13px;
-      border-radius: 999px;
-      background: rgba(168, 85, 247, .18);
-      color: #d8a8ff;
-      border: 1px solid rgba(168,85,247,.35);
-      font-weight: bold;
-      font-size: 13px;
-    }
-
-    .level-slider {
-      width: 100%;
-      accent-color: #a855f7;
-      cursor: pointer;
-    }
-
-    .level-labels {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      margin-top: 10px;
-      gap: 4px;
-    }
-
-    .level-labels span {
-      text-align: center;
-      color: #666;
-      font-size: 11px;
-      transition: .2s;
-    }
-
-    .level-labels span.active {
-      color: #d7a5ff;
-      font-weight: bold;
-    }
-
-    /* =========================
-       CHALLENGE
-    ========================== */
-
-    .challenge-box {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .challenge-text {
-      flex: 1;
-    }
-
-    .challenge-text h3 {
-      margin-bottom: 6px;
-    }
-
-    /* =========================
-       BUTTONS
-    ========================== */
-
-    .btn {
-      border: 0;
-      border-radius: 13px;
-      padding: 12px 17px;
-      color: white;
-      background: linear-gradient(135deg, #7c3aed, #a855f7);
-      transition: .2s;
-      font-weight: bold;
-      box-shadow: 0 8px 25px rgba(124,58,237,.18);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
-
-    .btn.secondary {
-      background: rgba(255,255,255,.08);
-      box-shadow: none;
-    }
-
-    .btn.danger {
-      background: linear-gradient(135deg, #7f1d1d, #dc2626);
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 15px;
-    }
-
-    /* =========================
-       GENERATORS
-    ========================== */
-
-    .generators {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .generator {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.08);
-      transition: .2s;
-    }
-
-    .generator:hover {
-      transform: translateY(-3px);
-      border-color: rgba(168,85,247,.4);
-    }
-
-    .generator h3 {
-      margin-bottom: 8px;
-      font-size: 17px;
-    }
-
-    .generator p {
-      color: #888;
-      font-size: 12px;
-      min-height: 34px;
-    }
-
-    .generator .btn {
-      width: 100%;
-      margin-top: 13px;
-    }
-
-    /* =========================
-       RESULT
-    ========================== */
-
-    .result {
-      margin-top: 18px;
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      border-radius: 17px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.07);
-      color: #eee;
-      line-height: 1.6;
-    }
-
-    .result.empty {
-      color: #666;
-    }
-
-    /* =========================
-       GUESS GAME
-    ========================== */
-
-    .guess-input {
-      width: 100%;
-      padding: 13px;
-      margin-top: 12px;
-      border-radius: 12px;
-      border: 1px solid #333;
-      background: #111;
-      color: #fff;
-      outline: none;
-    }
-
-    .guess-input:focus {
-      border-color: #a855f7;
-    }
-
-    /* =========================
-       JOKE MAKER
-    ========================== */
-
-    .secret-code {
-      letter-spacing: 6px;
-      font-size: 25px;
-      font-weight: bold;
-      margin: 15px 0;
-      color: #d8a8ff;
-      text-align: center;
-    }
-
-    .joke-status {
-      text-align: center;
-      color: #aaa;
-      font-size: 13px;
-      margin-top: 10px;
-    }
-
-    /* =========================
-       REWARDS
-    ========================== */
-
-    .rewards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .reward {
-      background: rgba(255,255,255,.045);
-      border-radius: 15px;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .reward strong {
-      display: block;
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-
-    .reward span {
-      color: #888;
-      font-size: 12px;
-    }
-
-    /* =========================
-       RECENT
-    ========================== */
-
-    .recent-list {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    .recent-item {
-      padding: 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.045);
-      color: #bbb;
-      font-size: 13px;
-    }
-
-    /* =========================
-       MODAL
-    ========================== */
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.75);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 999;
-    }
-
-    .modal.show {
-      display: flex;
-    }
-
-    .modal-box {
-      width: min(450px, 100%);
-      background: #121217;
-      border: 1px solid #333;
-      border-radius: 20px;
-      padding: 22px;
-    }
-
-    /* =========================
-       ACCESS EXPIRED MODAL
-    ========================== */
-
-    .access-expired-box {
-      text-align: center;
-      border-color: rgba(168,85,247,.35);
-      box-shadow: 0 20px 70px rgba(0,0,0,.45);
-    }
-
-    .access-expired-icon {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
-
-    /* =========================
-       FOOTER
-    ========================== */
-
-    footer {
-      text-align: center;
-      padding: 30px 0 50px;
-      color: #666;
-      font-size: 12px;
-    }
-
-    /* =========================
-       MOBILE
-    ========================== */
-
-    @media (max-width: 800px) {
-      .profile {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .generators {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .rewards {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .generators {
-        grid-template-columns: 1fr;
-      }
-
-      .level-labels span {
-        font-size: 9px;
-      }
-
-      .logo-img {
-        width: 95%;
-      }
-
-      .card {
-        padding: 17px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>FunBox — Boredom? Not Today.</title>
+
+<meta name="description"
+content="FunBox — jokes, roasts, random facts, games and chaos.">
+
+<link rel="icon" href="222.png">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments)}
+gtag("js",new Date());
+gtag("config","G-JB6ZCD4C07");
+</script>
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+:root{
+--bg:#07070b;
+--accent:#a855f7;
+--accent2:#7c3aed;
+--text:#fff;
+--muted:#999;
+--card:rgba(255,255,255,.055);
+--line:rgba(255,255,255,.11);
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:
+radial-gradient(circle at top left,#24133c 0,transparent 35%),
+radial-gradient(circle at bottom right,#111b42 0,transparent 35%),
+var(--bg);
+color:var(--text);
+min-height:100vh;
+overflow-x:hidden;
+transition:.3s;
+}
+
+button,input{
+font:inherit;
+}
+
+button{
+cursor:pointer;
+}
+
+.container{
+width:min(1100px,92%);
+margin:auto;
+}
+
+header{
+text-align:center;
+padding:25px 0 12px;
+}
+
+.logo-img{
+width:min(520px,90%);
+max-height:220px;
+object-fit:contain;
+display:block;
+margin:auto;
+filter:drop-shadow(0 0 20px rgba(170,80,255,.25));
+}
+
+.tagline{
+color:#aaa;
+font-size:14px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.top-controls{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin:10px 0 18px;
+}
+
+.user-pill{
+display:none;
+padding:9px 13px;
+border-radius:999px;
+background:rgba(255,255,255,.08);
+color:#ddd;
+font-size:13px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:22px;
+padding:22px;
+margin:18px 0;
+backdrop-filter:blur(15px);
+box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.card h2{
+margin-bottom:8px;
+font-size:22px;
+}
+
+.muted{
+color:var(--muted);
+font-size:14px;
+}
+
+.profile{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+.stat{
+background:rgba(255,255,255,.05);
+border-radius:16px;
+padding:15px;
+text-align:center;
+}
+
+.stat strong{
+display:block;
+font-size:23px;
+margin-bottom:4px;
+}
+
+.stat span{
+color:#999;
+font-size:12px;
+}
+
+.level-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:18px;
+}
+
+.level-title{
+font-size:18px;
+font-weight:bold;
+}
+
+.level-current{
+padding:7px 13px;
+border-radius:999px;
+background:rgba(168,85,247,.18);
+color:#d8a8ff;
+border:1px solid rgba(168,85,247,.35);
+font-weight:bold;
+font-size:13px;
+}
+
+.level-slider{
+width:100%;
+accent-color:var(--accent);
+cursor:pointer;
+}
+
+.level-labels{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+margin-top:10px;
+gap:4px;
+}
+
+.level-labels span{
+text-align:center;
+color:#666;
+font-size:11px;
+}
+
+.level-labels span.active{
+color:#d7a5ff;
+font-weight:bold;
+}
+
+.generators{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-top:15px;
+}
+
+.generator{
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.045);
+border:1px solid rgba(255,255,255,.08);
+transition:.2s;
+}
+
+.generator:hover{
+transform:translateY(-3px);
+border-color:rgba(168,85,247,.4);
+}
+
+.generator h3{
+margin-bottom:8px;
+font-size:17px;
+}
+
+.generator p{
+color:#888;
+font-size:12px;
+min-height:34px;
+}
+
+.btn{
+border:0;
+border-radius:13px;
+padding:12px 17px;
+color:white;
+background:
+linear-gradient(135deg,var(--accent2),var(--accent));
+transition:.2s;
+font-weight:bold;
+box-shadow:0 8px 25px rgba(124,58,237,.18);
+margin-top:10px;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+filter:brightness(1.1);
+}
+
+.btn.secondary{
+background:rgba(255,255,255,.08);
+box-shadow:none;
+}
+
+.btn.danger{
+background:linear-gradient(135deg,#7f1d1d,#dc2626);
+}
+
+.buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:15px;
+}
+
+.result{
+margin-top:18px;
+min-height:80px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:20px;
+border-radius:17px;
+background:rgba(0,0,0,.25);
+border:1px solid rgba(255,255,255,.07);
+color:#eee;
+line-height:1.6;
+}
+
+.result.empty{
+color:#666;
+}
+
+.guess-input{
+width:100%;
+padding:13px;
+margin-top:12px;
+border-radius:12px;
+border:1px solid #333;
+background:#111;
+color:#fff;
+outline:none;
+}
+
+.guess-input:focus{
+border-color:var(--accent);
+}
+
+.secret-code{
+letter-spacing:6px;
+font-size:25px;
+font-weight:bold;
+margin:15px 0;
+color:#d8a8ff;
+text-align:center;
+}
+
+.joke-status{
+text-align:center;
+color:#aaa;
+font-size:13px;
+margin-top:10px;
+}
+
+.rewards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-top:15px;
+}
+
+.reward{
+background:rgba(255,255,255,.045);
+border-radius:15px;
+padding:15px;
+text-align:center;
+}
+
+.reward strong{
+display:block;
+font-size:20px;
+margin-bottom:5px;
+}
+
+.reward span{
+color:#888;
+font-size:12px;
+}
+
+.recent-list{
+display:flex;
+flex-direction:column;
+gap:9px;
+margin-top:15px;
+}
+
+.recent-item{
+padding:12px;
+border-radius:12px;
+background:rgba(255,255,255,.045);
+color:#bbb;
+font-size:13px;
+}
+
+.theme-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:15px;
+}
+
+.theme-btn{
+padding:14px;
+border:1px solid var(--line);
+border-radius:14px;
+background:rgba(255,255,255,.04);
+color:#fff;
+text-align:left;
+font-weight:bold;
+transition:.2s;
+}
+
+.theme-btn:hover,
+.theme-btn.active{
+border-color:var(--accent);
+box-shadow:0 0 18px rgba(168,85,247,.15);
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.78);
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:9999;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modal-box{
+width:min(470px,100%);
+background:#121217;
+border:1px solid #333;
+border-radius:20px;
+padding:22px;
+}
+
+.modal-box h2{
+margin-bottom:8px;
+}
+
+.access-expired-box{
+text-align:center;
+border-color:rgba(168,85,247,.35);
+box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+
+.access-expired-icon{
+font-size:42px;
+margin-bottom:8px;
+}
+
+footer{
+text-align:center;
+padding:30px 0 50px;
+color:#666;
+font-size:12px;
+}
+
+@media(max-width:800px){
+
+.profile{
+grid-template-columns:1fr 1fr;
+}
+
+.generators{
+grid-template-columns:1fr 1fr;
+}
+
+.rewards{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:520px){
+
+.generators{
+grid-template-columns:1fr;
+}
+
+.theme-grid{
+grid-template-columns:1fr;
+}
+
+.level-labels span{
+font-size:9px;
+}
+
+.logo-img{
+width:95%;
+}
+
+.card{
+padding:17px;
+}
+
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <!-- =========================
-       HEADER
-  ========================== -->
+<header>
 
-  <header>
-    <img src="222.png" class="logo-img" alt="FunBox Logo">
-    <div class="tagline">Boredom? Not Today.</div>
-  </header>
+<img
+src="222.png"
+class="logo-img"
+alt="FunBox Logo"
+>
 
+<div class="tagline">
+Boredom? Not Today.
+</div>
 
-  <!-- =========================
-       PROFILE
-  ========================== -->
+</header>
 
-  <section class="card">
+<!-- TOP CONTROLS -->
 
-    <h2>🎮 Your FunBox Profile</h2>
-    <p class="muted">Your progress is saved on this device.</p>
+<div class="top-controls">
 
-    <div class="profile" style="margin-top:15px;">
+<span id="userPill" class="user-pill"></span>
 
-      <div class="stat">
-        <strong id="points">0</strong>
-        <span>Points</span>
-      </div>
+<button
+class="btn secondary"
+onclick="openLoginModal()"
+>
+👤 Login
+</button>
 
-      <div class="stat">
-        <strong id="profileLevel">1</strong>
-        <span>Level</span>
-      </div>
+<button
+id="logoutBtn"
+class="btn danger"
+style="display:none"
+onclick="logoutUser()"
+>
+Logout
+</button>
 
-      <div class="stat">
-        <strong id="streak">0</strong>
-        <span>Streak</span>
-      </div>
+<button
+class="btn secondary"
+onclick="openThemeModal()"
+>
+🎨 Theme
+</button>
 
-      <div class="stat">
-        <strong id="title">Newbie</strong>
-        <span>Title</span>
-      </div>
+</div>
 
-    </div>
 
-  </section>
+<!-- PROFILE -->
 
-
-  <!-- =========================
-       ANSWER LEVEL
-  ========================== -->
-
-  <section class="card level-card">
-
-    <div class="level-top">
-      <div class="level-title">🎚️ Answer Level</div>
-      <div class="level-current" id="levelMode">Friendly</div>
-    </div>
-
-    <input
-      id="toneSlider"
-      class="level-slider"
-      type="range"
-      min="0"
-      max="5"
-      step="1"
-      value="0"
-      oninput="changeTone(this.value)"
-    >
-
-    <div class="level-labels">
-      <span class="active">Friendly</span>
-      <span>Easy</span>
-      <span>Toxic</span>
-      <span>Savage</span>
-      <span>Chaos</span>
-      <span>Legend</span>
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       DAILY CHALLENGE
-  ========================== -->
-
-  <section class="card">
-
-    <div class="challenge-box">
-
-      <div class="challenge-text">
-        <h3>🏆 Daily Challenge</h3>
-        <p class="muted" id="challengeText">
-          Use any FunBox generator today.
-        </p>
-      </div>
-
-      <button class="btn" onclick="completeChallenge()">
-        Complete
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       FUN GENERATORS
-  ========================== -->
-
-  <section class="card">
-
-    <h2>🔥 Fun Generators</h2>
-    <p class="muted">
-      Pick your weapon.
-    </p>
-
-    <div class="generators" style="margin-top:15px;">
-
-      <div class="generator">
-        <h3>😎 Excuse Generator</h3>
-        <p>Need an excuse? We got you.</p>
-        <button class="btn" onclick="runGenerator('excuse')">
-          Generate
-        </button>
-      </div>
-
-      <div class="generator">
-        <h3>🔮 Future Scanner</h3>
-        <p>Let's see what happens next.</p>
-        <button class="btn" onclick="runGenerator('future')">
-          Scan Future
-        </button>
-      </div>
-
-      <div class="generator">
-        <h3>🧠 Random Fact</h3>
-        <p>Something random for your brain.</p>
-        <button class="btn" onclick="runGenerator('fact')">
-          Tell Me
-        </button>
-      </div>
-
-      <div class="generator">
-        <h3>🔥 Roast Me</h3>
-        <p>Playful Hinglish roast.</p>
-        <button class="btn" onclick="runGenerator('roast')">
-          Roast
-        </button>
-      </div>
+<section class="card">
 
-      <div class="generator">
-        <h3>🎲 Randomize My Fate</h3>
-        <p>Your totally scientific destiny.</p>
-        <button class="btn" onclick="runGenerator('fate')">
-          Randomize
-        </button>
-      </div>
+<h2>🎮 Your FunBox Profile</h2>
 
-      <div class="generator">
-        <h3>🆘 I'm Bored</h3>
-        <p>FunBox decides what you should do.</p>
-        <button class="btn" onclick="surprise()">
-          Fix It
-        </button>
-      </div>
+<p class="muted">
+Progress is saved on this device.
+</p>
 
-    </div>
+<div class="profile" style="margin-top:15px">
 
-    <div id="result" class="result empty">
-      Your result will appear here...
-    </div>
+<div class="stat">
+<strong id="points">0</strong>
+<span>Points</span>
+</div>
 
-  </section>
+<div class="stat">
+<strong id="profileLevel">1</strong>
+<span>Level</span>
+</div>
 
+<div class="stat">
+<strong id="streak">0</strong>
+<span>Streak</span>
+</div>
 
-  <!-- =========================
-       GUESS GAME
-  ========================== -->
+<div class="stat">
+<strong id="title">Newbie</strong>
+<span>Title</span>
+</div>
 
-  <section class="card">
+</div>
 
-    <h2>🎯 Guess the Number</h2>
-    <p class="muted">
-      I'm thinking of a number between 1 and 50.
-    </p>
+</section>
 
-    <input
-      id="guessInput"
-      class="guess-input"
-      type="number"
-      min="1"
-      max="50"
-      placeholder="Enter your guess"
-    >
 
-    <div class="buttons">
-      <button class="btn" onclick="guessNumber()">
-        Guess
-      </button>
+<!-- LEVEL -->
 
-      <button class="btn secondary" onclick="newGuessGame()">
-        New Game
-      </button>
-    </div>
+<section class="card">
 
-    <div id="guessResult" class="result empty">
-      Make your first guess.
-    </div>
+<div class="level-top">
 
-  </section>
+<div class="level-title">
+🎚️ Answer Level
+</div>
 
+<div
+class="level-current"
+id="levelMode"
+>
+Dry
+</div>
 
-  <!-- =========================
-       JOKE MAKER
-  ========================== -->
+</div>
 
-  <section class="card">
+<input
+id="toneSlider"
+class="level-slider"
+type="range"
+min="0"
+max="5"
+step="1"
+value="0"
+oninput="changeTone(this.value)"
+>
 
-    <h2>😂 Joke Maker</h2>
+<div class="level-labels">
 
-    <p class="muted">
-      Speak a joke. If it's valid, one hidden letter gets revealed.
-    </p>
+<span class="active">Dry</span>
+<span>Roast</span>
+<span>Savage</span>
+<span>Chaos</span>
+<span>Brutal</span>
+<span>Legend</span>
 
-    <div id="secretDisplay" class="secret-code">
-      ? ? ? ? ?
-    </div>
+</div>
 
-    <div class="buttons">
+</section>
 
-      <button class="btn" onclick="startVoiceJoke()">
-        🎤 Speak Joke
-      </button>
 
-      <button class="btn secondary" onclick="openCodeModal()">
-        🔑 Enter Code
-      </button>
+<!-- DAILY CHALLENGE -->
 
-      <button class="btn secondary" onclick="newJokeGame()">
-        🔄 New Game
-      </button>
+<section class="card">
 
-    </div>
+<div
+style="
+display:flex;
+justify-content:space-between;
+gap:15px;
+align-items:center;
+flex-wrap:wrap;
+"
+>
 
-    <div id="jokeStatus" class="joke-status">
-      Voice recognition works best in Chrome.
-    </div>
+<div>
 
-  </section>
+<h3>🏆 Daily Challenge</h3>
 
+<p
+class="muted"
+id="challengeText"
+>
+Use any FunBox generator today.
+</p>
 
-  <!-- =========================
-       REWARDS
-  ========================== -->
+</div>
 
-  <section class="card">
+<button
+class="btn"
+onclick="completeChallenge()"
+>
+Complete
+</button>
 
-    <h2>🎁 Rewards</h2>
+</div>
 
-    <p class="muted">
-      Earn points and unlock bonuses.
-    </p>
+</section>
 
-    <div class="rewards" style="margin-top:15px;">
 
-      <div class="reward">
-        <strong>100</strong>
-        <span>+1 Extra Use</span>
-      </div>
+<!-- GENERATORS -->
 
-      <div class="reward">
-        <strong>250</strong>
-        <span>Special Theme</span>
-      </div>
+<section class="card">
 
-      <div class="reward">
-        <strong>500</strong>
-        <span>Chaos Master</span>
-      </div>
+<h2>🔥 Fun Generators</h2>
 
-      <div class="reward">
-        <strong>1000</strong>
-        <span>Legend</span>
-      </div>
+<p class="muted">
+No sugar-coating. Pick your weapon.
+</p>
 
-    </div>
+<div class="generators">
 
-  </section>
 
+<div class="generator">
 
-  <!-- =========================
-       ACCESS
-  ========================== -->
+<h3>😎 Excuse Generator</h3>
 
-  <section class="card">
+<p>
+For when responsibility starts acting suspicious.
+</p>
 
-    <h2>🔓 Daily Access</h2>
+<button
+class="btn"
+onclick="runGenerator('excuse')"
+>
+Generate
+</button>
 
-    <p class="muted">
-      You get 3 free uses every day. Rewards can give extra uses.
-    </p>
+</div>
 
-    <div id="accessStatus" class="result">
-      Loading...
-    </div>
 
-  </section>
+<div class="generator">
 
+<h3>🔮 Future Scanner</h3>
 
-  <!-- =========================
-       RECENT RESULTS
-  ========================== -->
+<p>
+Science definitely didn't approve this.
+</p>
 
-  <section class="card">
+<button
+class="btn"
+onclick="runGenerator('future')"
+>
+Scan Future
+</button>
 
-    <h2>🕘 Recent Results</h2>
+</div>
 
-    <div id="recentList" class="recent-list" style="margin-top:15px;">
-      <div class="recent-item">
-        Nothing here yet.
-      </div>
-    </div>
 
-  </section>
+<div class="generator">
 
+<h3>🧠 Random Fact</h3>
 
-  <!-- =========================
-       ABOUT
-  ========================== -->
+<p>
+Pointless knowledge, now available.
+</p>
 
-  <section class="card">
+<button
+class="btn"
+onclick="runGenerator('fact')"
+>
+Tell Me
+</button>
 
-    <h2>ℹ️ About FunBox</h2>
+</div>
 
-    <p class="muted" style="line-height:1.7;">
-      FunBox is a browser-based entertainment project with random generators,
-      mini games, jokes and challenges.
-      Your profile data is stored locally in your browser.
-    </p>
 
-  </section>
+<div class="generator">
+
+<h3>🔥 Roast Me</h3>
+
+<p>
+Dry, savage, but not personal or hateful.
+</p>
+
+<button
+class="btn"
+onclick="runGenerator('roast')"
+>
+Roast
+</button>
+
+</div>
+
+
+<div class="generator">
+
+<h3>🎲 Randomize My Fate</h3>
+
+<p>
+Your destiny has questionable management.
+</p>
+
+<button
+class="btn"
+onclick="runGenerator('fate')"
+>
+Randomize
+</button>
+
+</div>
+
+
+<div class="generator">
+
+<h3>🆘 I'm Bored</h3>
+
+<p>
+FunBox chooses your next side quest.
+</p>
+
+<button
+class="btn"
+onclick="surprise()"
+>
+Fix It
+</button>
+
+</div>
+
+
+<div class="generator">
+
+<h3>😂 Joke Drop</h3>
+
+<p>
+Fresh joke. Zero dignity required.
+</p>
+
+<button
+class="btn"
+onclick="runGenerator('joke')"
+>
+Drop Joke
+</button>
+
+</div>
+
+
+<div class="generator">
+
+<h3>🧨 Chaos Answer</h3>
+
+<p>
+A random answer to absolutely nothing.
+</p>
+
+<button
+class="btn"
+onclick="runGenerator('chaos')"
+>
+Unleash
+</button>
+
+</div>
+
+
+<div class="generator">
+
+<h3>🧩 Decision Machine</h3>
+
+<p>
+Stop overthinking. Let the machine pretend.
+</p>
+
+<button
+class="btn"
+onclick="runGenerator('decision')"
+>
+Decide
+</button>
+
+</div>
+
+
+</div>
+
+
+<div
+id="result"
+class="result empty"
+>
+Your result will appear here...
+</div>
+
+</section>
+
+
+<!-- GUESS GAME -->
+
+<section class="card">
+
+<h2>🎯 Guess the Number</h2>
+
+<p class="muted">
+I'm thinking of a number between 1 and 50.
+</p>
+
+<input
+id="guessInput"
+class="guess-input"
+type="number"
+min="1"
+max="50"
+placeholder="Enter your guess"
+>
+
+<div class="buttons">
+
+<button
+class="btn"
+onclick="guessNumber()"
+>
+Guess
+</button>
+
+<button
+class="btn secondary"
+onclick="newGuessGame()"
+>
+New Game
+</button>
+
+</div>
+
+<div
+id="guessResult"
+class="result empty"
+>
+Make your first guess.
+</div>
+
+</section>
+
+
+<!-- JOKE GAME -->
+
+<section class="card">
+
+<h2>😂 Joke Maker</h2>
+
+<p class="muted">
+Speak a joke. Pass the detector and reveal a hidden letter.
+</p>
+
+<div
+id="secretDisplay"
+class="secret-code"
+>
+? ? ? ? ?
+</div>
+
+<div class="buttons">
+
+<button
+class="btn"
+onclick="startVoiceJoke()"
+>
+🎤 Speak Joke
+</button>
+
+<button
+class="btn secondary"
+onclick="openCodeModal()"
+>
+🔑 Enter Code
+</button>
+
+<button
+class="btn secondary"
+onclick="newJokeGame()"
+>
+🔄 New Game
+</button>
+
+</div>
+
+<div
+id="jokeStatus"
+class="joke-status"
+>
+Voice recognition works best in Chrome.
+</div>
+
+</section>
+
+
+<!-- REWARDS -->
+
+<section class="card">
+
+<h2>🎁 Rewards</h2>
+
+<p class="muted">
+Earn points and unlock bonuses.
+</p>
+
+<div class="rewards">
+
+<div class="reward">
+<strong>100</strong>
+<span>+1 Extra Use</span>
+</div>
+
+<div class="reward">
+<strong>250</strong>
+<span>Special Theme</span>
+</div>
+
+<div class="reward">
+<strong>500</strong>
+<span>Chaos Master</span>
+</div>
+
+<div class="reward">
+<strong>1000</strong>
+<span>Legend</span>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ACCESS -->
+
+<section class="card">
+
+<h2>🔓 Daily Access</h2>
+
+<p class="muted">
+3 free uses every day. Rewards can give extra uses.
+</p>
+
+<div
+id="accessStatus"
+class="result"
+>
+Loading...
+</div>
+
+</section>
+
+
+<!-- RECENT -->
+
+<section class="card">
+
+<h2>🕘 Recent Results</h2>
+
+<div
+id="recentList"
+class="recent-list"
+>
+<div class="recent-item">
+Nothing here yet.
+</div>
+</div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="card">
+
+<h2>ℹ️ About FunBox</h2>
+
+<p
+class="muted"
+style="line-height:1.7"
+>
+FunBox is a browser-based entertainment project with
+generators, mini games, jokes, themes and challenges.
+The Login button currently saves a local nickname on this device.
+It is not a real server account.
+</p>
+
+</section>
 
 </div>
 
 
 <footer>
-  FunBox © 2026 • Made by Taksh • Boredom? Not Today.
+
+FunBox © 2026 • Made by Taksh • Boredom? Not Today.
+
 </footer>
 
 
-<!-- =========================
-     CODE MODAL
-========================== -->
+<!-- LOGIN MODAL -->
 
-<div id="codeModal" class="modal">
+<div
+id="loginModal"
+class="modal"
+>
 
-  <div class="modal-box">
+<div class="modal-box">
 
-    <h2>🔑 Enter Access Code</h2>
+<h2>👤 FunBox Login</h2>
 
-    <p class="muted" style="margin-top:8px;">
-      Enter your valid FunBox code for 24-hour unlimited access.
-    </p>
+<p class="muted">
+Enter a nickname to save your FunBox profile on this device.
+</p>
 
-    <input
-      id="codeInput"
-      class="guess-input"
-      placeholder="Enter code"
-      autocomplete="off"
-    >
+<input
+id="loginName"
+class="guess-input"
+maxlength="20"
+placeholder="Your nickname"
+autocomplete="off"
+>
 
-    <div class="buttons">
+<div class="buttons">
 
-      <button class="btn" onclick="redeemCode()">
-        Redeem
-      </button>
+<button
+class="btn"
+onclick="saveLogin()"
+>
+Enter FunBox
+</button>
 
-      <button class="btn secondary" onclick="closeCodeModal()">
-        Cancel
-      </button>
+<button
+class="btn secondary"
+onclick="closeLoginModal()"
+>
+Cancel
+</button>
 
-    </div>
+</div>
 
-    <div id="codeResult" class="joke-status"></div>
+<div
+id="loginResult"
+class="joke-status"
+></div>
 
-  </div>
+</div>
 
 </div>
 
 
-<!-- =========================
-     ACCESS EXPIRED MODAL
-========================== -->
+<!-- THEME MODAL -->
 
-<div id="accessExpiredModal" class="modal">
+<div
+id="themeModal"
+class="modal"
+>
 
-  <div class="modal-box access-expired-box">
+<div class="modal-box">
 
-    <div class="access-expired-icon">🔒</div>
+<h2>🎨 Choose Theme</h2>
 
-    <h2>Access Khatam</h2>
+<p class="muted">
+Your selected theme is saved on this device.
+</p>
 
-    <p class="muted" style="margin-top:8px; line-height:1.6;">
-      Aaj ke free uses khatam ho gaye hain.<br>
-      Rewards earn karo ya access code se unlimited access unlock karo.
-    </p>
+<div class="theme-grid">
 
-    <div class="buttons" style="justify-content:center;">
+<button
+class="theme-btn"
+onclick="setTheme('void')"
+>
+🟣 Void Purple
+</button>
 
-      <button class="btn" onclick="openCodeFromExpired()">
-        🔑 Enter Code
-      </button>
+<button
+class="theme-btn"
+onclick="setTheme('blood')"
+>
+🔴 Blood Red
+</button>
 
-      <button class="btn secondary" onclick="closeAccessExpired()">
-        Close
-      </button>
+<button
+class="theme-btn"
+onclick="setTheme('acid')"
+>
+🟢 Acid Green
+</button>
 
-    </div>
+<button
+class="theme-btn"
+onclick="setTheme('ocean')"
+>
+🔵 Deep Ocean
+</button>
 
-  </div>
+<button
+class="theme-btn"
+onclick="setTheme('gold')"
+>
+🟡 Black Gold
+</button>
+
+<button
+class="theme-btn"
+onclick="setTheme('mono')"
+>
+⚪ Monochrome
+</button>
+
+</div>
+
+<div class="buttons">
+
+<button
+class="btn secondary"
+onclick="closeThemeModal()"
+>
+Close
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CODE MODAL -->
+
+<div
+id="codeModal"
+class="modal"
+>
+
+<div class="modal-box">
+
+<h2>🔑 Enter Access Code</h2>
+
+<p class="muted">
+Enter your access code.
+</p>
+
+<input
+id="codeInput"
+class="guess-input"
+placeholder="Enter code"
+autocomplete="off"
+>
+
+<div class="buttons">
+
+<button
+class="btn"
+onclick="redeemCode()"
+>
+Redeem
+</button>
+
+<button
+class="btn secondary"
+onclick="closeCodeModal()"
+>
+Cancel
+</button>
+
+</div>
+
+<div
+id="codeResult"
+class="joke-status"
+></div>
+
+</div>
+
+</div>
+
+
+<!-- ACCESS EXPIRED -->
+
+<div
+id="accessExpiredModal"
+class="modal"
+>
+
+<div class="modal-box access-expired-box">
+
+<div class="access-expired-icon">
+🔒
+</div>
+
+<h2>
+Access Khatam
+</h2>
+
+<p
+class="muted"
+style="line-height:1.6;margin-top:8px"
+>
+Aaj ke free uses khatam ho gaye.
+Rewards earn karo ya access code use karo.
+</p>
+
+<div
+class="buttons"
+style="justify-content:center"
+>
+
+<button
+class="btn"
+onclick="openCodeFromExpired()"
+>
+🔑 Enter Code
+</button>
+
+<button
+class="btn secondary"
+onclick="closeAccessExpired()"
+>
+Close
+</button>
+
+</div>
+
+</div>
 
 </div>
 
 
 <script>
 
-  /* =========================================================
-     GOOGLE ANALYTICS HELPER
-  ========================================================= */
+const STORAGE={
 
-  function trackEvent(name, params = {}) {
+points:"funboxPoints",
 
-    if (typeof gtag === "function") {
+streak:"funboxStreak",
 
-      gtag("event", name, params);
+lastDay:"funboxLastDay",
 
-    }
+tone:"funboxTone",
 
-  }
+uses:"funboxUses",
 
+useDate:"funboxUseDate",
 
-  /* =========================================================
-     STORAGE
-  ========================================================= */
+extraUses:"funboxExtraUses",
 
-  const STORAGE = {
+unlimited:"funboxUnlimitedUntil",
 
-    points: "funboxPoints",
-    streak: "funboxStreak",
-    lastDay: "funboxLastDay",
-    tone: "funboxTone",
-    uses: "funboxUses",
-    useDate: "funboxUseDate",
-    extraUses: "funboxExtraUses",
-    unlimited: "funboxUnlimitedUntil",
-    recent: "funboxRecent",
-    challenge: "funboxChallenge",
-    rewards: "funboxRewards"
+recent:"funboxRecent",
 
-  };
+challenge:"funboxChallenge",
 
+username:"funboxUsername",
 
-  function getToday() {
+theme:"funboxTheme"
 
-    const d = new Date();
+};
 
-    return d.getFullYear() + "-" +
-      String(d.getMonth() + 1).padStart(2, "0") + "-" +
-      String(d.getDate()).padStart(2, "0");
 
-  }
+let points=
+Number(localStorage.getItem(STORAGE.points)||0);
 
+let streak=
+Number(localStorage.getItem(STORAGE.streak)||0);
 
-  /* =========================================================
-     STATE
-  ========================================================= */
+let tone=
+Number(localStorage.getItem(STORAGE.tone)||0);
 
-  let points = Number(localStorage.getItem(STORAGE.points) || 0);
+let uses=
+Number(localStorage.getItem(STORAGE.uses)||0);
 
-  let streak = Number(localStorage.getItem(STORAGE.streak) || 0);
+let extraUses=
+Number(localStorage.getItem(STORAGE.extraUses)||0);
 
-  let tone = Number(localStorage.getItem(STORAGE.tone) || 0);
+let unlimitedUntil=
+Number(localStorage.getItem(STORAGE.unlimited)||0);
 
-  let uses = Number(localStorage.getItem(STORAGE.uses) || 0);
 
-  let extraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
+let guessNumberTarget=
+Math.floor(Math.random()*50)+1;
 
-  let unlimitedUntil =
-    Number(localStorage.getItem(STORAGE.unlimited) || 0);
+let guessAttempts=0;
 
-  let guessNumberTarget =
-    Math.floor(Math.random() * 50) + 1;
 
-  let guessAttempts = 0;
+const toneModes=[
 
+"Dry",
+"Roast",
+"Savage",
+"Chaos",
+"Brutal",
+"Legend"
 
-  const toneModes = [
+];
 
-    "Friendly",
-    "Easy",
-    "Toxic",
-    "Savage",
-    "Chaos",
-    "Legend"
 
-  ];
+const content={
 
+excuse:[
 
-  /* =========================================================
-     TONE CONTENT
-  ========================================================= */
+[
+"Aaj mera brain maintenance mode mein hai.",
+"Productivity ne mujhe seen pe chhod diya.",
+"Kaam important hai. Main bhi... theoretically."
+],
 
-  const content = {
+[
+"Plan solid tha. Execution ne resign kar diya.",
+"Main busy tha. Haan, isi baat ko repeat karna hai.",
+"Aaj schedule ne mujhe khud cancel kar diya."
+],
 
-    excuse: [
+[
+"Mera brain aur kaam ek dusre ko avoid kar rahe hain.",
+"Productivity ka notification aaya. Ignore kar diya.",
+"Main kaam ko avoid nahi karta, strategic distance rakhta hoon."
+],
 
-      [
-        "Aaj mera brain maintenance mode mein hai.",
-        "Mera system aaj thoda loading pe hai.",
-        "Aaj productivity ne mujhe block kar diya."
-      ],
+[
+"Kaam mujhe dekh raha hai. Main bhi usko dekh raha hoon. Bas.",
+"Mere excuses ab mujhse zyada organized hain.",
+"Effort ka demo version aaj available nahi hai."
+],
 
-      [
-        "Main karta, but mera motivation abhi online nahi hai.",
-        "Plan solid tha. Execution ne resign kar diya.",
-        "Aaj ka schedule mujhe dekh ke khud confuse hai."
-      ],
-
-      [
-        "Mera brain aur kaam dono ek dusre ko avoid kar rahe hain.",
-        "Productivity ka notification aaya tha. Ignore kar diya.",
-        "Main busy tha... kuch bhi na karne mein."
-      ],
-
-      [
-        "Kaam mujhe dekh raha hai. Main bhi usko dekh raha hoon. Bas.",
-        "Mere excuses bhi ab mujhse zyada organized hain.",
-        "Aaj effort ka demo version bhi available nahi hai."
-      ],
-
-      [
-        "Maine kaam start karne ka socha. Phir thought process hi khatam ho gaya.",
-        "Productivity ne knock kiya. Maine pretend kiya ghar pe nahi hoon.",
-        "Aaj mera brain officially airplane mode pe hai."
-      ],
-
-      [
-        "Legendary excuse unlocked: main productive hone ke liye mentally buffering kar raha hoon.",
-        "Kaam kal hoga. Kal ko bhi chance chahiye life mein.",
-        "Aaj main achievement nahi, lore create kar raha hoon."
-      ]
-
-    ],
-
-    future: [
-
-      [
-        "Aaj tumhe ek unexpected good moment milega.",
-        "Tumhara next few hours surprisingly chill ho sakta hai.",
-        "Aaj luck tumhare side pe thoda online hai."
-      ],
-
-      [
-        "Aaj kuch random aur funny hone wala hai.",
-        "Tumhe ek aisi cheez milegi jiske baare mein tumne socha bhi nahi tha.",
-        "Aaj ka plot thoda interesting ho sakta hai."
-      ],
-
-      [
-        "Future scanner detected: tum phir phone check karoge bina reason ke.",
-        "Prediction: tum ek kaam postpone karke doosra random kaam start karoge.",
-        "Scanner says: productivity ke naam pe tum kuch aur karoge."
-      ],
-
-      [
-        "Future update: tumhara attention span phir vacation pe jayega.",
-        "Aaj tumhara brain ek unnecessary side quest start karega.",
-        "Plot twist incoming. Exact details unavailable. Drama department active."
-      ],
-
-      [
-        "Scanner overheated. Tumhari life ka plot apparently too random hai.",
-        "Future detected: tum kuch karne jaoge aur kuch aur karoge.",
-        "Timeline unstable. Snacks recommended."
-      ],
-
-      [
-        "Legendary prediction: tumhara next decision completely unpredictable hoga. Even you won't know.",
-        "Future refuses to cooperate. Apparently tum hi plot twist ho.",
-        "Scanner result: main character energy detected. Side quests incoming."
-      ]
-
-    ],
-
-    roast: [
-
-      [
-        "Tum boring nahi ho. Bas tumhara software update pending hai.",
-        "Tumhara brain kabhi-kabhi loading screen jaisa lagta hai.",
-        "Tumhare ideas ka Wi-Fi signal thoda weak hai."
-      ],
-
-      [
-        "Tumhari productivity aur Monday morning ka same relationship hai.",
-        "Tum plan banane mein professional ho. Execute karna optional hai.",
-        "Tumhare decisions ko kabhi-kabhi tutorial chahiye."
-      ],
-
-      [
-        "Tumhara attention span goldfish se competition kar raha hai.",
-        "Tum kaam ko avoid nahi karte, tum usko strategic distance dete ho.",
-        "Tumhare plans impressive hain. Bas reality mein unka cameo nahi hota."
-      ],
-
-      [
-        "Tumhare excuses ka startup khul sakta hai.",
-        "Tumhari productivity ne resignation letter draft kar liya hai.",
-        "Tumhara brain multitasking karta hai: ek saath kuch bhi complete nahi karta."
-      ],
-
-      [
-        "Tum ek walking side quest ho.",
-        "Tumhari life ka loading bar 97% pe permanently stuck hai.",
-        "Tumhara brain tabs kholta bahut hai, close koi nahi karta."
-      ],
-
-      [
-        "Tum normal nahi ho. Tum FunBox ka premium bug ho.",
-        "Tumhari chaos energy ko software engineers bhi reproduce nahi kar sakte.",
-        "Tumhari life ka genre: comedy with unexpected updates."
-      ]
-
-    ],
-
-    fate: [
-
-      [
-        "You will find something interesting today.",
-        "Today: random luck + random decisions.",
-        "Your fate says: take a small break."
-      ],
-
-      [
-        "Fate says: do something you normally wouldn't.",
-        "The universe has assigned you a side quest.",
-        "Your next hour contains at least one plot twist."
-      ],
-
-      [
-        "Fate says: procrastination detected.",
-        "The universe has seen your tabs. It is concerned.",
-        "Destiny has entered airplane mode."
-      ],
-
-      [
-        "Your fate: accidentally become productive for 7 minutes.",
-        "Destiny says: side quest first, responsibility later.",
-        "The universe has no explanation. Continue anyway."
-      ],
-
-      [
-        "Fate.exe has stopped responding.",
-        "Your destiny is currently buffering.",
-        "Chaos has officially accepted your application."
-      ],
+[
+"Maine kaam start karne ka socha. Thought process hi khatam ho gaya.",
+"Productivity ne knock kiya. Main ghar pe nahi tha.",
+"Aaj brain officially airplane mode pe hai."
+],
 
-      [
-        "Legendary fate: you become the plot twist.",
-        "Destiny has marked you as an unpredictable variable.",
-        "The universe says: make it interesting."
-      ]
+[
+"Legendary excuse unlocked: motivation abhi loading screen pe hai.",
+"Kaam kal hoga. Kal ko bhi ek chance do.",
+"Aaj main achievement nahi, lore create kar raha hoon."
+]
+
+],
+
+
+future:[
+
+[
+"Aaj ka plot surprisingly normal rahega. Probably.",
+"Next few hours mein ek random good moment aa sakta hai.",
+"Luck tumhare side pe thoda online hai."
+],
+
+[
+"Aaj kuch random funny hone wala hai.",
+"Tumhe kuch aisa milega jiske baare mein socha nahi tha.",
+"Plot twist incoming. Details classified."
+],
+
+[
+"Future scanner: tum bina reason phone check karoge.",
+"Prediction: ek kaam postpone karke doosra start karoge.",
+"Productivity ke naam pe kuch aur karoge."
+],
+
+[
+"Attention span phir vacation pe jayega.",
+"Brain ek unnecessary side quest start karega.",
+"Drama department active."
+],
+
+[
+"Scanner overheated. Tumhari timeline suspiciously random hai.",
+"Tum kuch karne jaoge aur kuch aur karoge.",
+"Timeline unstable. Snacks recommended."
+],
+
+[
+"Legendary prediction: tum khud plot twist banoge.",
+"Future refuses to cooperate.",
+"Main character energy detected. Side quests incoming."
+]
 
-    ]
+],
 
-  };
 
+roast:[
 
-  const facts = [
+[
+"Tumhara brain kabhi-kabhi loading screen jaisa lagta hai.",
+"Ideas ka Wi-Fi signal weak hai.",
+"Tum boring nahi ho, bas software update pending hai."
+],
 
-    "Octopuses have three hearts.",
-    "Bananas are technically berries.",
-    "Honey can last for an extremely long time when properly stored.",
-    "A group of flamingos is called a flamboyance.",
-    "Some turtles can breathe through specialized skin areas.",
-    "The shortest war in recorded history lasted less than an hour.",
-    "Wombat poop is cube-shaped.",
-    "Butterflies taste using receptors on their feet.",
-    "A day on Venus is longer than its year.",
-    "Cows can form close social relationships."
+[
+"Plan banane mein professional. Execute karna optional.",
+"Decisions ko kabhi-kabhi tutorial chahiye.",
+"Productivity aur tum long-distance relationship mein ho."
+],
 
-  ];
+[
+"Attention span goldfish se competition kar raha hai.",
+"Tumhare plans impressive hain. Reality mein cameo missing hai.",
+"Tum kaam ko avoid nahi karte, usko strategic distance dete ho."
+],
 
+[
+"Tumhare excuses ka startup khul sakta hai.",
+"Productivity ne resignation letter draft kar liya hai.",
+"Multitasking: ek saath kuch bhi complete nahi."
+],
 
-  const surpriseIdeas = [
+[
+"Tum ek walking side quest ho.",
+"Loading bar 97% pe permanently stuck hai.",
+"Brain tabs kholta bahut hai, close koi nahi karta."
+],
 
-    "🎧 Put on one song and just listen without touching your phone.",
-    "🧠 Learn one random fact and remember it for tomorrow.",
-    "🎨 Draw the weirdest creature you can imagine.",
-    "🧩 Solve a small puzzle.",
-    "📸 Take a funny photo of an ordinary object.",
-    "✍️ Write a 3-line mini story.",
-    "🎮 Play a quick game.",
-    "🚶 Take a short walk and notice five things around you.",
-    "😂 Make up a terrible joke.",
-    "📚 Read one page of anything interesting."
+[
+"Tum FunBox ka premium bug ho.",
+"Tumhari chaos energy ko engineers reproduce nahi kar sakte.",
+"Life ka genre: comedy with unexpected updates."
+]
 
-  ];
+],
 
 
-  /* =========================================================
-     PROFILE
-  ========================================================= */
+fate:[
 
-  function getProfileLevel() {
+[
+"Fate says: ek chhota break le.",
+"Aaj random luck allowed hai.",
+"Your destiny says: snacks first, decisions later."
+],
 
-    if (points >= 1000) return 10;
-    if (points >= 750) return 9;
-    if (points >= 500) return 8;
-    if (points >= 400) return 7;
-    if (points >= 300) return 6;
-    if (points >= 250) return 5;
-    if (points >= 150) return 4;
-    if (points >= 100) return 3;
-    if (points >= 50) return 2;
+[
+"Universe ne side quest assign ki hai.",
+"Aaj normal plan ko thoda disturb karo.",
+"Next hour mein plot twist possible."
+],
 
-    return 1;
+[
+"Procrastination detected.",
+"Universe ne tumhari tabs dekhi hain. Concerned.",
+"Destiny airplane mode pe hai."
+],
 
-  }
+[
+"Accidentally 7 minutes productive hone ka chance hai.",
+"Side quest first, responsibility later.",
+"Universe ke paas explanation nahi hai."
+],
 
+[
+"Fate.exe stopped responding.",
+"Destiny buffering.",
+"Chaos ne tumhari application accept kar li."
+],
 
-  function getTitle() {
+[
+"Legendary fate: tum plot twist ho.",
+"Destiny says: unpredictable variable detected.",
+"Universe: make it interesting."
+]
 
-    if (points >= 1000) return "Legend";
-    if (points >= 500) return "Chaos Master";
-    if (points >= 250) return "FunBox Pro";
-    if (points >= 100) return "Explorer";
-    if (points >= 50) return "Regular";
+]
 
-    return "Newbie";
+};
 
-  }
 
+const jokes=[
 
-  function renderProfile() {
+"Teacher: Homework kahan hai? Student: Sir, cloud mein save tha. Wi-Fi ne dhoka de diya.",
 
-    document.getElementById("points").textContent = points;
+"Friend: Tu itna late kyun? Me: Main time pe nikla tha. Time hi jaldi chala gaya.",
 
-    document.getElementById("profileLevel").textContent =
-      getProfileLevel();
+"Phone: 1% battery. Me: Ab dekhte hain kiski willpower strong hai.",
 
-    document.getElementById("streak").textContent = streak;
+"Mom: Padhai hui? Me: Haan. Book kholi thi. Progress documented hai.",
 
-    document.getElementById("title").textContent = getTitle();
+"Me: Kal se productive. Also me tomorrow: Kal se productive.",
 
-    localStorage.setItem(STORAGE.points, points);
+"Brain at 2 AM: Chalo purani embarrassing memories replay karte hain.",
 
-    localStorage.setItem(STORAGE.streak, streak);
+"Alarm: Wake up. Me: Nice suggestion. Rejected.",
 
-  }
+"Notebook: Blank page. Me: Finally, someone understands my plans.",
 
+"Life: Choose a path. Me: Randomize.",
 
-  /* =========================================================
-     POINTS
-  ========================================================= */
+"My attention span entered the chat, then immediately left.",
 
-  function addPoints(amount, source = "unknown") {
+"I opened my notes to study. The notes opened a different problem: me.",
 
-    points += amount;
+"Productivity and I are currently not following each other.",
 
-    localStorage.setItem(STORAGE.points, points);
+"Teacher: Why are you late? Student: Because I came after being early.",
 
-    renderProfile();
+"Brain: Let's focus. Also brain: Remember that random thing from 2017?",
 
-    trackEvent("earn_virtual_currency", {
+"Phone battery: 5%. Me: We have enough for one more scroll.",
 
-      virtual_currency_name: "points",
-      value: amount,
-      source: source
+"Friend: What's your plan? Me: That's classified information.",
 
-    });
+"Me opening one tab: I can handle this. Me five minutes later: 37 tabs.",
 
-  }
+"Homework: Finish me. Me: You first.",
 
+"Alarm clock: I exist to ruin your dreams. Literally.",
 
-  /* =========================================================
-     TONE
-  ========================================================= */
+"Me: I'll sleep early today. Also me at 2 AM: Interesting video."
+];
 
-  function changeTone(value) {
 
-    tone = Number(value);
+const chaosAnswers=[
 
-    localStorage.setItem(STORAGE.tone, tone);
+"Error 404: useful answer not found.",
 
-    document.getElementById("levelMode").textContent =
-      toneModes[tone];
+"The machine has chosen confusion.",
 
-    document.querySelectorAll(".level-labels span")
-      .forEach((el, index) => {
+"Your aura today: browser with 47 tabs.",
 
-        el.classList.toggle("active", index === tone);
+"Chaos level stable. Common sense unavailable.",
 
-      });
+"Congratulations. Nothing practical happened.",
 
-    trackEvent("funbox_tone_changed", {
+"You clicked this, so apparently we both make questionable decisions.",
 
-      tone_level: toneModes[tone]
+"System verdict: do it for the plot.",
 
-    });
+"Breaking news: you are still reading this."
 
-  }
+];
 
 
-  /* =========================================================
-     USAGE SYSTEM
-  ========================================================= */
+const decisions=[
 
-  function resetDailyUsesIfNeeded() {
+"Do it.",
 
-    const today = getToday();
+"Don't do it.",
 
-    const savedDate =
-      localStorage.getItem(STORAGE.useDate);
+"Do it later.",
 
-    if (savedDate !== today) {
+"Ask someone you trust.",
 
-      uses = 0;
+"Flip a coin and blame probability.",
 
-      localStorage.setItem(STORAGE.uses, "0");
+"Randomize again.",
 
-      localStorage.setItem(
-        STORAGE.useDate,
-        today
-      );
+"Yes.",
 
-    }
+"No.",
 
-  }
+"Maybe.",
 
+"Absolutely not."
 
-  function hasUnlimitedAccess() {
+];
 
-    return Date.now() < unlimitedUntil;
 
-  }
+const facts=[
 
+"Octopuses have three hearts.",
 
-  function canUse() {
+"Bananas are botanically berries.",
 
-    resetDailyUsesIfNeeded();
+"A group of flamingos is called a flamboyance.",
 
-    if (hasUnlimitedAccess()) return true;
+"Butterflies taste using receptors on their feet.",
 
-    return uses < 3 || extraUses > 0;
+"A day on Venus is longer than its year.",
 
-  }
+"Wombat poop is cube-shaped.",
 
+"Some turtles can breathe through specialized skin.",
 
-  function showAccessExpired() {
+"Cows can form close social relationships.",
 
-    const modal = document.getElementById("accessExpiredModal");
+"Honey can stay edible for a very long time when properly stored.",
 
-    if (modal) {
-      modal.classList.add("show");
-    }
+"The shortest war in recorded history lasted less than an hour.",
 
-  }
+"Sharks existed before trees.",
 
+"Some frogs can freeze and later thaw back to life.",
 
-  function closeAccessExpired() {
+"Sea otters sometimes hold hands while sleeping.",
 
-    const modal = document.getElementById("accessExpiredModal");
+"Koalas have fingerprints that can resemble human fingerprints.",
 
-    if (modal) {
-      modal.classList.remove("show");
-    }
+"Ravens can solve multi-step problems.",
 
-  }
+"Bananas naturally contain tiny amounts of radioactive potassium.",
 
+"Lightning can be hotter than the surface of the Sun.",
 
-  function openCodeFromExpired() {
+"Some clouds can weigh hundreds of thousands of kilograms.",
 
-    closeAccessExpired();
-    openCodeModal();
+"Your nose can remember thousands of different smells.",
 
-  }
+"Space is silent because sound needs a medium to travel."
 
+];
 
-  function consumeUse() {
 
-    resetDailyUsesIfNeeded();
+const surpriseIdeas=[
 
-    if (hasUnlimitedAccess()) {
+"🎧 One song. No scrolling.",
 
-      updateAccessStatus();
-      return true;
+"🎨 Draw the weirdest creature you can imagine.",
 
-    }
+"🧩 Solve a small puzzle.",
 
-    if (uses < 3) {
+"📸 Photograph an ordinary object like it's a movie poster.",
 
-      uses++;
+"✍️ Write a 3-line ridiculous story.",
 
-      localStorage.setItem(STORAGE.uses, String(uses));
-      updateAccessStatus();
+"🎮 Play a quick game.",
 
-      // Show the popup immediately after the 3rd free use.
-      if (uses >= 3 && extraUses <= 0) {
-        setTimeout(showAccessExpired, 450);
-      }
+"🚶 Take a short walk and notice five things.",
 
-      return true;
+"😂 Invent a terrible joke.",
 
-    }
+"📚 Read one page of anything.",
 
-    if (extraUses > 0) {
+"🧠 Learn one random fact.",
 
-      extraUses--;
-      localStorage.setItem(STORAGE.extraUses, String(extraUses));
-      updateAccessStatus();
+"🧹 Clean one tiny thing for exactly five minutes.",
 
-      if (uses >= 3 && extraUses <= 0) {
-        setTimeout(showAccessExpired, 450);
-      }
+"🎯 Try to beat your previous guess-game attempt."
 
-      return true;
+];
 
-    }
 
-    showAccessExpired();
-    return false;
+function randomItem(array){
 
-  }
+return array[
+Math.floor(Math.random()*array.length)
+];
 
+}
 
-  function updateAccessStatus() {
 
-    resetDailyUsesIfNeeded();
+function getToday(){
 
-    const box =
-      document.getElementById("accessStatus");
+let d=new Date();
 
-    if (hasUnlimitedAccess()) {
+return d.getFullYear()
++"-"+
+String(d.getMonth()+1).padStart(2,"0")
++"-"+
+String(d.getDate()).padStart(2,"0");
 
-      const remaining =
-        Math.max(
-          0,
-          unlimitedUntil - Date.now()
-        );
+}
 
-      const hours =
-        Math.ceil(
-          remaining / (1000 * 60 * 60)
-        );
 
-      box.textContent =
-        "🔓 Unlimited access active for about " +
-        hours +
-        " hour(s).";
+function trackEvent(name,params={}){
 
-      return;
+if(typeof gtag==="function"){
 
-    }
+gtag("event",name,params);
 
-    const freeLeft =
-      Math.max(0, 3 - uses);
+}
 
-    box.textContent =
-      "🎟️ Free uses left today: " +
-      freeLeft +
-      " • Extra uses: " +
-      extraUses;
+}
 
-  }
 
+function getProfileLevel(){
 
-  /* =========================================================
-     RECENT RESULTS
-  ========================================================= */
+if(points>=1000)return 10;
+if(points>=750)return 9;
+if(points>=500)return 8;
+if(points>=400)return 7;
+if(points>=300)return 6;
+if(points>=250)return 5;
+if(points>=150)return 4;
+if(points>=100)return 3;
+if(points>=50)return 2;
 
-  function addRecent(text) {
+return 1;
 
-    let recent =
-      JSON.parse(
-        localStorage.getItem(STORAGE.recent) || "[]"
-      );
+}
 
-    recent.unshift(text);
 
-    recent = recent.slice(0, 8);
+function getTitle(){
 
-    localStorage.setItem(
-      STORAGE.recent,
-      JSON.stringify(recent)
-    );
+if(points>=1000)return"Legend";
+if(points>=500)return"Chaos Master";
+if(points>=250)return"FunBox Pro";
+if(points>=100)return"Explorer";
+if(points>=50)return"Regular";
 
-    renderRecent();
+return"Newbie";
 
-  }
+}
 
 
-  function renderRecent() {
+function renderProfile(){
 
-    const list =
-      document.getElementById("recentList");
+document.getElementById("points").textContent=points;
 
-    const recent =
-      JSON.parse(
-        localStorage.getItem(STORAGE.recent) || "[]"
-      );
+document.getElementById("profileLevel").textContent=
+getProfileLevel();
 
-    if (!recent.length) {
+document.getElementById("streak").textContent=
+streak;
 
-      list.innerHTML =
-        '<div class="recent-item">Nothing here yet.</div>';
+document.getElementById("title").textContent=
+getTitle();
 
-      return;
+localStorage.setItem(
+STORAGE.points,
+points
+);
 
-    }
+}
 
-    list.innerHTML =
-      recent.map(item =>
-        `<div class="recent-item">${escapeHTML(item)}</div>`
-      ).join("");
 
-  }
+function addPoints(amount,source){
 
+points+=amount;
 
-  function escapeHTML(text) {
+renderProfile();
 
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+trackEvent(
+"funbox_points",
+{
+value:amount,
+source:source||"unknown"
+}
+);
 
-  }
+}
 
 
-  /* =========================================================
-     GENERATORS
-  ========================================================= */
+function changeTone(value){
 
-  function randomItem(array) {
+tone=Number(value);
 
-    return array[
-      Math.floor(Math.random() * array.length)
-    ];
+localStorage.setItem(
+STORAGE.tone,
+tone
+);
 
-  }
+document.getElementById("levelMode").textContent=
+toneModes[tone];
 
+document
+.querySelectorAll(".level-labels span")
+.forEach(
+(element,index)=>{
+element.classList.toggle(
+"active",
+index===tone
+);
+});
 
-  function runGenerator(type) {
+}
 
-    if (!consumeUse()) return;
 
-    let text = "";
+function resetDailyUsesIfNeeded(){
 
-    if (type === "fact") {
+let today=getToday();
 
-      text = randomItem(facts);
+let saved=localStorage.getItem(
+STORAGE.useDate
+);
 
-    } else {
+if(saved!==today){
 
-      const group = content[type][tone];
+uses=0;
 
-      text = randomItem(group);
+localStorage.setItem(
+STORAGE.uses,
+"0"
+);
 
-    }
+localStorage.setItem(
+STORAGE.useDate,
+today
+);
 
-    document.getElementById("result").textContent = text;
+}
 
-    document.getElementById("result")
-      .classList.remove("empty");
+}
 
-    addRecent(text);
 
-    addPoints(5, "generator");
+function hasUnlimitedAccess(){
 
-    trackEvent("funbox_generator_used", {
+return Date.now()<unlimitedUntil;
 
-      generator: type,
-      tone_level: toneModes[tone]
+}
 
-    });
 
-  }
+function canUse(){
 
+resetDailyUsesIfNeeded();
 
-  /* =========================================================
-     SURPRISE
-  ========================================================== */
+return(
+hasUnlimitedAccess()||
+uses<3||
+extraUses>0
+);
 
-  function surprise() {
+}
 
-    if (!consumeUse()) return;
 
-    const text =
-      randomItem(surpriseIdeas);
+function showAccessExpired(){
 
-    document.getElementById("result").textContent =
-      text;
+let modal=
+document.getElementById(
+"accessExpiredModal"
+);
 
-    document.getElementById("result")
-      .classList.remove("empty");
+if(modal){
 
-    addRecent(text);
+modal.classList.add("show");
 
-    addPoints(5, "surprise");
+}
 
-    trackEvent("funbox_surprise_used", {
+}
 
-      tone_level: toneModes[tone]
 
-    });
+function closeAccessExpired(){
 
-  }
+document
+.getElementById(
+"accessExpiredModal"
+)
+.classList.remove("show");
 
+}
 
-  /* =========================================================
-     GUESS GAME
-  ========================================================== */
 
-  function newGuessGame() {
+function openCodeFromExpired(){
 
-    guessNumberTarget =
-      Math.floor(Math.random() * 50) + 1;
+closeAccessExpired();
 
-    guessAttempts = 0;
+openCodeModal();
 
-    document.getElementById("guessInput").value = "";
+}
 
-    document.getElementById("guessResult").textContent =
-      "New number selected.";
 
-    document.getElementById("guessResult")
-      .classList.remove("empty");
+function consumeUse(){
 
-  }
+resetDailyUsesIfNeeded();
 
+if(hasUnlimitedAccess()){
 
-  function guessNumber() {
+updateAccessStatus();
 
-    const input =
-      document.getElementById("guessInput");
+return true;
 
-    const result =
-      document.getElementById("guessResult");
+}
 
-    const guess =
-      Number(input.value);
 
-    if (!guess || guess < 1 || guess > 50) {
+if(uses<3){
 
-      result.textContent =
-        "Enter a number from 1 to 50.";
+uses++;
 
-      return;
+localStorage.setItem(
+STORAGE.uses,
+uses
+);
 
-    }
+updateAccessStatus();
 
-    guessAttempts++;
 
-    if (guess === guessNumberTarget) {
+if(
+uses>=3 &&
+extraUses<=0
+){
 
-      result.textContent =
-        "🎉 Correct! You got it in " +
-        guessAttempts +
-        " attempt(s)!";
+setTimeout(
+showAccessExpired,
+300
+);
 
-      addPoints(20, "guess_win");
+}
 
-      trackEvent("funbox_guess_result", {
+return true;
 
-        result: "win",
-        attempts: guessAttempts
+}
 
-      });
 
-      newGuessGame();
+if(extraUses>0){
 
-      return;
+extraUses--;
 
-    }
+localStorage.setItem(
+STORAGE.extraUses,
+extraUses
+);
 
-    if (guess < guessNumberTarget) {
+updateAccessStatus();
 
-      result.textContent =
-        "⬆️ Too low. Try higher.";
+return true;
 
-    } else {
+}
 
-      result.textContent =
-        "⬇️ Too high. Try lower.";
 
-    }
+showAccessExpired();
 
-    trackEvent("funbox_guess_result", {
+return false;
 
-      result: "miss",
-      attempts: guessAttempts
+}
 
-    });
 
-  }
+function updateAccessStatus(){
 
+resetDailyUsesIfNeeded();
 
-  /* =========================================================
-     JOKE MAKER
-  ========================================================== */
+let box=
+document.getElementById(
+"accessStatus"
+);
 
-  const jokeMakers = [
+if(hasUnlimitedAccess()){
 
-    "TAKSH",
-    "DHRUVI",
-    "RUPAL",
-    "CHERRY"
+let hours=Math.ceil(
+Math.max(
+0,
+unlimitedUntil-Date.now()
+)/3600000
+);
 
-  ];
+box.textContent=
+"🔓 Unlimited access active for about "
++hours+
+" hour(s).";
 
+return;
 
-  let currentMaker =
-    randomItem(jokeMakers);
+}
 
-  let revealedLetters = [];
 
-  let jokeFinished = false;
+box.textContent=
+"🎟️ Free uses left today: "
++Math.max(0,3-uses)
++" • Extra uses: "
++extraUses;
 
+}
 
-  function newJokeGame() {
 
-    currentMaker =
-      randomItem(jokeMakers);
+function addRecent(text){
 
-    revealedLetters = [];
+let recent=
+JSON.parse(
+localStorage.getItem(
+STORAGE.recent
+)||"[]"
+);
 
-    jokeFinished = false;
+recent.unshift(text);
 
-    renderJokeSecret();
+recent=recent.slice(0,10);
 
-    document.getElementById("jokeStatus").textContent =
-      "New joke challenge ready.";
+localStorage.setItem(
+STORAGE.recent,
+JSON.stringify(recent)
+);
 
-    trackEvent("funbox_joke_new_game");
+renderRecent();
 
-  }
+}
 
 
-  function renderJokeSecret() {
+function escapeHTML(text){
 
-    const display =
-      currentMaker
-        .split("")
-        .map((letter, index) =>
-          revealedLetters.includes(index)
-            ? letter
-            : "?"
-        )
-        .join(" ");
+return String(text)
 
-    document.getElementById("secretDisplay")
-      .textContent = display;
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
-  }
+}
 
 
-  function isLikelyJoke(text) {
+function renderRecent(){
 
-    const lower =
-      text.toLowerCase();
+let list=
+document.getElementById(
+"recentList"
+);
 
-    const jokeWords = [
+let recent=
+JSON.parse(
+localStorage.getItem(
+STORAGE.recent
+)||"[]"
+);
 
-      "why",
-      "what",
-      "how",
-      "knock",
-      "joke",
-      "funny",
-      "because",
-      "who",
-      "did",
-      "went",
-      "school",
-      "teacher"
+if(!recent.length){
 
-    ];
+list.innerHTML=
+'<div class="recent-item">Nothing here yet.</div>';
 
-    return jokeWords.some(
-      word => lower.includes(word)
-    );
+return;
 
-  }
+}
 
+list.innerHTML=
+recent.map(
+item=>
+`<div class="recent-item">
+${escapeHTML(item)}
+</div>`
+).join("");
 
-  function processJoke(text) {
+}
 
-    if (!text) return;
 
-    if (!isLikelyJoke(text)) {
+function runGenerator(type){
 
-      document.getElementById("jokeStatus").textContent =
-        "Hmm... that didn't sound like a joke. Try again.";
+if(
+!canUse()||
+!consumeUse()
+)return;
 
-      trackEvent("funbox_joke_invalid");
 
-      return;
+let text="";
 
-    }
 
-    const hidden =
-      currentMaker
-        .split("")
-        .map((_, index) => index)
-        .filter(index =>
-          !revealedLetters.includes(index)
-        );
+if(type==="fact"){
 
-    if (!hidden.length) {
+text=randomItem(facts);
 
-      jokeFinished = true;
+}
 
-      document.getElementById("jokeStatus").textContent =
-        "🎉 Challenge complete!";
+else if(type==="joke"){
 
-      return;
+text=randomItem(jokes);
 
-    }
+}
 
-    const reveal =
-      randomItem(hidden);
+else if(type==="chaos"){
 
-    revealedLetters.push(reveal);
+text=randomItem(chaosAnswers);
 
-    renderJokeSecret();
+}
 
-    addPoints(10, "joke_valid");
+else if(type==="decision"){
 
-    document.getElementById("jokeStatus").textContent =
-      "😂 Joke accepted! One letter revealed.";
+text=randomItem(decisions);
 
-    trackEvent("funbox_joke_valid", {
+}
 
-      tone_level: toneModes[tone]
+else{
 
-    });
+let group=
+content[type][tone];
 
-    if (revealedLetters.length === currentMaker.length) {
+text=randomItem(group);
 
-      jokeFinished = true;
+}
 
-      addPoints(50, "joke_complete");
 
-      document.getElementById("jokeStatus").textContent =
-        "🏆 Full code revealed!";
+let result=
+document.getElementById(
+"result"
+);
 
-    }
+result.textContent=text;
 
-  }
+result.classList.remove("empty");
 
+addRecent(text);
 
-  function startVoiceJoke() {
+addPoints(
+5,
+"generator"
+);
 
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
+trackEvent(
+"funbox_generator_used",
+{
+generator:type,
+level:toneModes[tone]
+}
+);
 
-    if (!SpeechRecognition) {
+}
 
-      document.getElementById("jokeStatus").textContent =
-        "Voice recognition isn't supported in this browser. Try Chrome.";
 
-      return;
+function surprise(){
 
-    }
+if(
+!canUse()||
+!consumeUse()
+)return;
 
-    if (!consumeUse()) return;
 
-    const recognition =
-      new SpeechRecognition();
+let text=
+randomItem(
+surpriseIdeas
+);
 
-    recognition.lang = "en-IN";
+let result=
+document.getElementById(
+"result"
+);
 
-    recognition.interimResults = false;
+result.textContent=text;
 
-    recognition.maxAlternatives = 1;
+result.classList.remove("empty");
 
-    document.getElementById("jokeStatus").textContent =
-      "🎤 Listening... tell me a joke.";
+addRecent(text);
 
-    trackEvent("funbox_joke_voice");
+addPoints(
+5,
+"surprise"
+);
 
-    recognition.start();
+}
 
-    recognition.onresult = function(event) {
 
-      const spoken =
-        event.results[0][0].transcript;
+const guessReplies={
 
-      /*
-        IMPORTANT:
-        We intentionally DO NOT send the spoken joke
-        to Google Analytics.
-      */
+low:[
 
-      processJoke(spoken);
+"⬆️ Too low. Even your guess needs elevation.",
 
-    };
+"⬆️ Nope. Go higher.",
 
-    recognition.onerror = function() {
+"⬆️ That number is hiding under the target.",
 
-      document.getElementById("jokeStatus").textContent =
-        "Couldn't hear that. Try again.";
+"⬆️ Wrong direction. Up.",
 
-    };
+"⬆️ Higher. The target is not down there.",
 
-  }
+"⬆️ Your guess just took the basement route.",
 
+"⬆️ That's below the target. Physics remains undefeated."
 
-  /* =========================================================
-     ACCESS CODE
-  ========================================================== */
+],
 
-  function openCodeModal() {
+high:[
 
-    document.getElementById("codeModal")
-      .classList.add("show");
+"⬇️ Too high. Calm down, calculator.",
 
-    document.getElementById("codeInput")
-      .focus();
+"⬇️ Nope. Come back down.",
 
-  }
+"⬇️ You overshot reality.",
 
+"⬇️ Lower. The target isn't on the moon.",
 
-  function closeCodeModal() {
+"⬇️ That guess has ambition. Not accuracy.",
 
-    document.getElementById("codeModal")
-      .classList.remove("show");
+"⬇️ Your number is living above its pay grade.",
 
-  }
+"⬇️ That's higher than the target. Try returning to Earth."
 
+]
 
-  function redeemCode() {
+};
 
-    const input =
-      document.getElementById("codeInput");
 
-    const code =
-      input.value.trim();
+function newGuessGame(){
 
-    if (!code) {
+guessNumberTarget=
+Math.floor(Math.random()*50)+1;
 
-      document.getElementById("codeResult").textContent =
-        "Enter a code.";
+guessAttempts=0;
 
-      return;
+document.getElementById(
+"guessInput"
+).value="";
 
-    }
+let result=
+document.getElementById(
+"guessResult"
+);
 
-    /*
-      Client-side demo access system.
-      Do NOT use this as secure authentication.
-    */
+result.textContent=
+"New number selected. Try not to embarrass the calculator.";
 
-    unlimitedUntil =
-      Date.now() +
-      24 * 60 * 60 * 1000;
+result.classList.remove("empty");
 
-    localStorage.setItem(
-      STORAGE.unlimited,
-      unlimitedUntil
-    );
+}
 
-    document.getElementById("codeResult").textContent =
-      "✅ 24-hour unlimited access activated!";
 
-    /*
-      Never send the actual code to Analytics.
-    */
+function guessNumber(){
 
-    trackEvent("funbox_code_redeemed", {
+let input=
+document.getElementById(
+"guessInput"
+);
 
-      access_type: "unlimited"
+let result=
+document.getElementById(
+"guessResult"
+);
 
-    });
+let guess=
+Number(input.value);
 
-    updateAccessStatus();
 
-    addPoints(25, "code_redeemed");
+if(
+!guess||
+guess<1||
+guess>50
+){
 
-    setTimeout(() => {
+result.textContent=
+"Enter a number from 1 to 50.";
 
-      closeCodeModal();
+return;
 
-    }, 900);
+}
 
-  }
 
+guessAttempts++;
 
-  /* =========================================================
-     DAILY CHALLENGE
-  ========================================================== */
 
-  function renderChallenge() {
+if(guess===guessNumberTarget){
 
-    const today = getToday();
+result.textContent=
+"🎯 Correct. "+
+guessAttempts+
+" attempt(s). The machine reluctantly respects you.";
 
-    const completed =
-      localStorage.getItem(STORAGE.challenge) === today;
+addPoints(
+20,
+"guess_win"
+);
 
-    const text =
-      document.getElementById("challengeText");
+trackEvent(
+"funbox_guess_win",
+{
+attempts:guessAttempts
+}
+);
 
-    if (completed) {
+setTimeout(
+newGuessGame,
+1200
+);
 
-      text.textContent =
-        "✅ Today's challenge is already complete.";
+return;
 
-    } else {
+}
 
-      text.textContent =
-        "Use any FunBox generator today and claim your bonus.";
 
-    }
+if(guess<guessNumberTarget){
 
-  }
+result.textContent=
+randomItem(
+guessReplies.low
+);
 
+}
 
-  function completeChallenge() {
+else{
 
-    const today = getToday();
+result.textContent=
+randomItem(
+guessReplies.high
+);
 
-    if (
-      localStorage.getItem(STORAGE.challenge) === today
-    ) {
+}
 
-      alert("Today's challenge is already complete!");
+}
 
-      return;
 
-    }
+const jokeMakers=[
 
-    localStorage.setItem(
-      STORAGE.challenge,
-      today
-    );
+"TAKSH",
+"FUNBOX",
+"CHAOS",
+"LEGEND",
+"ROAST",
+"JOKER"
 
-    addPoints(25, "daily_challenge");
+];
 
-    renderChallenge();
 
-    trackEvent("funbox_challenge_complete", {
+let currentMaker=
+randomItem(jokeMakers);
 
-      challenge_type: "daily_generator",
-      reward: 25
+let revealedLetters=[];
 
-    });
 
-    alert("🏆 Daily Challenge complete! +25 points.");
+function newJokeGame(){
 
-  }
+currentMaker=
+randomItem(jokeMakers);
 
+revealedLetters=[];
 
-  /* =========================================================
-     STREAK
-  ========================================================== */
+renderJokeSecret();
 
-  function updateStreak() {
+document.getElementById(
+"jokeStatus"
+).textContent=
+"New joke challenge ready.";
 
-    const today = getToday();
+}
 
-    const last =
-      localStorage.getItem(STORAGE.lastDay);
 
-    if (last === today) {
+function renderJokeSecret(){
 
-      return;
+document.getElementById(
+"secretDisplay"
+).textContent=
 
-    }
+currentMaker
+.split("")
+.map(
+(letter,index)=>
+revealedLetters.includes(index)
+?letter
+:"?"
+)
+.join(" ");
 
-    if (!last) {
+}
 
-      streak = 1;
 
-    } else {
+function isLikelyJoke(text){
 
-      const previous =
-        new Date(last);
+let s=text.toLowerCase();
 
-      const current =
-        new Date(today);
+return[
 
-      const diff =
-        Math.round(
-          (current - previous) /
-          (1000 * 60 * 60 * 24)
-        );
+"why",
+"what",
+"how",
+"joke",
+"funny",
+"because",
+"who",
+"did",
+"school",
+"teacher",
+"knock",
+"went"
 
-      if (diff === 1) {
+].some(
+word=>s.includes(word)
+);
 
-        streak++;
+}
 
-      } else {
 
-        streak = 1;
+function processJoke(text){
 
-      }
+if(!text)return;
 
-    }
 
-    localStorage.setItem(
-      STORAGE.lastDay,
-      today
-    );
+if(!isLikelyJoke(text)){
 
-    localStorage.setItem(
-      STORAGE.streak,
-      streak
-    );
+document.getElementById(
+"jokeStatus"
+).textContent=
+"That sounded less like a joke and more like a status update.";
 
-  }
+return;
 
+}
 
-  /* =========================================================
-     INITIALIZE
-  ========================================================== */
 
-  function init() {
+let hidden=
+currentMaker
+.split("")
+.map(
+(_,index)=>index
+)
+.filter(
+index=>!revealedLetters.includes(index)
+);
 
-    updateStreak();
 
-    resetDailyUsesIfNeeded();
+if(!hidden.length)return;
 
-    renderProfile();
 
-    changeTone(tone);
+revealedLetters.push(
+randomItem(hidden)
+);
 
-    renderRecent();
+renderJokeSecret();
 
-    renderChallenge();
+addPoints(
+10,
+"joke_valid"
+);
 
-    updateAccessStatus();
+document.getElementById(
+"jokeStatus"
+).textContent=
+"😂 Accepted. One letter revealed.";
 
-    // If the user already used all free uses, show the popup on page load too.
-    if (!hasUnlimitedAccess() && uses >= 3 && extraUses <= 0) {
-      setTimeout(showAccessExpired, 500);
-    }
 
-    renderJokeSecret();
+if(
+revealedLetters.length===
+currentMaker.length
+){
 
-    newGuessGame();
+addPoints(
+50,
+"joke_complete"
+);
 
-  }
+document.getElementById(
+"jokeStatus"
+).textContent=
+"🏆 Full code revealed. Somehow you survived.";
 
+}
 
-  init();
+}
+
+
+function startVoiceJoke(){
+
+const SpeechRecognition=
+window.SpeechRecognition||
+window.webkitSpeechRecognition;
+
+
+if(!SpeechRecognition){
+
+document.getElementById(
+"jokeStatus"
+).textContent=
+"Voice recognition isn't supported here. Try Chrome.";
+
+return;
+
+}
+
+
+if(
+!canUse()||
+!consumeUse()
+)return;
+
+
+let recognition=
+new SpeechRecognition();
+
+recognition.lang="en-IN";
+
+recognition.interimResults=false;
+
+recognition.maxAlternatives=1;
+
+
+document.getElementById(
+"jokeStatus"
+).textContent=
+"🎤 Listening...";
+
+
+recognition.start();
+
+
+recognition.onresult=
+event=>{
+
+processJoke(
+event.results[0][0].transcript
+);
+
+};
+
+
+recognition.onerror=
+()=>{
+
+document.getElementById(
+"jokeStatus"
+).textContent=
+"Couldn't hear that. Try again.";
+
+};
+
+}
+
+
+function openLoginModal(){
+
+document.getElementById(
+"loginModal"
+).classList.add("show");
+
+document.getElementById(
+"loginName"
+).focus();
+
+}
+
+
+function closeLoginModal(){
+
+document.getElementById(
+"loginModal"
+).classList.remove("show");
+
+}
+
+
+function saveLogin(){
+
+let input=
+document.getElementById(
+"loginName"
+);
+
+let name=
+input.value.trim();
+
+
+if(!name){
+
+document.getElementById(
+"loginResult"
+).textContent=
+"Nickname required.";
+
+return;
+
+}
+
+
+localStorage.setItem(
+STORAGE.username,
+name.slice(0,20)
+);
+
+renderLoginState();
+
+closeLoginModal();
+
+}
+
+
+function logoutUser(){
+
+localStorage.removeItem(
+STORAGE.username
+);
+
+renderLoginState();
+
+}
+
+
+function renderLoginState(){
+
+let name=
+localStorage.getItem(
+STORAGE.username
+);
+
+let pill=
+document.getElementById(
+"userPill"
+);
+
+let logout=
+document.getElementById(
+"logoutBtn"
+);
+
+
+if(name){
+
+pill.textContent=
+"👤 "+name;
+
+pill.style.display=
+"inline-block";
+
+logout.style.display=
+"inline-block";
+
+}
+
+else{
+
+pill.style.display=
+"none";
+
+logout.style.display=
+"none";
+
+}
+
+}
+
+
+const THEMES={
+
+void:{
+bg:"#07070b",
+a:"#24133c",
+b:"#111b42",
+accent:"#a855f7",
+accent2:"#7c3aed"
+},
+
+blood:{
+bg:"#090607",
+a:"#3a1015",
+b:"#25090d",
+accent:"#ef4444",
+accent2:"#b91c1c"
+},
+
+acid:{
+bg:"#050805",
+a:"#123018",
+b:"#071d12",
+accent:"#84cc16",
+accent2:"#16a34a"
+},
+
+ocean:{
+bg:"#050a12",
+a:"#0b2940",
+b:"#061525",
+accent:"#38bdf8",
+accent2:"#0284c7"
+},
+
+gold:{
+bg:"#080705",
+a:"#30240d",
+b:"#171107",
+accent:"#facc15",
+accent2:"#ca8a04"
+},
+
+mono:{
+bg:"#070707",
+a:"#222",
+b:"#111",
+accent:"#f5f5f5",
+accent2:"#777"
+}
+
+};
+
+
+function openThemeModal(){
+
+document.getElementById(
+"themeModal"
+).classList.add("show");
+
+}
+
+
+function closeThemeModal(){
+
+document.getElementById(
+"themeModal"
+).classList.remove("show");
+
+}
+
+
+function setTheme(name){
+
+let theme=
+THEMES[name]||
+THEMES.void;
+
+
+document.body.style.background=
+
+"radial-gradient(circle at top left,"+
+theme.a+
+" 0,transparent 35%),"+
+"radial-gradient(circle at bottom right,"+
+theme.b+
+" 0,transparent 35%),"+
+theme.bg;
+
+
+document.documentElement.style.setProperty(
+"--accent",
+theme.accent
+);
+
+document.documentElement.style.setProperty(
+"--accent2",
+theme.accent2
+);
+
+
+localStorage.setItem(
+STORAGE.theme,
+name
+);
+
+
+document.querySelectorAll(
+".theme-btn"
+).forEach(
+button=>
+button.classList.remove("active")
+);
+
+
+closeThemeModal();
+
+}
+
+
+function loadSavedTheme(){
+
+setTheme(
+localStorage.getItem(
+STORAGE.theme
+)||"void"
+);
+
+}
+
+
+function openCodeModal(){
+
+document.getElementById(
+"codeModal"
+).classList.add("show");
+
+document.getElementById(
+"codeInput"
+).focus();
+
+}
+
+
+function closeCodeModal(){
+
+document.getElementById(
+"codeModal"
+).classList.remove("show");
+
+}
+
+
+function redeemCode(){
+
+let code=
+document.getElementById(
+"codeInput"
+).value.trim();
+
+
+if(!code){
+
+document.getElementById(
+"codeResult"
+).textContent=
+"Enter a code.";
+
+return;
+
+}
+
+
+unlimitedUntil=
+Date.now()+86400000;
+
+
+localStorage.setItem(
+STORAGE.unlimited,
+unlimitedUntil
+);
+
+
+document.getElementById(
+"codeResult"
+).textContent=
+"✅ 24-hour unlimited access activated.";
+
+
+updateAccessStatus();
+
+addPoints(
+25,
+"code_redeemed"
+);
+
+
+setTimeout(
+closeCodeModal,
+800
+);
+
+}
+
+
+function renderChallenge(){
+
+let completed=
+localStorage.getItem(
+STORAGE.challenge
+)===
+getToday();
+
+
+document.getElementById(
+"challengeText"
+).textContent=
+
+completed
+?
+"✅ Today's challenge is already complete."
+:
+"Use any FunBox generator today and claim your bonus.";
+
+}
+
+
+function completeChallenge(){
+
+let today=
+getToday();
+
+
+if(
+localStorage.getItem(
+STORAGE.challenge
+)===
+today
+){
+
+alert(
+"Today's challenge is already complete!"
+);
+
+return;
+
+}
+
+
+localStorage.setItem(
+STORAGE.challenge,
+today
+);
+
+addPoints(
+25,
+"daily_challenge"
+);
+
+renderChallenge();
+
+alert(
+"🏆 Daily Challenge complete! +25 points."
+);
+
+}
+
+
+function updateStreak(){
+
+let today=
+getToday();
+
+let last=
+localStorage.getItem(
+STORAGE.lastDay
+);
+
+
+if(last===today)return;
+
+
+if(!last){
+
+streak=1;
+
+}
+
+else{
+
+let diff=
+Math.round(
+(
+new Date(today)-
+new Date(last)
+)/86400000
+);
+
+
+if(diff===1){
+
+streak++;
+
+}
+
+else{
+
+streak=1;
+
+}
+
+}
+
+
+localStorage.setItem(
+STORAGE.lastDay,
+today
+);
+
+localStorage.setItem(
+STORAGE.streak,
+streak
+);
+
+}
+
+
+function init(){
+
+updateStreak();
+
+resetDailyUsesIfNeeded();
+
+renderProfile();
+
+renderLoginState();
+
+loadSavedTheme();
+
+changeTone(tone);
+
+renderRecent();
+
+renderChallenge();
+
+updateAccessStatus();
+
+renderJokeSecret();
+
+newGuessGame();
+
+
+if(
+!hasUnlimitedAccess()&&
+uses>=3&&
+extraUses<=0
+){
+
+setTimeout(
+showAccessExpired,
+500
+);
+
+}
+
+}
+
+
+init();
 
 </script>
 
