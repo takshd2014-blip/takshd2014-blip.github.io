@@ -49,6 +49,10 @@
       margin-bottom: 8px;
     }
 
+    h2 {
+      margin-bottom: 10px;
+    }
+
     .tagline {
       opacity: 0.75;
     }
@@ -63,7 +67,8 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.25);
     }
 
-    input {
+    input,
+    textarea {
       width: 100%;
       padding: 15px;
       border-radius: 12px;
@@ -73,10 +78,9 @@
       font-size: 16px;
     }
 
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+    textarea {
+      min-height: 120px;
+      resize: vertical;
     }
 
     button {
@@ -87,11 +91,25 @@
       font-size: 15px;
       font-weight: bold;
       transition: 0.2s;
+      background: white;
+      color: #222;
     }
 
     button:hover {
       transform: translateY(-2px);
       filter: brightness(1.1);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
     .result {
@@ -147,6 +165,75 @@
       margin-bottom: 8px;
     }
 
+    /* MAKER */
+
+    .maker-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0,0,0,0.22);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .maker-progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 22px 0;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .maker-letter {
+      min-width: 45px;
+      padding: 8px 5px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      text-align: center;
+    }
+
+    .maker-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .voice-status {
+      text-align: center;
+      margin-top: 12px;
+      opacity: 0.8;
+      min-height: 22px;
+    }
+
+    .maker-result {
+      min-height: 140px;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.06);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .letter-reveal {
+      font-size: 35px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .full-name {
+      font-size: 30px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .small-note {
+      font-size: 13px;
+      opacity: 0.65;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
     footer {
       text-align: center;
       opacity: 0.7;
@@ -154,6 +241,7 @@
     }
 
     @media (max-width: 700px) {
+
       h1 {
         font-size: 34px;
       }
@@ -165,6 +253,19 @@
       .about-grid {
         grid-template-columns: 1fr;
       }
+
+      .maker-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .maker-progress {
+        gap: 4px;
+        font-size: 23px;
+      }
+
+      .maker-letter {
+        min-width: 36px;
+      }
     }
   </style>
 </head>
@@ -173,47 +274,138 @@
 
 <div class="container">
 
+  <!-- HEADER -->
+
   <header>
-    <img src="22.png" class="logo" alt="FunBox Logo">
+
+    <img
+      src="22.png"
+      class="logo"
+      alt="FunBox Logo"
+    >
+
     <h1>⚡ FunBox</h1>
-    <p class="tagline">Because boring is overrated.</p>
+
+    <p class="tagline">
+      Because boring is overrated.
+    </p>
+
   </header>
-<section class="glass">
 
-  <h2>🔐 Daily Access</h2>
 
-  <p id="accessStatus">
-    🎟️ Limited access active hai.
-  </p>
+  <!-- ACCESS -->
 
-  <input
-    type="text"
-    id="redeemInput"
-    placeholder="Enter today's redeem code"
-    autocomplete="off"
-  >
+  <section class="glass">
 
-  <button onclick="redeemCode()">
-    🔓 Redeem Code
-  </button>
+    <h2>🔐 FunBox Access</h2>
 
-  <p id="redeemMessage" style="margin-top:12px;"></p>
+    <p
+      id="accessStatus"
+      style="margin-top:10px;"
+    >
+      🎟️ 3 free uses available.
+    </p>
 
-  <button
-    onclick="makerJoke()"
-    id="makerJokeButton"
-    style="display:none; margin-top:12px;"
-  >
-    😂 Get Maker Joke
-  </button>
+    <input
+      type="text"
+      id="redeemInput"
+      placeholder="Enter redeem code..."
+      autocomplete="off"
+    >
 
-  <div
-    id="makerJokeResult"
-    class="result"
-    style="display:none;"
-  ></div>
+    <button onclick="redeemCode()">
+      🔓 Redeem Code
+    </button>
 
-</section>
+    <p
+      id="redeemMessage"
+      style="margin-top:12px;"
+    ></p>
+
+
+    <!-- JOKE MAKER -->
+
+    <div
+      id="makerSection"
+      class="maker-box"
+      style="display:none;"
+    >
+
+      <h2>😂 Joke Maker</h2>
+
+      <p style="opacity:0.82; line-height:1.6;">
+        Tum ek joke bolo ya type karo.
+        Har joke ke baad secret maker name ka
+        <strong>1 letter</strong> reveal hoga. 👀
+      </p>
+
+      <div
+        id="makerProgress"
+        class="maker-progress"
+      ></div>
+
+      <p
+        id="makerCount"
+        style="text-align:center; opacity:0.75;"
+      ></p>
+
+
+      <textarea
+        id="jokeInput"
+        placeholder="Apna joke yahan type karo..."
+      ></textarea>
+
+
+      <div class="maker-buttons">
+
+        <button
+          id="voiceButton"
+          onclick="startVoiceJoke()"
+        >
+          🎤 Bolkar Joke Batao
+        </button>
+
+        <button
+          id="submitJokeButton"
+          onclick="submitMakerJoke()"
+        >
+          📨 Submit My Joke
+        </button>
+
+      </div>
+
+
+      <p
+        id="voiceStatus"
+        class="voice-status"
+      ></p>
+
+
+      <div
+        id="makerJokeResult"
+        class="maker-result"
+      >
+        Pehla joke submit karo aur mystery start karo. 👀
+      </div>
+
+      <button
+        id="newMakerGameButton"
+        onclick="startNewMakerGame()"
+        style="
+          width:100%;
+          margin-top:12px;
+          display:none;
+        "
+      >
+        🔄 New Mystery Name
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- FUN GENERATOR -->
 
   <section class="glass">
 
@@ -254,9 +446,14 @@
 
     </div>
 
-    <div class="result" id="result">
+
+    <div
+      class="result"
+      id="result"
+    >
       Select a button and let the chaos begin...
     </div>
+
 
     <div class="actions">
 
@@ -273,49 +470,62 @@
   </section>
 
 
+  <!-- RECENT RESULTS -->
+
   <section class="glass recent">
 
     <h2>🕘 Recent Results</h2>
 
     <div id="recentResults">
+
       <p style="opacity:0.6; margin-top:15px;">
         Abhi kuch nahi hai...
       </p>
+
     </div>
 
   </section>
 
 
+  <!-- ABOUT -->
+
   <section class="glass">
 
     <h2>ℹ️ About FunBox</h2>
 
-    <p style="margin-top:12px; line-height:1.7; opacity:0.85;">
-      FunBox ek random entertainment zone hai jahan tum excuses,
-      roasts, weird facts, future predictions aur naam wali shayari
-      generate kar sakte ho.
+    <p
+      style="
+        margin-top:12px;
+        line-height:1.7;
+        opacity:0.85;
+      "
+    >
+      FunBox ek random entertainment zone hai jahan
+      excuses, roasts, weird facts, future predictions,
+      naam wali shayari aur random chaos milta hai.
     </p>
+
 
     <div class="about-grid">
 
       <div class="feature">
         <h3>🔥 Savage Roasts</h3>
-        <p>Thoda savage. Zero bad words.</p>
+        <p>Light savage Hinglish roasts.</p>
       </div>
 
       <div class="feature">
         <h3>✍️ Name Shayari</h3>
-        <p>Naam ke sound ke saath rhyme.</p>
+        <p>Naam ke saath rhyming shayari.</p>
       </div>
 
       <div class="feature">
         <h3>🔮 Predictions</h3>
-        <p>Future scanner ka scientific zero percent guarantee.</p>
+        <p>Random future scanner.</p>
       </div>
 
       <div class="feature">
         <h3>🤯 Weird Facts</h3>
-        <p>Aise facts jo random bhi hain aur interesting bhi.</p>
+        <p>Random facts jo dimag ko confuse karein.</p>
       </div>
 
       <div class="feature">
@@ -324,8 +534,8 @@
       </div>
 
       <div class="feature">
-        <h3>🎲 Pure Chaos</h3>
-        <p>Random button. Random result. No explanation.</p>
+        <h3>🎲 Random Chaos</h3>
+        <p>Random result. Zero planning.</p>
       </div>
 
     </div>
@@ -333,19 +543,21 @@
   </section>
 
 
+  <!-- FOOTER -->
+
   <footer>
 
-    <div style="font-size:20px;">
+    <div>
       ⚡ FunBox
     </div>
 
-    <p style="margin-top:8px;">
+    <div>
       Made by <strong>Taksh</strong>
-    </p>
+    </div>
 
-    <p style="margin-top:5px;">
+    <div style="margin-top:5px;">
       FunBox © 2026 • Because boring is overrated.
-    </p>
+    </div>
 
   </footer>
 
@@ -354,555 +566,1131 @@
 
 <script>
 
+  /* =====================================================
+     ACCESS SYSTEM
+     ===================================================== */
 
-const MAKER_NAME = "TAKSH";
+  const MAKER_CODE = "TAKSH";
 
-const FREE_LIMIT = 3;
+  const FREE_LIMIT = 3;
 
-const ACCESS_TIME = 24 * 60 * 60 * 1000;
+  let freeUses = Number(
+    localStorage.getItem("funboxFreeUses") || "0"
+  );
 
-let unlimitedUntil =
-  Number(localStorage.getItem("funboxUnlimitedUntil")) || 0;
-
-let freeUses =
-  Number(localStorage.getItem("funboxFreeUses")) || 0;
-
-let makerJokeIndex =
-  Number(localStorage.getItem("funboxMakerJokeIndex")) || 0;
-
-
-// Aaj ka random Maker Name
-function getDailyMaker() {
-
-  const today = new Date().toISOString().slice(0, 10);
-
-  const savedDate =
-    localStorage.getItem("funboxMakerDate");
-
-  const savedName =
-    localStorage.getItem("funboxMakerName");
-
-  // Agar aaj ka name already selected hai
-  if (savedDate === today && savedName) {
-    return savedName;
-  }
-
-  // Naya random name
-  const randomName =
-    MAKER_NAMES[
-      Math.floor(Math.random() * MAKER_NAMES.length)
-    ];
-
-  localStorage.setItem("funboxMakerDate", today);
-  localStorage.setItem("funboxMakerName", randomName);
-
-  // Naye din jokes phir se start
-  localStorage.setItem("funboxMakerJokeIndex", "0");
-
-  makerJokeIndex = 0;
-
-  return randomName;
-}
+  let unlimitedUnlocked =
+    localStorage.getItem("funboxUnlimited") === "true";
 
 
-const todayMaker = "TAKSH";
+  /* =====================================================
+     FOUR RANDOM MAKER NAMES
+     ===================================================== */
+
+  const MAKER_NAMES = [
+    "TAKSH",
+    "DHRUVI",
+    "RUPAL",
+    "CHERRY"
+  ];
 
 
-// Check unlimited access
-function hasUnlimitedAccess() {
+  let selectedMakerName =
+    localStorage.getItem("funboxSelectedMaker") || "";
 
-  return Date.now() < unlimitedUntil;
-
-}
-
-
-// Access status update
-function updateAccessStatus() {
-
-  const status =
-    document.getElementById("accessStatus");
-
-  if (!status) return;
-
-  if (hasUnlimitedAccess()) {
-
-    status.textContent =
-      "♾️ Unlimited access active hai!";
-
-  } else {
-
-    const remaining =
-      Math.max(0, FREE_LIMIT - freeUses);
-
-    status.textContent =
-      `🎟️ Free uses remaining: ${remaining}`;
-  }
-}
-
-
-// Generator access check
-function checkAccess() {
-
-  if (hasUnlimitedAccess()) {
-    return true;
-  }
-
-  if (freeUses < FREE_LIMIT) {
-
-    freeUses++;
-
-    localStorage.setItem(
-      "funboxFreeUses",
-      freeUses
+  let makerLetterIndex =
+    Number(
+      localStorage.getItem("funboxMakerLetterIndex") || "0"
     );
 
-    updateAccessStatus();
 
-    return true;
-  }
+  /* =====================================================
+     RANDOM NAME SELECTOR
+     ===================================================== */
 
-  const message =
-    document.getElementById("redeemMessage");
+  function chooseRandomMakerName() {
 
-  if (message) {
+    const randomIndex =
+      Math.floor(
+        Math.random() * MAKER_NAMES.length
+      );
 
-    message.textContent =
-      "🔒 Free access khatam! Aaj ka redeem code enter karo.";
-  }
-
-  return false;
-}
-
-
-// Redeem code
-function redeemCode() {
-
-  const input =
-    document
-      .getElementById("redeemInput")
-      .value
-      .trim()
-      .toUpperCase();
-
-  const message =
-    document.getElementById("redeemMessage");
-
-  if (input === todayMaker) {
-
-    unlimitedUntil =
-      Date.now() + ACCESS_TIME;
+    selectedMakerName =
+      MAKER_NAMES[randomIndex];
 
     localStorage.setItem(
-      "funboxUnlimitedUntil",
-      unlimitedUntil
+      "funboxSelectedMaker",
+      selectedMakerName
     );
 
-    makerJokeIndex = 0;
+    makerLetterIndex = 0;
 
     localStorage.setItem(
-      "funboxMakerJokeIndex",
+      "funboxMakerLetterIndex",
       "0"
     );
 
-    message.textContent =
-      "✅ Correct! 24 hours unlimited access unlocked.";
-
-    document.getElementById(
-      "makerJokeButton"
-    ).style.display = "inline-block";
-
-    updateAccessStatus();
-
-  } else {
-
-    message.textContent =
-      "❌ Wrong code! Aaj ka code nahi hai.";
   }
-}
 
 
-// Maker jokes
-const makerJokes = {
+  /* =====================================================
+     ACCESS STATUS
+     ===================================================== */
 
-  TAKSH: [
-    "T se Talent... aur homework ke time talent gayab. 😭",
-    "T se Time bhi hota hai, lekin Taksh ke paas homework ke liye kabhi nahi hota.",
-    "T se Tension bhi hoti hai, especially jab teacher bole: homework dikhao.",
-    "T se Topper bol sakte the... par result ne mana kar diya.",
-    "T se Taksh. Mystery solved! 😂"
-  ],
+  function updateAccessStatus() {
 
-  DHRUVI: [
-    "D se Dimaag hota hai, lekin kabhi-kabhi Dhr uvi ka loading pe hota hai. 😂",
-    "D se Drama bhi hota hai, aur excuses mein full HD drama.",
-    "D se Deadline hoti hai, par deadline ko suggestion samjho.",
-    "D se Decision hota hai: homework karna hai... kal.",
-    "D se Dhruvi. Ek letter aur reveal! 😎",
-    "D se naam shuru hua, ab mystery almost khatam."
-  ],
+    const status =
+      document.getElementById("accessStatus");
 
-  RUPAL: [
-    "R se Rupal, aur R se Result... dono ka connection suspense hai. 😂",
-    "R se Routine hota hai, par Rupal ka routine roz update hota hai.",
-    "R se Rocket hota hai, par homework abhi launch nahi hua.",
-    "R se Reason hota hai, aur Rupal ke paas excuses ke reasons ready hain.",
-    "R se Rupal. Mystery complete! 😎"
-  ],
-
-  CHERRY: [
-    "C se Cherry, aur C se Confidence... dono full power. 😂",
-    "C se Clever hota hai, lekin common sense kabhi-kabhi vacation pe.",
-    "C se Class bhi hoti hai, jahan homework ka sawaal dangerous hota hai.",
-    "C se Calculator, par simple maths mein bhi investigation.",
-    "C se Chill bhi hota hai, jo homework ke time priority ban jata hai.",
-    "C se Cherry. Mystery complete! 😎"
-  ]
-
-};
+    const maker =
+      document.getElementById("makerSection");
 
 
-// Maker Joke button
-function makerJoke() {
+    if (unlimitedUnlocked) {
 
-  if (!hasUnlimitedAccess()) {
+      status.innerHTML =
+        "🔓 <strong>Unlimited Access Active!</strong>";
+
+      maker.style.display = "block";
+
+      if (!selectedMakerName) {
+        chooseRandomMakerName();
+      }
+
+      renderMakerProgress();
+
+      return;
+    }
+
+
+    maker.style.display = "none";
+
+
+    const remaining =
+      Math.max(
+        FREE_LIMIT - freeUses,
+        0
+      );
+
+
+    if (remaining > 0) {
+
+      status.innerHTML =
+        `🎟️ ${remaining} free uses remaining.`;
+
+    } else {
+
+      status.innerHTML =
+        "🔒 Free uses khatam. Redeem code use karo.";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     REDEEM
+     ===================================================== */
+
+  function redeemCode() {
+
+    const input =
+      document
+        .getElementById("redeemInput")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const message =
+      document.getElementById("redeemMessage");
+
+
+    if (!input) {
+
+      message.innerHTML =
+        "⚠️ Pehle code enter karo.";
+
+      return;
+    }
+
+
+    if (input === MAKER_CODE) {
+
+      unlimitedUnlocked = true;
+
+      localStorage.setItem(
+        "funboxUnlimited",
+        "true"
+      );
+
+
+      /*
+        Har successful redeem par
+        ek naya random maker select hoga.
+      */
+
+      chooseRandomMakerName();
+
+
+      message.innerHTML =
+        "🎉 Code accepted! Unlimited access unlocked!";
+
+
+      document.getElementById(
+        "redeemInput"
+      ).value = "";
+
+
+      updateAccessStatus();
+
+      showMakerStart();
+
+      return;
+    }
+
+
+    message.innerHTML =
+      "❌ Wrong code. Try again.";
+
+  }
+
+
+  /* =====================================================
+     ACCESS CHECK
+     ===================================================== */
+
+  function checkAccess() {
+
+    if (unlimitedUnlocked) {
+      return true;
+    }
+
+
+    if (freeUses < FREE_LIMIT) {
+
+      freeUses++;
+
+      localStorage.setItem(
+        "funboxFreeUses",
+        String(freeUses)
+      );
+
+      updateAccessStatus();
+
+      return true;
+    }
+
+
+    document.getElementById(
+      "redeemMessage"
+    ).innerHTML =
+      "🔒 Free limit reached. Redeem code to continue.";
+
+    return false;
+  }
+
+
+  /* =====================================================
+     MAKER START
+     ===================================================== */
+
+  function showMakerStart() {
+
+    const result =
+      document.getElementById(
+        "makerJokeResult"
+      );
+
+    result.innerHTML = `
+      <strong>🎯 Mystery Maker Ready!</strong>
+      <br><br>
+      Tumhara pehla joke ka wait hai...
+    `;
+
+  }
+
+
+  /* =====================================================
+     MAKER PROGRESS
+     ===================================================== */
+
+  function renderMakerProgress() {
+
+    const progress =
+      document.getElementById(
+        "makerProgress"
+      );
+
+    const count =
+      document.getElementById(
+        "makerCount"
+      );
+
+
+    if (!selectedMakerName) {
+      chooseRandomMakerName();
+    }
+
+
+    progress.innerHTML = "";
+
+
+    for (
+      let i = 0;
+      i < selectedMakerName.length;
+      i++
+    ) {
+
+      const box =
+        document.createElement("div");
+
+      box.className =
+        "maker-letter";
+
+
+      if (i < makerLetterIndex) {
+
+        box.textContent =
+          selectedMakerName[i];
+
+      } else {
+
+        box.textContent = "•";
+
+      }
+
+
+      progress.appendChild(box);
+
+    }
+
+
+    if (
+      makerLetterIndex >=
+      selectedMakerName.length
+    ) {
+
+      count.innerHTML =
+        `🎉 Mystery complete!`;
+
+    } else {
+
+      count.innerHTML =
+        `😂 Joke ${makerLetterIndex + 1} of ${selectedMakerName.length}`;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SUBMIT JOKE
+     ===================================================== */
+
+  function submitMakerJoke(
+    jokeFromVoice = ""
+  ) {
+
+    if (!unlimitedUnlocked) {
+
+      document.getElementById(
+        "makerJokeResult"
+      ).innerHTML =
+        "🔒 Pehle redeem code enter karo.";
+
+      return;
+    }
+
+
+    if (
+      makerLetterIndex >=
+      selectedMakerName.length
+    ) {
+
+      return;
+    }
+
+
+    const input =
+      document.getElementById(
+        "jokeInput"
+      );
+
+
+    const joke =
+      jokeFromVoice ||
+      input.value.trim();
+
+
+    if (!joke) {
+
+      document.getElementById(
+        "makerJokeResult"
+      ).innerHTML =
+        "😂 Joke toh bolo/likho pehle!";
+
+      return;
+    }
+
+
+    if (joke.length < 3) {
+
+      document.getElementById(
+        "makerJokeResult"
+      ).innerHTML =
+        "😂 Itna chhota joke? Thoda aur effort daalo.";
+
+      return;
+    }
+
+
+    /*
+      Current letter
+    */
+
+    const revealedLetter =
+      selectedMakerName[makerLetterIndex];
+
+
+    const currentNumber =
+      makerLetterIndex + 1;
+
+
+    makerLetterIndex++;
+
+
+    localStorage.setItem(
+      "funboxMakerLetterIndex",
+      String(makerLetterIndex)
+    );
+
+
+    input.value = "";
+
+
+    /*
+      Progress update
+    */
+
+    renderMakerProgress();
+
+
+    const result =
+      document.getElementById(
+        "makerJokeResult"
+      );
+
+
+    /*
+      Escape user text before putting it
+      inside innerHTML.
+    */
+
+    const safeJoke =
+      escapeHtml(joke);
+
+
+    if (
+      makerLetterIndex >=
+      selectedMakerName.length
+    ) {
+
+      result.innerHTML = `
+        <div>
+          😂 <strong>Joke ${currentNumber}</strong>
+        </div>
+
+        <div style="margin-top:10px;">
+          "${safeJoke}"
+        </div>
+
+        <div class="letter-reveal">
+          🔤 Letter ${currentNumber}:
+          ${revealedLetter}
+        </div>
+
+        <div class="full-name">
+          🎉 ${selectedMakerName}
+        </div>
+
+        <div>
+          Mystery solved! 😂
+        </div>
+      `;
+
+
+      document.getElementById(
+        "submitJokeButton"
+      ).disabled = true;
+
+
+      document.getElementById(
+        "voiceButton"
+      ).disabled = true;
+
+
+      document.getElementById(
+        "newMakerGameButton"
+      ).style.display = "block";
+
+
+    } else {
+
+      result.innerHTML = `
+        <div>
+          😂 <strong>Joke ${currentNumber}</strong>
+        </div>
+
+        <div style="margin-top:10px;">
+          "${safeJoke}"
+        </div>
+
+        <div class="letter-reveal">
+          🔤 Letter ${currentNumber}:
+          ${revealedLetter}
+        </div>
+
+        <div>
+          ${selectedMakerName.length - makerLetterIndex}
+          letter(s) abhi hidden hain... 👀
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     NEW RANDOM MAKER GAME
+     ===================================================== */
+
+  function startNewMakerGame() {
+
+    chooseRandomMakerName();
+
+
+    document.getElementById(
+      "submitJokeButton"
+    ).disabled = false;
+
+
+    document.getElementById(
+      "voiceButton"
+    ).disabled = false;
+
+
+    document.getElementById(
+      "newMakerGameButton"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "jokeInput"
+    ).value = "";
+
 
     document.getElementById(
       "makerJokeResult"
-    ).style.display = "block";
+    ).innerHTML = `
+      <strong>🎯 New Mystery Name!</strong>
+      <br><br>
+      Ab phir se joke bolo...
+    `;
+
+
+    renderMakerProgress();
+
+  }
+
+
+  /* =====================================================
+     VOICE JOKE
+     ===================================================== */
+
+  let recognition = null;
+
+
+  function startVoiceJoke() {
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+
+    const status =
+      document.getElementById(
+        "voiceStatus"
+      );
+
+
+    const voiceButton =
+      document.getElementById(
+        "voiceButton"
+      );
+
+
+    if (!SpeechRecognition) {
+
+      status.innerHTML =
+        "⚠️ Is browser mein voice input supported nahi hai. Neeche type karke submit karo.";
+
+      return;
+    }
+
+
+    if (
+      makerLetterIndex >=
+      selectedMakerName.length
+    ) {
+
+      return;
+    }
+
+
+    recognition =
+      new SpeechRecognition();
+
+
+    /*
+      Indian English/Hinglish ke liye.
+    */
+
+    recognition.lang = "en-IN";
+
+    recognition.interimResults = false;
+
+    recognition.continuous = false;
+
+
+    voiceButton.disabled = true;
+
+
+    status.innerHTML =
+      "🎤 Sun raha hoon... Ab apna joke bolo!";
+
+
+    recognition.onresult =
+      function(event) {
+
+        const transcript =
+          event.results[0][0].transcript;
+
+
+        document.getElementById(
+          "jokeInput"
+        ).value = transcript;
+
+
+        status.innerHTML =
+          "✅ Joke suna gaya!";
+
+
+        submitMakerJoke(
+          transcript
+        );
+
+      };
+
+
+    recognition.onerror =
+      function(event) {
+
+        status.innerHTML =
+          "⚠️ Voice input error. Joke type karke try karo.";
+
+        voiceButton.disabled = false;
+
+      };
+
+
+    recognition.onend =
+      function() {
+
+        voiceButton.disabled = false;
+
+      };
+
+
+    try {
+
+      recognition.start();
+
+    } catch (error) {
+
+      voiceButton.disabled = false;
+
+      status.innerHTML =
+        "⚠️ Voice start nahi ho paya. Dobara try karo.";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     HTML ESCAPE
+     ===================================================== */
+
+  function escapeHtml(text) {
+
+    const div =
+      document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+  }
+
+
+  /* =====================================================
+     FUN CONTENT
+     ===================================================== */
+
+  const data = {
+
+    excuse: [
+
+      "Sir, homework ready tha... bas notebook ne ghar pe rehne ka decision le liya. 😭",
+
+      "Maine homework kiya tha, lekin mera bag usko accept nahi kar raha tha. 😂",
+
+      "Network slow tha... isliye mera homework bhi upload nahi hua. 😭",
+
+      "Kal pakka karunga. Ye line main khud ko bhi roz bolta hoon. 😂",
+
+      "Homework karne baitha tha, phir 2 minute ke liye phone dekha... aur history ban gayi."
+
+    ],
+
+
+    future: [
+
+      "Tumhara future bright hai... bas screen brightness kam karni padegi. 🔮",
+
+      "Kal tumhe ek unexpected message milega. Shayad 'Homework complete?' 😭",
+
+      "Tumhare future mein success hai... aur uske saath thoda homework bhi.",
+
+      "Aaj luck tumhare side hai. Kal ka pata nahi. 😂",
+
+      "Future scanner kehta hai: tum kuch bada karoge... pehle room clean karo."
+
+    ],
+
+
+    fact: [
+
+      "Octopus ke teen hearts hote hain. Tumhara ek heart hai aur woh bhi notifications pe dependent hai. 🐙",
+
+      "Bananas technically berries hote hain, lekin strawberries nahi. Nature ko bhi confusion pasand hai. 🍌",
+
+      "Honey bahut long time tak spoil nahi hota. Matlab honey tumse zyada responsible hai. 😂",
+
+      "Sharks dinosaurs se bhi purane hain. 🦈",
+
+      "Wombat cube-shaped poop karta hai. Nature kabhi-kabhi overcreative ho jati hai. 😂"
+
+    ],
+
+
+    roast: [
+
+      "Tumhari planning Wi-Fi signal jaisi hai: naam strong, connection zero. 😂",
+
+      "Tumhara confidence impressive hai... evidence abhi tak nahi mila. 😭",
+
+      "Tum itne late ho ki clock bhi tumhara wait karte-karte tired ho gayi. 😂",
+
+      "Tumhara brain loading screen pe permanently atka hua lagta hai. 💀",
+
+      "Tum multitasking kar sakte ho: ek saath kuch bhi complete nahi karna. 😂",
+
+      "Tumhara focus goldfish se competition kar raha hai. 🐟"
+
+    ],
+
+
+    fate: [
+
+      "🎲 Fate says: Aaj tumhara lucky number 7 hai.",
+
+      "🎲 Fate says: Aaj kuch random hoga. Exactly kya, ye fate bhi nahi jaanta.",
+
+      "🎲 Fate says: Tumhe ek funny coincidence milega.",
+
+      "🎲 Fate says: Aaj procrastination ka level dangerous ho sakta hai. 😂",
+
+      "🎲 Fate says: Tumhari next decision ka result surprisingly funny hoga."
+
+    ]
+
+  };
+
+
+  /* =====================================================
+     RANDOM SYSTEM
+     ===================================================== */
+
+  const usedIndexes = {
+
+    excuse: [],
+    future: [],
+    fact: [],
+    roast: [],
+    fate: []
+
+  };
+
+
+  function getRandom(category) {
+
+    const array =
+      data[category];
+
+
+    if (
+      usedIndexes[category].length >=
+      array.length
+    ) {
+
+      usedIndexes[category] = [];
+
+    }
+
+
+    let index;
+
+
+    do {
+
+      index =
+        Math.floor(
+          Math.random() *
+          array.length
+        );
+
+    } while (
+      usedIndexes[category].includes(index)
+    );
+
+
+    usedIndexes[category].push(index);
+
+
+    return array[index];
+
+  }
+
+
+  /* =====================================================
+     GENERATE
+     ===================================================== */
+
+  function generate(category) {
+
+    if (!checkAccess()) {
+      return;
+    }
+
+
+    const text =
+      getRandom(category);
+
+
+    showResult(text);
+
+  }
+
+
+  /* =====================================================
+     RESULT
+     ===================================================== */
+
+  function showResult(text) {
+
+    const result =
+      document.getElementById(
+        "result"
+      );
+
+
+    result.textContent = text;
+
+
+    addRecent(text);
+
+  }
+
+
+  /* =====================================================
+     NAME SHAYARI
+     ===================================================== */
+
+  function generateShayari() {
+
+    if (!checkAccess()) {
+      return;
+    }
+
+
+    let name =
+      document
+        .getElementById("nameInput")
+        .value
+        .trim();
+
+
+    if (!name) {
+
+      name = "Dost";
+
+    }
+
+
+    const cleanName =
+      name.charAt(0).toUpperCase() +
+      name.slice(1);
+
+
+    const shayaris = [
+
+      `${cleanName} naam hai tera, style tera kamaal, entry teri ho toh ruk jaaye pura hall. 😂`,
+
+      `${cleanName} ka naam suna, mood ho gaya bright, attitude tera kabhi low, kabhi full flight. 😎`,
+
+      `${cleanName} naam mein hai swag ka sound, jahan tu aaye wahan comedy ka ground. 😂`,
+
+      `${cleanName} naam chhota nahi, pura brand hai bhai, bas homework wali file thodi missing hai bhai. 😭`,
+
+      `${cleanName} ki entry hui, scene hua set, ab kya hoga next? Ye toh internet bhi nahi predict kar sakta. 😂`
+
+    ];
+
+
+    const random =
+      shayaris[
+        Math.floor(
+          Math.random() *
+          shayaris.length
+        )
+      ];
+
+
+    showResult(random);
+
+  }
+
+
+  /* =====================================================
+     SURPRISE
+     ===================================================== */
+
+  function surprise() {
+
+    if (!checkAccess()) {
+      return;
+    }
+
+
+    const categories =
+      [
+        "excuse",
+        "future",
+        "fact",
+        "roast",
+        "fate"
+      ];
+
+
+    const category =
+      categories[
+        Math.floor(
+          Math.random() *
+          categories.length
+        )
+      ];
+
+
+    showResult(
+      getRandom(category)
+    );
+
+  }
+
+
+  /* =====================================================
+     RECENT RESULTS
+     ===================================================== */
+
+  let recentResults =
+    JSON.parse(
+      localStorage.getItem(
+        "funboxRecent"
+      ) || "[]"
+    );
+
+
+  function addRecent(text) {
+
+    recentResults.unshift(text);
+
+
+    if (
+      recentResults.length > 8
+    ) {
+
+      recentResults.pop();
+
+    }
+
+
+    localStorage.setItem(
+      "funboxRecent",
+      JSON.stringify(recentResults)
+    );
+
+
+    renderRecent();
+
+  }
+
+
+  function renderRecent() {
+
+    const box =
+      document.getElementById(
+        "recentResults"
+      );
+
+
+    if (
+      recentResults.length === 0
+    ) {
+
+      box.innerHTML =
+        `
+          <p style="opacity:0.6; margin-top:15px;">
+            Abhi kuch nahi hai...
+          </p>
+        `;
+
+      return;
+
+    }
+
+
+    box.innerHTML = "";
+
+
+    recentResults.forEach(
+      function(item) {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+        div.className =
+          "recent-item";
+
+        div.textContent =
+          item;
+
+        box.appendChild(div);
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     COPY
+     ===================================================== */
+
+  function copyResult() {
+
+    const text =
+      document.getElementById(
+        "result"
+      ).textContent;
+
+
+    if (
+      !text ||
+      text.includes(
+        "Select a button"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    navigator.clipboard
+      .writeText(text)
+      .then(
+        function() {
+
+          alert(
+            "📋 Copied!"
+          );
+
+        }
+      )
+      .catch(
+        function() {
+
+          alert(
+            "Copy nahi hua. Text manually copy kar lo."
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =====================================================
+     CLEAR
+     ===================================================== */
+
+  function clearResult() {
 
     document.getElementById(
-      "makerJokeResult"
+      "result"
     ).textContent =
-      "⏰ 24-hour access expire ho gaya.";
+      "Select a button and let the chaos begin...";
 
-    return;
   }
 
-  const jokes = makerJokes[todayMaker];
 
-  const result =
-    document.getElementById("makerJokeResult");
+  /* =====================================================
+     STARTUP
+     ===================================================== */
 
-  result.style.display = "flex";
-
-  if (makerJokeIndex >= jokes.length) {
-
-    result.innerHTML =
-      `🎉 Full Maker Name: <strong>${todayMaker}</strong>`;
-
-    return;
-  }
-
-  const letter =
-    todayMaker[makerJokeIndex];
-
-  result.innerHTML = `
-    <div>
-      <strong>😂 Joke ${makerJokeIndex + 1}</strong>
-      <br><br>
-      ${jokes[makerJokeIndex]}
-      <br><br>
-      🔤 Letter ${makerJokeIndex + 1}:
-      <strong>${letter}</strong>
-    </div>
-  `;
-
-  makerJokeIndex++;
-
-  localStorage.setItem(
-    "funboxMakerJokeIndex",
-    makerJokeIndex
-  );
-}
-
-
-updateAccessStatus();
-
-
-const data = {
-
-  excuse: [
-    "Sir, homework ready tha... bas notebook ne ghar pe rehne ka decision le liya.",
-    "Maine homework kiya tha, lekin meri handwriting ne khud resign kar diya.",
-    "Internet slow tha... actually internet nahi, mera motivation slow tha.",
-    "Homework karne baitha tha, phir ceiling ko dekhte-dekhte research project ban gaya.",
-    "Mera homework complete tha, bas maine submit karna bhool gaya. Classic.",
-    "Pen mein ink thi, ideas mein nahi.",
-    "Main homework kar raha tha, phir ek notification aaya. Baaki history hai."
-  ],
-
-  future: [
-    "Kal tumhe ek aisi cheez milegi jo tumne expect nahi ki thi.",
-    "Tumhara next lucky moment random hoga. Bilkul FunBox ke result ki tarah.",
-    "Aaj tumhara future bright hai... screen brightness check kar lena.",
-    "Tumhari next achievement ke raste mein sabse bada obstacle tumhara laziness hai.",
-    "Soon tumhe ek unexpected good news mil sakti hai.",
-    "Tumhari life mein ek random plot twist loading hai."
-  ],
-
-  fact: [
-    "Octopus ke teen hearts hote hain. Tumhare excuses ke kitne hain?",
-    "Banana technically berry hai, lekin strawberry technically berry nahi hai.",
-    "Honey bahut lambe time tak kharab nahi hota.",
-    "Sharks trees se bhi purane hain.",
-    "Wombat cube-shaped poop karta hai. Nature ka geometry department.",
-    "Koalas ke fingerprints humans ke fingerprints se kaafi similar hote hain.",
-    "Space mein sound normally travel nahi karta kyunki wahan air nahi hoti."
-  ],
-
-  roast: [
-    "Tumhara confidence impressive hai, especially jab answer galat hota hai.",
-    "Tum slow nahi ho... bas duniya thodi zyada fast hai.",
-    "Tumhara brain loading screen pe permanent membership le chuka hai.",
-    "Tum itne random ho ki Randomize My Fate bhi confused ho gaya.",
-    "Tumhari planning aur reality ka relationship long-distance hai.",
-    "Tumhara attention span notification se bhi jaldi disappear ho jata hai.",
-    "Tumhare ideas interesting hain. Bas kabhi-kabhi unhe idea rehna chahiye."
-  ],
-
-  fate: [
-    "Aaj tumhara fate: 50% luck, 50% jugaad.",
-    "Aaj ka result: kuch random hone wala hai. Obviously.",
-    "Tumhari destiny ne kaha: pehle snacks, baad mein decisions.",
-    "Fate report: chaos detected successfully.",
-    "Universe ne tumhara request dekha aur bola: 'Dekhte hain.'",
-    "Aaj ka future: unexpected but entertaining."
-  ]
-
-};
-
-
-const used = {
-  excuse: [],
-  future: [],
-  fact: [],
-  roast: [],
-  fate: []
-};
-
-
-function getRandom(type) {
-
-  if (used[type].length >= data[type].length) {
-    used[type] = [];
-  }
-
-  let index;
-
-  do {
-    index = Math.floor(Math.random() * data[type].length);
-  }
-  while (used[type].includes(index));
-
-  used[type].push(index);
-
-  return data[type][index];
-}
-
-
-function showResult(text) {
-
-  document.getElementById("result").textContent = text;
-
-  updateRecent(text);
-}
-
-
-function generate(type) {
-
-  if (!checkAccess()) {
-    return;
-  }
-
-  const text = getRandom(type);
-
-  showResult(text);
-}
-
-
-function getRhyme(name) {
-
-  const n = name.toLowerCase().trim();
-
-  if (!n) {
-    return ["kamaal", "bawaal", "dhamaal", "sawaal"];
-  }
-
-  if (n.endsWith("iya") || n.endsWith("ia")) {
-    return ["diya", "piya", "jiya", "duniya"];
-  }
-
-  if (n.endsWith("an") || n.endsWith("en")) {
-    return ["shaan", "tufaan", "armaan", "jaan"];
-  }
-
-  if (n.endsWith("a")) {
-    return ["nirala", "ujala", "masala", "hungama"];
-  }
-
-  if (
-    n.endsWith("i") ||
-    n.endsWith("ee") ||
-    n.endsWith("y")
-  ) {
-    return ["sahi", "wahi", "tabahi", "kahi"];
-  }
-
-  if (
-    n.endsWith("u") ||
-    n.endsWith("oo")
-  ) {
-    return ["guru", "shuru", "babu", "bekabu"];
-  }
-
-  if (
-    n.endsWith("ar") ||
-    n.endsWith("er")
-  ) {
-    return ["dhamakedar", "zabardast yaar", "taiyaar", "bekaar"];
-  }
-
-  return ["kamaal", "bawaal", "dhamaal", "sawaal"];
-}
-
-
-function generateShayari() {
-if (!checkAccess()) {
-  return;
-}
-  const input = document.getElementById("nameInput").value.trim();
-
-  if (!input) {
-    showResult("Pehle naam daal bhai, hawa se shayari nahi banti. 😭");
-    return;
-  }
-
-  const name = input;
-  const rhyme = getRhyme(name);
-
-  const templates = [
-
-    `${name} ka style hai ${rhyme[0]}, attitude full ${rhyme[1]}, kaam ki baat aaye to scene thoda ${rhyme[3]}.`,
-
-    `${name} jab aaye to lage ${rhyme[2]}, confidence dekho bilkul ${rhyme[0]}, bas homework dekhte hi ho jaata hai ${rhyme[3]}.`,
-
-    `${name} ka naam sunke bole sab ${rhyme[1]}, personality mein hai full ${rhyme[2]}, par padhai mein kabhi-kabhi system ${rhyme[3]}.`,
-
-    `${name} ki entry ho toh mood ${rhyme[2]}, jokes aaye toh scene ${rhyme[0]}, aur responsibility aaye toh answer: ${rhyme[3]}.`,
-
-    `${name} ka swag bilkul ${rhyme[0]}, attitude full ${rhyme[2]}, par alarm bajte hi life ban jaati hai ${rhyme[3]}.`,
-
-    `${name} ka naam hai ${rhyme[1]}, confidence hai ${rhyme[0]}, bas kaam ki baari aaye toh dimaag bole: ${rhyme[3]}.`,
-
-    `${name} ko samajhna hai bada ${rhyme[3]}, kyunki style mein ${rhyme[2]}, attitude mein ${rhyme[1]}, aur logic mein thoda ${rhyme[3]}.`,
-
-    `${name} ka scene hai ${rhyme[2]}, entry bilkul ${rhyme[0]}, par teacher ke saamne confidence ho jaata hai ${rhyme[3]}.`
-
-  ];
-
-  const index = Math.floor(Math.random() * templates.length);
-
-  showResult(templates[index]);
-}
-
-
-function surprise() {
-
-  const types = [
-    "excuse",
-    "future",
-    "fact",
-    "roast",
-    "fate"
-  ];
-
-  const type =
-    types[Math.floor(Math.random() * types.length)];
-
-  generate(type);
-}
-
-
-function updateRecent(text) {
-
-  let recent =
-    JSON.parse(localStorage.getItem("funboxRecent") || "[]");
-
-  recent.unshift(text);
-
-  recent = recent.slice(0, 5);
-
-  localStorage.setItem(
-    "funboxRecent",
-    JSON.stringify(recent)
-  );
+  updateAccessStatus();
 
   renderRecent();
-}
 
 
-function renderRecent() {
+  /*
+    Agar unlimited already unlocked hai
+    aur page refresh hua hai, maker continue
+    karega wahi se.
+  */
 
-  const box =
-    document.getElementById("recentResults");
+  if (unlimitedUnlocked) {
 
-  const recent =
-    JSON.parse(localStorage.getItem("funboxRecent") || "[]");
+    document.getElementById(
+      "makerSection"
+    ).style.display = "block";
 
-  if (recent.length === 0) {
+    renderMakerProgress();
 
-    box.innerHTML =
-      `<p style="opacity:0.6;">Abhi kuch nahi hai...</p>`;
-
-    return;
   }
-
-  box.innerHTML = recent
-    .map(item => `
-      <div class="recent-item">
-        ${escapeHtml(item)}
-      </div>
-    `)
-    .join("");
-}
-
-
-function escapeHtml(text) {
-
-  const div = document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-}
-
-
-function copyResult() {
-
-  const text =
-    document.getElementById("result").textContent;
-
-  if (
-    !text ||
-    text === "Select a button and let the chaos begin..."
-  ) {
-    return;
-  }
-
-  navigator.clipboard.writeText(text);
-
-  alert("Copied! 📋");
-}
-
-
-function clearResult() {
-
-  document.getElementById("result").textContent =
-    "Select a button and let the chaos begin...";
-}
-
-
-renderRecent();
 
 </script>
 
