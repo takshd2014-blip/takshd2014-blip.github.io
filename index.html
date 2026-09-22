@@ -1,669 +1,724 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>FunBox ⚡</title>
+<title>FunBox ⚡</title>
 
-  <link rel="icon" type="image/png" href="22.png">
+<link rel="icon" type="image/png" href="22.png">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
 
-    body {
-      min-height: 100vh;
-      color: white;
-      background:
-        radial-gradient(circle at top left, #302b63, transparent 35%),
-        radial-gradient(circle at bottom right, #24243e, transparent 35%),
-        linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      padding: 20px;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-    }
+body {
+  min-height: 100vh;
+  color: white;
 
-    header {
-      text-align: center;
-      padding: 25px 15px;
-    }
+  background:
+    radial-gradient(circle at top left, #302b63, transparent 35%),
+    radial-gradient(circle at bottom right, #24243e, transparent 35%),
+    linear-gradient(135deg, #0f0c29, #302b63, #24243e);
 
-    .logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      border-radius: 25px;
-      margin-bottom: 10px;
-    }
+  padding: 20px;
+}
 
-    h1 {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
+.container {
+  max-width: 1000px;
+  margin: auto;
+}
 
-    h2 {
-      margin-bottom: 10px;
-    }
+header {
+  text-align: center;
+  padding: 25px 15px;
+}
 
-    .tagline {
-      opacity: 0.75;
-    }
+.logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 25px;
+  margin-bottom: 10px;
+}
 
-    .glass {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 25px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-    }
+h1 {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 15px;
-      border-radius: 12px;
-      border: none;
-      outline: none;
-      margin: 15px 0;
-      font-size: 16px;
-    }
+h2 {
+  margin-bottom: 10px;
+}
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
+.tagline {
+  opacity: 0.75;
+}
 
-    button {
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-      transition: 0.2s;
-      background: white;
-      color: #222;
-    }
+.glass {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
 
-    button:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
+input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  margin: 15px 0;
+  font-size: 16px;
+}
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
+button {
+  border: none;
+  padding: 14px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.2s;
+  background: white;
+  color: #222;
+}
 
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
 
-    .result {
-      min-height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 19px;
-      line-height: 1.6;
-      padding: 20px;
-      margin-top: 20px;
-      border-radius: 15px;
-      background: rgba(0,0,0,0.2);
-    }
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
 
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-    .actions button {
-      flex: 1;
-    }
+.result {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 19px;
+  line-height: 1.6;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 15px;
+  background: rgba(0,0,0,0.2);
+}
 
-    .recent {
-      margin-top: 20px;
-    }
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
 
-    .recent-item {
-      padding: 12px;
-      margin: 8px 0;
-      background: rgba(255,255,255,0.06);
-      border-radius: 10px;
-      font-size: 14px;
-    }
+.actions button {
+  flex: 1;
+}
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 20px;
-    }
+.recent {
+  margin-top: 20px;
+}
 
-    .feature {
-      background: rgba(255,255,255,0.06);
-      padding: 18px;
-      border-radius: 14px;
-    }
+.recent-item {
+  padding: 12px;
+  margin: 8px 0;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  font-size: 14px;
+}
 
-    .feature h3 {
-      margin-bottom: 8px;
-    }
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
 
-    /* MAKER */
+.feature {
+  background: rgba(255,255,255,0.06);
+  padding: 18px;
+  border-radius: 14px;
+}
 
-    .maker-box {
-      margin-top: 20px;
-      padding: 20px;
-      background: rgba(0,0,0,0.22);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
+.feature h3 {
+  margin-bottom: 8px;
+}
 
-    .maker-progress {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 22px 0;
-      font-size: 28px;
-      font-weight: bold;
-    }
+/* =========================
+   JOKE MAKER
+   ========================= */
 
-    .maker-letter {
-      min-width: 45px;
-      padding: 8px 5px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.08);
-      text-align: center;
-    }
+.maker-box {
+  margin-top: 22px;
+  padding: 22px;
+  background: rgba(0,0,0,0.22);
+  border-radius: 17px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
 
-    .maker-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+.maker-description {
+  opacity: 0.82;
+  line-height: 1.6;
+  margin-top: 8px;
+}
 
-    .voice-status {
-      text-align: center;
-      margin-top: 12px;
-      opacity: 0.8;
-      min-height: 22px;
-    }
+.maker-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 24px 0 15px;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-    .maker-result {
-      min-height: 140px;
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 15px;
-      background: rgba(255,255,255,0.06);
-      text-align: center;
-      line-height: 1.7;
-    }
+.maker-letter {
+  min-width: 45px;
+  padding: 9px 5px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  text-align: center;
+}
 
-    .letter-reveal {
-      font-size: 35px;
-      font-weight: bold;
-      margin: 12px 0;
-    }
+.maker-count {
+  text-align: center;
+  opacity: 0.75;
+}
 
-    .full-name {
-      font-size: 30px;
-      font-weight: bold;
-      margin: 12px 0;
-    }
+.voice-area {
+  text-align: center;
+  margin-top: 22px;
+}
 
-    .small-note {
-      font-size: 13px;
-      opacity: 0.65;
-      margin-top: 12px;
-      line-height: 1.5;
-    }
+.voice-button {
+  font-size: 17px;
+  padding: 16px 28px;
+}
 
-    footer {
-      text-align: center;
-      opacity: 0.7;
-      padding: 30px 10px;
-    }
+.voice-status {
+  min-height: 24px;
+  margin-top: 14px;
+  opacity: 0.85;
+}
 
-    @media (max-width: 700px) {
+.spoken-joke {
+  min-height: 90px;
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  text-align: center;
+  line-height: 1.6;
+}
 
-      h1 {
-        font-size: 34px;
-      }
+.letter-reveal {
+  font-size: 34px;
+  font-weight: bold;
+  margin: 14px 0;
+}
 
-      .buttons {
-        grid-template-columns: 1fr;
-      }
+.full-name {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 14px 0;
+}
 
-      .about-grid {
-        grid-template-columns: 1fr;
-      }
+.unlock-button {
+  width: 100%;
+  margin-top: 15px;
+  display: none;
+}
 
-      .maker-buttons {
-        grid-template-columns: 1fr;
-      }
+.new-game-button {
+  width: 100%;
+  margin-top: 10px;
+  display: none;
+}
 
-      .maker-progress {
-        gap: 4px;
-        font-size: 23px;
-      }
+.check-note {
+  font-size: 13px;
+  opacity: 0.6;
+  text-align: center;
+  margin-top: 15px;
+  line-height: 1.5;
+}
 
-      .maker-letter {
-        min-width: 36px;
-      }
-    }
-  </style>
+footer {
+  text-align: center;
+  opacity: 0.7;
+  padding: 30px 10px;
+}
+
+@media (max-width: 700px) {
+
+  h1 {
+    font-size: 34px;
+  }
+
+  .buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .maker-progress {
+    gap: 4px;
+    font-size: 23px;
+  }
+
+  .maker-letter {
+    min-width: 36px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <!-- HEADER -->
+<!-- =========================
+     HEADER
+     ========================= -->
 
-  <header>
+<header>
 
-    <img
-      src="22.png"
-      class="logo"
-      alt="FunBox Logo"
-    >
+  <img
+    src="22.png"
+    class="logo"
+    alt="FunBox Logo"
+  >
 
-    <h1>⚡ FunBox</h1>
+  <h1>⚡ FunBox</h1>
 
-    <p class="tagline">
-      Because boring is overrated.
+  <p class="tagline">
+    Because boring is overrated.
+  </p>
+
+</header>
+
+
+<!-- =========================
+     ACCESS
+     ========================= -->
+
+<section class="glass">
+
+  <h2>🔐 FunBox Access</h2>
+
+  <p
+    id="accessStatus"
+    style="margin-top:10px;"
+  >
+    🎟️ 3 free uses available.
+  </p>
+
+  <input
+    type="text"
+    id="redeemInput"
+    placeholder="Enter promo code..."
+    autocomplete="off"
+  >
+
+  <button onclick="redeemCode()">
+    🔓 Redeem Code
+  </button>
+
+  <p
+    id="redeemMessage"
+    style="margin-top:12px;"
+  ></p>
+
+
+  <!-- =========================
+       VOICE JOKE MAKER
+       ========================= -->
+
+  <div class="maker-box">
+
+    <h2>😂 Joke Bolo, Code Jaano</h2>
+
+    <p class="maker-description">
+      Promo code nahi pata?
+      Koi problem nahi. Ek <strong>real joke</strong> bolo.
+      Har valid joke ke baad secret code ka 1 letter milega.
     </p>
 
-  </header>
 
+    <!-- LETTER PROGRESS -->
 
-  <!-- ACCESS -->
+    <div
+      id="makerProgress"
+      class="maker-progress"
+    ></div>
 
-  <section class="glass">
-
-    <h2>🔐 FunBox Access</h2>
 
     <p
-      id="accessStatus"
-      style="margin-top:10px;"
-    >
-      🎟️ 3 free uses available.
-    </p>
-
-    <input
-      type="text"
-      id="redeemInput"
-      placeholder="Enter redeem code..."
-      autocomplete="off"
-    >
-
-    <button onclick="redeemCode()">
-      🔓 Redeem Code
-    </button>
-
-    <p
-      id="redeemMessage"
-      style="margin-top:12px;"
+      id="makerCount"
+      class="maker-count"
     ></p>
 
 
-    <!-- JOKE MAKER -->
+    <!-- VOICE -->
 
-    <div
-      id="makerSection"
-      class="maker-box"
-      style="display:none;"
-    >
+    <div class="voice-area">
 
-      <h2>😂 Joke Maker</h2>
-
-      <p style="opacity:0.82; line-height:1.6;">
-        Tum ek joke bolo ya type karo.
-        Har joke ke baad secret maker name ka
-        <strong>1 letter</strong> reveal hoga. 👀
-      </p>
-
-      <div
-        id="makerProgress"
-        class="maker-progress"
-      ></div>
-
-      <p
-        id="makerCount"
-        style="text-align:center; opacity:0.75;"
-      ></p>
-
-
-      <textarea
-        id="jokeInput"
-        placeholder="Apna joke yahan type karo..."
-      ></textarea>
-
-
-      <div class="maker-buttons">
-
-        <button
-          id="voiceButton"
-          onclick="startVoiceJoke()"
-        >
-          🎤 Bolkar Joke Batao
-        </button>
-
-        <button
-          id="submitJokeButton"
-          onclick="submitMakerJoke()"
-        >
-          📨 Submit My Joke
-        </button>
-
-      </div>
-
+      <button
+        id="voiceButton"
+        class="voice-button"
+        onclick="startVoiceJoke()"
+      >
+        🎤 Joke Bolo
+      </button>
 
       <p
         id="voiceStatus"
         class="voice-status"
-      ></p>
-
-
-      <div
-        id="makerJokeResult"
-        class="maker-result"
       >
-        Pehla joke submit karo aur mystery start karo. 👀
-      </div>
-
-      <button
-        id="newMakerGameButton"
-        onclick="startNewMakerGame()"
-        style="
-          width:100%;
-          margin-top:12px;
-          display:none;
-        "
-      >
-        🔄 New Mystery Name
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- FUN GENERATOR -->
-
-  <section class="glass">
-
-    <h2>🎲 Fun Generator</h2>
-
-    <input
-      type="text"
-      id="nameInput"
-      placeholder="Apna naam enter karo..."
-      autocomplete="off"
-    >
-
-    <div class="buttons">
-
-      <button onclick="generate('excuse')">
-        😂 Excuse Generator
-      </button>
-
-      <button onclick="generate('future')">
-        🔮 Future Scanner
-      </button>
-
-      <button onclick="generate('fact')">
-        🤯 Random Fact
-      </button>
-
-      <button onclick="generate('roast')">
-        🔥 Roast Me
-      </button>
-
-      <button onclick="generateShayari()">
-        ✍️ Naam Ki Shayari
-      </button>
-
-      <button onclick="surprise()">
-        🎲 Randomize My Fate
-      </button>
-
-    </div>
-
-
-    <div
-      class="result"
-      id="result"
-    >
-      Select a button and let the chaos begin...
-    </div>
-
-
-    <div class="actions">
-
-      <button onclick="copyResult()">
-        📋 Copy
-      </button>
-
-      <button onclick="clearResult()">
-        🗑️ Clear
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- RECENT RESULTS -->
-
-  <section class="glass recent">
-
-    <h2>🕘 Recent Results</h2>
-
-    <div id="recentResults">
-
-      <p style="opacity:0.6; margin-top:15px;">
-        Abhi kuch nahi hai...
+        Button dabao aur joke bolo.
       </p>
 
     </div>
 
-  </section>
 
+    <!-- SPOKEN JOKE -->
 
-  <!-- ABOUT -->
-
-  <section class="glass">
-
-    <h2>ℹ️ About FunBox</h2>
-
-    <p
-      style="
-        margin-top:12px;
-        line-height:1.7;
-        opacity:0.85;
-      "
+    <div
+      id="spokenJoke"
+      class="spoken-joke"
     >
-      FunBox ek random entertainment zone hai jahan
-      excuses, roasts, weird facts, future predictions,
-      naam wali shayari aur random chaos milta hai.
+      🎤 Tumhara joke yahan speech ke baad dikhega.
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div
+      id="makerJokeResult"
+      class="spoken-joke"
+    >
+      👀 Pehla valid joke bolo...
+    </div>
+
+
+    <!-- UNLOCK -->
+
+    <button
+      id="unlockButton"
+      class="unlock-button"
+      onclick="useRevealedCode()"
+    >
+      🔓 Use This Code for Unlimited Access
+    </button>
+
+
+    <!-- NEW GAME -->
+
+    <button
+      id="newGameButton"
+      class="new-game-button"
+      onclick="startNewMakerGame()"
+    >
+      🔄 New Mystery Code
+    </button>
+
+
+    <p class="check-note">
+      ⚠️ Random sentence ya normal baat count nahi hogi.
+      Joke-like setup/punchline check pass hona chahiye.
     </p>
 
+  </div>
 
-    <div class="about-grid">
+</section>
 
-      <div class="feature">
-        <h3>🔥 Savage Roasts</h3>
-        <p>Light savage Hinglish roasts.</p>
-      </div>
 
-      <div class="feature">
-        <h3>✍️ Name Shayari</h3>
-        <p>Naam ke saath rhyming shayari.</p>
-      </div>
+<!-- =========================
+     FUN GENERATOR
+     ========================= -->
 
-      <div class="feature">
-        <h3>🔮 Predictions</h3>
-        <p>Random future scanner.</p>
-      </div>
+<section class="glass">
 
-      <div class="feature">
-        <h3>🤯 Weird Facts</h3>
-        <p>Random facts jo dimag ko confuse karein.</p>
-      </div>
+  <h2>🎲 Fun Generator</h2>
 
-      <div class="feature">
-        <h3>😂 Excuses</h3>
-        <p>Homework se bachne ke creative excuses.</p>
-      </div>
+  <input
+    type="text"
+    id="nameInput"
+    placeholder="Apna naam enter karo..."
+    autocomplete="off"
+  >
 
-      <div class="feature">
-        <h3>🎲 Random Chaos</h3>
-        <p>Random result. Zero planning.</p>
-      </div>
+  <div class="buttons">
 
+    <button onclick="generate('excuse')">
+      😂 Excuse Generator
+    </button>
+
+    <button onclick="generate('future')">
+      🔮 Future Scanner
+    </button>
+
+    <button onclick="generate('fact')">
+      🤯 Random Fact
+    </button>
+
+    <button onclick="generate('roast')">
+      🔥 Roast Me
+    </button>
+
+    <button onclick="generateShayari()">
+      ✍️ Naam Ki Shayari
+    </button>
+
+    <button onclick="surprise()">
+      🎲 Randomize My Fate
+    </button>
+
+  </div>
+
+
+  <div
+    class="result"
+    id="result"
+  >
+    Select a button and let the chaos begin...
+  </div>
+
+
+  <div class="actions">
+
+    <button onclick="copyResult()">
+      📋 Copy
+    </button>
+
+    <button onclick="clearResult()">
+      🗑️ Clear
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     RECENT
+     ========================= -->
+
+<section class="glass recent">
+
+  <h2>🕘 Recent Results</h2>
+
+  <div id="recentResults">
+
+    <p style="opacity:0.6; margin-top:15px;">
+      Abhi kuch nahi hai...
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     ABOUT
+     ========================= -->
+
+<section class="glass">
+
+  <h2>ℹ️ About FunBox</h2>
+
+  <p
+    style="
+      margin-top:12px;
+      line-height:1.7;
+      opacity:0.85;
+    "
+  >
+    FunBox ek random entertainment zone hai jahan
+    excuses, roasts, weird facts, future predictions,
+    naam wali shayari aur random chaos milta hai.
+  </p>
+
+
+  <div class="about-grid">
+
+    <div class="feature">
+      <h3>🔥 Savage Roasts</h3>
+      <p>Light savage Hinglish roasts.</p>
     </div>
 
-  </section>
-
-
-  <!-- FOOTER -->
-
-  <footer>
-
-    <div>
-      ⚡ FunBox
+    <div class="feature">
+      <h3>✍️ Name Shayari</h3>
+      <p>Naam ke saath funny shayari.</p>
     </div>
 
-    <div>
-      Made by <strong>Taksh</strong>
+    <div class="feature">
+      <h3>🔮 Predictions</h3>
+      <p>Random future scanner.</p>
     </div>
 
-    <div style="margin-top:5px;">
-      FunBox © 2026 • Because boring is overrated.
+    <div class="feature">
+      <h3>🤯 Weird Facts</h3>
+      <p>Random facts jo dimag ko confuse karein.</p>
     </div>
 
-  </footer>
+    <div class="feature">
+      <h3>😂 Excuses</h3>
+      <p>Creative homework excuses.</p>
+    </div>
+
+    <div class="feature">
+      <h3>🎲 Random Chaos</h3>
+      <p>Random result. Zero planning.</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+     ========================= -->
+
+<footer>
+
+  <div>
+    ⚡ FunBox
+  </div>
+
+  <div>
+    Made by <strong>Taksh</strong>
+  </div>
+
+  <div style="margin-top:5px;">
+    FunBox © 2026 • Because boring is overrated.
+  </div>
+
+</footer>
 
 </div>
 
 
 <script>
 
-  /* =====================================================
-     ACCESS SYSTEM
-     ===================================================== */
+/* =====================================================
+   ACCESS
+   ===================================================== */
 
-  const MAKER_CODE = "TAKSH";
+const FREE_LIMIT = 3;
 
-  const FREE_LIMIT = 3;
+let freeUses = Number(
+  localStorage.getItem("funboxFreeUses") || "0"
+);
 
-  let freeUses = Number(
-    localStorage.getItem("funboxFreeUses") || "0"
+let unlimitedUnlocked =
+  localStorage.getItem("funboxUnlimited") === "true";
+
+
+/* =====================================================
+   SECRET PROMO NAMES
+   ===================================================== */
+
+const MAKER_NAMES = [
+  "TAKSH",
+  "DHRUVI",
+  "RUPAL",
+  "CHERRY"
+];
+
+
+let selectedMakerName =
+  localStorage.getItem("funboxSecretMaker") || "";
+
+
+let makerLetterIndex =
+  Number(
+    localStorage.getItem("funboxMakerLetterIndex") || "0"
   );
 
-  let unlimitedUnlocked =
-    localStorage.getItem("funboxUnlimited") === "true";
+
+/* =====================================================
+   CHOOSE RANDOM SECRET
+   ===================================================== */
+
+function chooseRandomMakerName() {
+
+  const randomIndex =
+    Math.floor(
+      Math.random() * MAKER_NAMES.length
+    );
+
+  selectedMakerName =
+    MAKER_NAMES[randomIndex];
+
+  makerLetterIndex = 0;
+
+  localStorage.setItem(
+    "funboxSecretMaker",
+    selectedMakerName
+  );
+
+  localStorage.setItem(
+    "funboxMakerLetterIndex",
+    "0"
+  );
+
+}
 
 
-  /* =====================================================
-     FOUR RANDOM MAKER NAMES
-     ===================================================== */
+/* =====================================================
+   FIRST LOAD
+   ===================================================== */
 
-  const MAKER_NAMES = [
-    "TAKSH",
-    "DHRUVI",
-    "RUPAL",
-    "CHERRY"
-  ];
+if (!selectedMakerName) {
+
+  chooseRandomMakerName();
+
+}
+
+renderMakerProgress();
 
 
-  let selectedMakerName =
-    localStorage.getItem("funboxSelectedMaker") || "";
+/* =====================================================
+   ACCESS STATUS
+   ===================================================== */
 
-  let makerLetterIndex =
-    Number(
-      localStorage.getItem("funboxMakerLetterIndex") || "0"
+function updateAccessStatus() {
+
+  const status =
+    document.getElementById(
+      "accessStatus"
     );
 
 
-  /* =====================================================
-     RANDOM NAME SELECTOR
-     ===================================================== */
+  if (unlimitedUnlocked) {
 
-  function chooseRandomMakerName() {
+    status.innerHTML =
+      "🔓 <strong>Unlimited Access Active!</strong>";
 
-    const randomIndex =
-      Math.floor(
-        Math.random() * MAKER_NAMES.length
-      );
-
-    selectedMakerName =
-      MAKER_NAMES[randomIndex];
-
-    localStorage.setItem(
-      "funboxSelectedMaker",
-      selectedMakerName
-    );
-
-    makerLetterIndex = 0;
-
-    localStorage.setItem(
-      "funboxMakerLetterIndex",
-      "0"
-    );
-
-  }
-
-
-  /* =====================================================
-     ACCESS STATUS
-     ===================================================== */
-
-  function updateAccessStatus() {
-
-    const status =
-      document.getElementById("accessStatus");
-
-    const maker =
-      document.getElementById("makerSection");
-
-
-    if (unlimitedUnlocked) {
-
-      status.innerHTML =
-        "🔓 <strong>Unlimited Access Active!</strong>";
-
-      maker.style.display = "block";
-
-      if (!selectedMakerName) {
-        chooseRandomMakerName();
-      }
-
-      renderMakerProgress();
-
-      return;
-    }
-
-
-    maker.style.display = "none";
-
+  } else {
 
     const remaining =
       Math.max(
@@ -680,1017 +735,1342 @@
     } else {
 
       status.innerHTML =
-        "🔒 Free uses khatam. Redeem code use karo.";
+        "🔒 Free uses khatam. Secret code collect karo.";
 
     }
 
   }
 
-
-  /* =====================================================
-     REDEEM
-     ===================================================== */
-
-  function redeemCode() {
-
-    const input =
-      document
-        .getElementById("redeemInput")
-        .value
-        .trim()
-        .toUpperCase();
-
-    const message =
-      document.getElementById("redeemMessage");
+}
 
 
-    if (!input) {
+/* =====================================================
+   REDEEM CODE
+   ===================================================== */
 
-      message.innerHTML =
-        "⚠️ Pehle code enter karo.";
+function redeemCode() {
 
-      return;
-    }
-
-
-    if (input === MAKER_CODE) {
-
-      unlimitedUnlocked = true;
-
-      localStorage.setItem(
-        "funboxUnlimited",
-        "true"
-      );
+  const input =
+    document
+      .getElementById("redeemInput")
+      .value
+      .trim()
+      .toUpperCase();
 
 
-      /*
-        Har successful redeem par
-        ek naya random maker select hoga.
-      */
-
-      chooseRandomMakerName();
-
-
-      message.innerHTML =
-        "🎉 Code accepted! Unlimited access unlocked!";
-
-
-      document.getElementById(
-        "redeemInput"
-      ).value = "";
-
-
-      updateAccessStatus();
-
-      showMakerStart();
-
-      return;
-    }
-
-
-    message.innerHTML =
-      "❌ Wrong code. Try again.";
-
-  }
-
-
-  /* =====================================================
-     ACCESS CHECK
-     ===================================================== */
-
-  function checkAccess() {
-
-    if (unlimitedUnlocked) {
-      return true;
-    }
-
-
-    if (freeUses < FREE_LIMIT) {
-
-      freeUses++;
-
-      localStorage.setItem(
-        "funboxFreeUses",
-        String(freeUses)
-      );
-
-      updateAccessStatus();
-
-      return true;
-    }
-
-
+  const message =
     document.getElementById(
       "redeemMessage"
-    ).innerHTML =
-      "🔒 Free limit reached. Redeem code to continue.";
-
-    return false;
-  }
-
-
-  /* =====================================================
-     MAKER START
-     ===================================================== */
-
-  function showMakerStart() {
-
-    const result =
-      document.getElementById(
-        "makerJokeResult"
-      );
-
-    result.innerHTML = `
-      <strong>🎯 Mystery Maker Ready!</strong>
-      <br><br>
-      Tumhara pehla joke ka wait hai...
-    `;
-
-  }
-
-
-  /* =====================================================
-     MAKER PROGRESS
-     ===================================================== */
-
-  function renderMakerProgress() {
-
-    const progress =
-      document.getElementById(
-        "makerProgress"
-      );
-
-    const count =
-      document.getElementById(
-        "makerCount"
-      );
-
-
-    if (!selectedMakerName) {
-      chooseRandomMakerName();
-    }
-
-
-    progress.innerHTML = "";
-
-
-    for (
-      let i = 0;
-      i < selectedMakerName.length;
-      i++
-    ) {
-
-      const box =
-        document.createElement("div");
-
-      box.className =
-        "maker-letter";
-
-
-      if (i < makerLetterIndex) {
-
-        box.textContent =
-          selectedMakerName[i];
-
-      } else {
-
-        box.textContent = "•";
-
-      }
-
-
-      progress.appendChild(box);
-
-    }
-
-
-    if (
-      makerLetterIndex >=
-      selectedMakerName.length
-    ) {
-
-      count.innerHTML =
-        `🎉 Mystery complete!`;
-
-    } else {
-
-      count.innerHTML =
-        `😂 Joke ${makerLetterIndex + 1} of ${selectedMakerName.length}`;
-
-    }
-
-  }
-
-
-  /* =====================================================
-     SUBMIT JOKE
-     ===================================================== */
-
-  function submitMakerJoke(
-    jokeFromVoice = ""
-  ) {
-
-    if (!unlimitedUnlocked) {
-
-      document.getElementById(
-        "makerJokeResult"
-      ).innerHTML =
-        "🔒 Pehle redeem code enter karo.";
-
-      return;
-    }
-
-
-    if (
-      makerLetterIndex >=
-      selectedMakerName.length
-    ) {
-
-      return;
-    }
-
-
-    const input =
-      document.getElementById(
-        "jokeInput"
-      );
-
-
-    const joke =
-      jokeFromVoice ||
-      input.value.trim();
-
-
-    if (!joke) {
-
-      document.getElementById(
-        "makerJokeResult"
-      ).innerHTML =
-        "😂 Joke toh bolo/likho pehle!";
-
-      return;
-    }
-
-
-    if (joke.length < 3) {
-
-      document.getElementById(
-        "makerJokeResult"
-      ).innerHTML =
-        "😂 Itna chhota joke? Thoda aur effort daalo.";
-
-      return;
-    }
-
-
-    /*
-      Current letter
-    */
-
-    const revealedLetter =
-      selectedMakerName[makerLetterIndex];
-
-
-    const currentNumber =
-      makerLetterIndex + 1;
-
-
-    makerLetterIndex++;
-
-
-    localStorage.setItem(
-      "funboxMakerLetterIndex",
-      String(makerLetterIndex)
     );
 
 
-    input.value = "";
+  if (!input) {
 
+    message.innerHTML =
+      "⚠️ Code enter karo.";
 
-    /*
-      Progress update
-    */
-
-    renderMakerProgress();
-
-
-    const result =
-      document.getElementById(
-        "makerJokeResult"
-      );
-
-
-    /*
-      Escape user text before putting it
-      inside innerHTML.
-    */
-
-    const safeJoke =
-      escapeHtml(joke);
-
-
-    if (
-      makerLetterIndex >=
-      selectedMakerName.length
-    ) {
-
-      result.innerHTML = `
-        <div>
-          😂 <strong>Joke ${currentNumber}</strong>
-        </div>
-
-        <div style="margin-top:10px;">
-          "${safeJoke}"
-        </div>
-
-        <div class="letter-reveal">
-          🔤 Letter ${currentNumber}:
-          ${revealedLetter}
-        </div>
-
-        <div class="full-name">
-          🎉 ${selectedMakerName}
-        </div>
-
-        <div>
-          Mystery solved! 😂
-        </div>
-      `;
-
-
-      document.getElementById(
-        "submitJokeButton"
-      ).disabled = true;
-
-
-      document.getElementById(
-        "voiceButton"
-      ).disabled = true;
-
-
-      document.getElementById(
-        "newMakerGameButton"
-      ).style.display = "block";
-
-
-    } else {
-
-      result.innerHTML = `
-        <div>
-          😂 <strong>Joke ${currentNumber}</strong>
-        </div>
-
-        <div style="margin-top:10px;">
-          "${safeJoke}"
-        </div>
-
-        <div class="letter-reveal">
-          🔤 Letter ${currentNumber}:
-          ${revealedLetter}
-        </div>
-
-        <div>
-          ${selectedMakerName.length - makerLetterIndex}
-          letter(s) abhi hidden hain... 👀
-        </div>
-      `;
-
-    }
+    return;
 
   }
 
 
-  /* =====================================================
-     NEW RANDOM MAKER GAME
-     ===================================================== */
+  if (input === selectedMakerName) {
 
-  function startNewMakerGame() {
+    unlimitedUnlocked = true;
 
-    chooseRandomMakerName();
-
-
-    document.getElementById(
-      "submitJokeButton"
-    ).disabled = false;
+    localStorage.setItem(
+      "funboxUnlimited",
+      "true"
+    );
 
 
-    document.getElementById(
-      "voiceButton"
-    ).disabled = false;
+    message.innerHTML =
+      "🎉 Correct code! Unlimited Access unlocked! 🔓";
 
 
     document.getElementById(
-      "newMakerGameButton"
-    ).style.display = "none";
-
-
-    document.getElementById(
-      "jokeInput"
+      "redeemInput"
     ).value = "";
 
 
     document.getElementById(
-      "makerJokeResult"
-    ).innerHTML = `
-      <strong>🎯 New Mystery Name!</strong>
-      <br><br>
-      Ab phir se joke bolo...
-    `;
+      "unlockButton"
+    ).style.display = "none";
 
 
-    renderMakerProgress();
-
-  }
-
-
-  /* =====================================================
-     VOICE JOKE
-     ===================================================== */
-
-  let recognition = null;
+    document.getElementById(
+      "newGameButton"
+    ).style.display = "block";
 
 
-  function startVoiceJoke() {
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
+    updateAccessStatus();
 
 
-    const status =
-      document.getElementById(
-        "voiceStatus"
-      );
-
-
-    const voiceButton =
-      document.getElementById(
-        "voiceButton"
-      );
-
-
-    if (!SpeechRecognition) {
-
-      status.innerHTML =
-        "⚠️ Is browser mein voice input supported nahi hai. Neeche type karke submit karo.";
-
-      return;
-    }
-
-
-    if (
-      makerLetterIndex >=
-      selectedMakerName.length
-    ) {
-
-      return;
-    }
-
-
-    recognition =
-      new SpeechRecognition();
-
-
-    /*
-      Indian English/Hinglish ke liye.
-    */
-
-    recognition.lang = "en-IN";
-
-    recognition.interimResults = false;
-
-    recognition.continuous = false;
-
-
-    voiceButton.disabled = true;
-
-
-    status.innerHTML =
-      "🎤 Sun raha hoon... Ab apna joke bolo!";
-
-
-    recognition.onresult =
-      function(event) {
-
-        const transcript =
-          event.results[0][0].transcript;
-
-
-        document.getElementById(
-          "jokeInput"
-        ).value = transcript;
-
-
-        status.innerHTML =
-          "✅ Joke suna gaya!";
-
-
-        submitMakerJoke(
-          transcript
-        );
-
-      };
-
-
-    recognition.onerror =
-      function(event) {
-
-        status.innerHTML =
-          "⚠️ Voice input error. Joke type karke try karo.";
-
-        voiceButton.disabled = false;
-
-      };
-
-
-    recognition.onend =
-      function() {
-
-        voiceButton.disabled = false;
-
-      };
-
-
-    try {
-
-      recognition.start();
-
-    } catch (error) {
-
-      voiceButton.disabled = false;
-
-      status.innerHTML =
-        "⚠️ Voice start nahi ho paya. Dobara try karo.";
-
-    }
+    return;
 
   }
 
 
-  /* =====================================================
-     HTML ESCAPE
-     ===================================================== */
+  message.innerHTML =
+    "❌ Wrong code. Joke bolo aur letters collect karo!";
 
-  function escapeHtml(text) {
+}
 
-    const div =
-      document.createElement("div");
 
-    div.textContent = text;
+/* =====================================================
+   FREE USE CHECK
+   ===================================================== */
 
-    return div.innerHTML;
+function checkAccess() {
+
+  if (unlimitedUnlocked) {
+
+    return true;
 
   }
 
 
-  /* =====================================================
-     FUN CONTENT
-     ===================================================== */
+  if (freeUses < FREE_LIMIT) {
 
-  const data = {
-
-    excuse: [
-
-      "Sir, homework ready tha... bas notebook ne ghar pe rehne ka decision le liya. 😭",
-
-      "Maine homework kiya tha, lekin mera bag usko accept nahi kar raha tha. 😂",
-
-      "Network slow tha... isliye mera homework bhi upload nahi hua. 😭",
-
-      "Kal pakka karunga. Ye line main khud ko bhi roz bolta hoon. 😂",
-
-      "Homework karne baitha tha, phir 2 minute ke liye phone dekha... aur history ban gayi."
-
-    ],
-
-
-    future: [
-
-      "Tumhara future bright hai... bas screen brightness kam karni padegi. 🔮",
-
-      "Kal tumhe ek unexpected message milega. Shayad 'Homework complete?' 😭",
-
-      "Tumhare future mein success hai... aur uske saath thoda homework bhi.",
-
-      "Aaj luck tumhare side hai. Kal ka pata nahi. 😂",
-
-      "Future scanner kehta hai: tum kuch bada karoge... pehle room clean karo."
-
-    ],
-
-
-    fact: [
-
-      "Octopus ke teen hearts hote hain. Tumhara ek heart hai aur woh bhi notifications pe dependent hai. 🐙",
-
-      "Bananas technically berries hote hain, lekin strawberries nahi. Nature ko bhi confusion pasand hai. 🍌",
-
-      "Honey bahut long time tak spoil nahi hota. Matlab honey tumse zyada responsible hai. 😂",
-
-      "Sharks dinosaurs se bhi purane hain. 🦈",
-
-      "Wombat cube-shaped poop karta hai. Nature kabhi-kabhi overcreative ho jati hai. 😂"
-
-    ],
-
-
-    roast: [
-
-      "Tumhari planning Wi-Fi signal jaisi hai: naam strong, connection zero. 😂",
-
-      "Tumhara confidence impressive hai... evidence abhi tak nahi mila. 😭",
-
-      "Tum itne late ho ki clock bhi tumhara wait karte-karte tired ho gayi. 😂",
-
-      "Tumhara brain loading screen pe permanently atka hua lagta hai. 💀",
-
-      "Tum multitasking kar sakte ho: ek saath kuch bhi complete nahi karna. 😂",
-
-      "Tumhara focus goldfish se competition kar raha hai. 🐟"
-
-    ],
-
-
-    fate: [
-
-      "🎲 Fate says: Aaj tumhara lucky number 7 hai.",
-
-      "🎲 Fate says: Aaj kuch random hoga. Exactly kya, ye fate bhi nahi jaanta.",
-
-      "🎲 Fate says: Tumhe ek funny coincidence milega.",
-
-      "🎲 Fate says: Aaj procrastination ka level dangerous ho sakta hai. 😂",
-
-      "🎲 Fate says: Tumhari next decision ka result surprisingly funny hoga."
-
-    ]
-
-  };
-
-
-  /* =====================================================
-     RANDOM SYSTEM
-     ===================================================== */
-
-  const usedIndexes = {
-
-    excuse: [],
-    future: [],
-    fact: [],
-    roast: [],
-    fate: []
-
-  };
-
-
-  function getRandom(category) {
-
-    const array =
-      data[category];
-
-
-    if (
-      usedIndexes[category].length >=
-      array.length
-    ) {
-
-      usedIndexes[category] = [];
-
-    }
-
-
-    let index;
-
-
-    do {
-
-      index =
-        Math.floor(
-          Math.random() *
-          array.length
-        );
-
-    } while (
-      usedIndexes[category].includes(index)
-    );
-
-
-    usedIndexes[category].push(index);
-
-
-    return array[index];
-
-  }
-
-
-  /* =====================================================
-     GENERATE
-     ===================================================== */
-
-  function generate(category) {
-
-    if (!checkAccess()) {
-      return;
-    }
-
-
-    const text =
-      getRandom(category);
-
-
-    showResult(text);
-
-  }
-
-
-  /* =====================================================
-     RESULT
-     ===================================================== */
-
-  function showResult(text) {
-
-    const result =
-      document.getElementById(
-        "result"
-      );
-
-
-    result.textContent = text;
-
-
-    addRecent(text);
-
-  }
-
-
-  /* =====================================================
-     NAME SHAYARI
-     ===================================================== */
-
-  function generateShayari() {
-
-    if (!checkAccess()) {
-      return;
-    }
-
-
-    let name =
-      document
-        .getElementById("nameInput")
-        .value
-        .trim();
-
-
-    if (!name) {
-
-      name = "Dost";
-
-    }
-
-
-    const cleanName =
-      name.charAt(0).toUpperCase() +
-      name.slice(1);
-
-
-    const shayaris = [
-
-      `${cleanName} naam hai tera, style tera kamaal, entry teri ho toh ruk jaaye pura hall. 😂`,
-
-      `${cleanName} ka naam suna, mood ho gaya bright, attitude tera kabhi low, kabhi full flight. 😎`,
-
-      `${cleanName} naam mein hai swag ka sound, jahan tu aaye wahan comedy ka ground. 😂`,
-
-      `${cleanName} naam chhota nahi, pura brand hai bhai, bas homework wali file thodi missing hai bhai. 😭`,
-
-      `${cleanName} ki entry hui, scene hua set, ab kya hoga next? Ye toh internet bhi nahi predict kar sakta. 😂`
-
-    ];
-
-
-    const random =
-      shayaris[
-        Math.floor(
-          Math.random() *
-          shayaris.length
-        )
-      ];
-
-
-    showResult(random);
-
-  }
-
-
-  /* =====================================================
-     SURPRISE
-     ===================================================== */
-
-  function surprise() {
-
-    if (!checkAccess()) {
-      return;
-    }
-
-
-    const categories =
-      [
-        "excuse",
-        "future",
-        "fact",
-        "roast",
-        "fate"
-      ];
-
-
-    const category =
-      categories[
-        Math.floor(
-          Math.random() *
-          categories.length
-        )
-      ];
-
-
-    showResult(
-      getRandom(category)
-    );
-
-  }
-
-
-  /* =====================================================
-     RECENT RESULTS
-     ===================================================== */
-
-  let recentResults =
-    JSON.parse(
-      localStorage.getItem(
-        "funboxRecent"
-      ) || "[]"
-    );
-
-
-  function addRecent(text) {
-
-    recentResults.unshift(text);
-
-
-    if (
-      recentResults.length > 8
-    ) {
-
-      recentResults.pop();
-
-    }
+    freeUses++;
 
 
     localStorage.setItem(
-      "funboxRecent",
-      JSON.stringify(recentResults)
+      "funboxFreeUses",
+      String(freeUses)
     );
 
 
-    renderRecent();
+    updateAccessStatus();
+
+
+    return true;
 
   }
 
 
-  function renderRecent() {
+  document.getElementById(
+    "redeemMessage"
+  ).innerHTML =
+    "🔒 Free limit reached. Secret code collect karo.";
+
+
+  return false;
+
+}
+
+
+/* =====================================================
+   MAKER PROGRESS
+   ===================================================== */
+
+function renderMakerProgress() {
+
+  const progress =
+    document.getElementById(
+      "makerProgress"
+    );
+
+
+  const count =
+    document.getElementById(
+      "makerCount"
+    );
+
+
+  if (!selectedMakerName) {
+
+    chooseRandomMakerName();
+
+  }
+
+
+  progress.innerHTML = "";
+
+
+  for (
+    let i = 0;
+    i < selectedMakerName.length;
+    i++
+  ) {
 
     const box =
-      document.getElementById(
-        "recentResults"
-      );
+      document.createElement("div");
 
 
-    if (
-      recentResults.length === 0
-    ) {
+    box.className =
+      "maker-letter";
 
-      box.innerHTML =
-        `
-          <p style="opacity:0.6; margin-top:15px;">
-            Abhi kuch nahi hai...
-          </p>
-        `;
 
-      return;
+    if (i < makerLetterIndex) {
+
+      box.textContent =
+        selectedMakerName[i];
+
+    } else {
+
+      box.textContent =
+        "•";
 
     }
 
 
-    box.innerHTML = "";
+    progress.appendChild(box);
+
+  }
 
 
-    recentResults.forEach(
-      function(item) {
+  if (
+    makerLetterIndex >=
+    selectedMakerName.length
+  ) {
 
-        const div =
-          document.createElement(
-            "div"
-          );
+    count.innerHTML =
+      "🎉 Secret code complete!";
 
-        div.className =
-          "recent-item";
+  } else {
 
-        div.textContent =
-          item;
+    count.innerHTML =
+      `😂 Valid joke ${makerLetterIndex + 1} of ${selectedMakerName.length}`;
 
-        box.appendChild(div);
+  }
+
+}
+
+
+/* =====================================================
+   JOKE CHECKER
+   ===================================================== */
+
+function isLikelyJoke(text) {
+
+  const joke =
+    text
+      .toLowerCase()
+      .trim();
+
+
+  /*
+    Minimum length.
+  */
+
+  if (joke.length < 12) {
+
+    return false;
+
+  }
+
+
+  /*
+    Common normal conversation
+    / random statements.
+  */
+
+  const normalStatements = [
+
+    "my name is",
+    "mera naam",
+    "my name",
+    "i am",
+    "main hoon",
+    "i live",
+    "mera ghar",
+    "today is",
+    "aaj hai",
+    "i like",
+    "mujhe pasand",
+    "hello",
+    "hi",
+    "good morning",
+    "good evening",
+    "how are you",
+    "what is your name",
+    "i don't know",
+    "mujhe nahi pata"
+
+  ];
+
+
+  for (
+    const phrase of normalStatements
+  ) {
+
+    if (
+      joke === phrase ||
+      joke.startsWith(phrase + " ")
+    ) {
+
+      return false;
+
+    }
+
+  }
+
+
+  /*
+    Words commonly found
+    in joke setups/punchlines.
+  */
+
+  const jokeWords = [
+
+    "why",
+    "what",
+    "how",
+    "when",
+    "who",
+    "because",
+    "but",
+    "then",
+    "teacher",
+    "student",
+    "school",
+    "homework",
+    "mom",
+    "dad",
+    "doctor",
+    "friend",
+    "boss",
+    "police",
+    "exam",
+    "class",
+    "phone",
+    "mobile",
+    "computer",
+    "wifi",
+    "internet",
+    "cat",
+    "dog",
+    "banana",
+    "chicken",
+    "shop",
+    "restaurant",
+    "hotel",
+    "marriage",
+    "wedding",
+    "party",
+    "sleep",
+    "sleeping",
+    "late",
+    "joke",
+    "funny",
+    "laugh",
+    "hahaha",
+    "haha",
+    "lol",
+    "lol",
+    "kyun",
+    "kaise",
+    "kab",
+    "kya",
+    "phir",
+    "lekin",
+    "kyunki",
+    "teacher",
+    "papa",
+    "mummy",
+    "dost",
+    "school",
+    "homework",
+    "exam",
+    "mobile",
+    "phone"
+
+  ];
+
+
+  let score = 0;
+
+
+  for (
+    const word of jokeWords
+  ) {
+
+    if (
+      joke.includes(
+        " " + word + " "
+      ) ||
+      joke.startsWith(word + " ") ||
+      joke.endsWith(" " + word) ||
+      joke === word
+    ) {
+
+      score++;
+
+    }
+
+  }
+
+
+  /*
+    Setup/punchline patterns.
+  */
+
+  const patterns = [
+
+    "why did",
+    "why does",
+    "why do",
+    "what did",
+    "what does",
+    "what do",
+    "a man",
+    "a guy",
+    "a boy",
+    "a girl",
+    "one day",
+    "ek din",
+    "ek baar",
+    "teacher asked",
+    "teacher said",
+    "mom asked",
+    "dad asked",
+    "friend asked",
+    "friend said",
+    "doctor said",
+    "then he",
+    "then she",
+    "then i",
+    "phir usne",
+    "phir maine",
+    "phir woh",
+    "maine kaha",
+    "usne kaha",
+    "bola",
+    "bola ki",
+    "kaha ki",
+    "because",
+    "lekin",
+    "kyunki"
+
+  ];
+
+
+  let patternFound = false;
+
+
+  for (
+    const pattern of patterns
+  ) {
+
+    if (
+      joke.includes(pattern)
+    ) {
+
+      patternFound = true;
+      break;
+
+    }
+
+  }
+
+
+  /*
+    A joke should have either:
+      - a recognizable joke pattern
+      - multiple joke-related words
+      - a longer setup
+  */
+
+  if (
+    patternFound &&
+    joke.length >= 18
+  ) {
+
+    return true;
+
+  }
+
+
+  if (
+    score >= 2 &&
+    joke.length >= 25
+  ) {
+
+    return true;
+
+  }
+
+
+  /*
+    If speech contains a question
+    and enough content, allow it.
+  */
+
+  if (
+    (
+      joke.includes("why") ||
+      joke.includes("kya") ||
+      joke.includes("kyun") ||
+      joke.includes("kaise")
+    ) &&
+    joke.length >= 30
+  ) {
+
+    return true;
+
+  }
+
+
+  return false;
+
+}
+
+
+/* =====================================================
+   SUBMIT VOICE JOKE
+   ===================================================== */
+
+function submitMakerJoke(
+  spokenText
+) {
+
+  if (
+    makerLetterIndex >=
+    selectedMakerName.length
+  ) {
+
+    return;
+
+  }
+
+
+  const text =
+    spokenText.trim();
+
+
+  /*
+    FIRST: CHECK JOKE
+  */
+
+  if (!isLikelyJoke(text)) {
+
+    document.getElementById(
+      "makerJokeResult"
+    ).innerHTML = `
+      ❌ <strong>Ye joke detect nahi hua.</strong>
+      <br><br>
+      Letter nahi milega.
+      <br>
+      Thoda proper setup + punchline wala joke bolo. 😂
+    `;
+
+
+    document.getElementById(
+      "voiceStatus"
+    ).innerHTML =
+      "🔁 Try again — is baar proper joke bolo!";
+
+
+    return;
+
+  }
+
+
+  /*
+    VALID JOKE
+  */
+
+  const letter =
+    selectedMakerName[
+      makerLetterIndex
+    ];
+
+
+  const jokeNumber =
+    makerLetterIndex + 1;
+
+
+  makerLetterIndex++;
+
+
+  localStorage.setItem(
+    "funboxMakerLetterIndex",
+    String(makerLetterIndex)
+  );
+
+
+  renderMakerProgress();
+
+
+  const safeText =
+    escapeHtml(text);
+
+
+  /*
+    LAST LETTER
+  */
+
+  if (
+    makerLetterIndex >=
+    selectedMakerName.length
+  ) {
+
+    document.getElementById(
+      "makerJokeResult"
+    ).innerHTML = `
+
+      😂 <strong>Valid Joke!</strong>
+
+      <br><br>
+
+      "${safeText}"
+
+      <div class="letter-reveal">
+        🔤 Letter ${jokeNumber}: ${letter}
+      </div>
+
+      <div class="full-name">
+        🎉 ${selectedMakerName}
+      </div>
+
+      <div>
+        🔓 Secret promo code complete!
+      </div>
+
+    `;
+
+
+    document.getElementById(
+      "unlockButton"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "voiceButton"
+    ).disabled =
+      true;
+
+
+    document.getElementById(
+      "newGameButton"
+    ).style.display =
+      "block";
+
+
+    return;
+
+  }
+
+
+  /*
+    NORMAL VALID JOKE
+  */
+
+  document.getElementById(
+    "makerJokeResult"
+  ).innerHTML = `
+
+    😂 <strong>Valid Joke!</strong>
+
+    <br><br>
+
+    "${safeText}"
+
+    <div class="letter-reveal">
+      🔤 Letter ${jokeNumber}: ${letter}
+    </div>
+
+    <div>
+      🤫 Baaki letters abhi hidden hain...
+    </div>
+
+  `;
+
+
+  document.getElementById(
+    "voiceStatus"
+  ).innerHTML =
+    "✅ Joke accepted! Next joke bolo.";
+
+}
+
+
+/* =====================================================
+   VOICE RECOGNITION
+   ===================================================== */
+
+let recognition = null;
+
+
+function startVoiceJoke() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  const status =
+    document.getElementById(
+      "voiceStatus"
+    );
+
+
+  const button =
+    document.getElementById(
+      "voiceButton"
+    );
+
+
+  if (!SpeechRecognition) {
+
+    status.innerHTML =
+      "⚠️ Is browser mein voice recognition supported nahi hai. Chrome/Edge try karo.";
+
+    return;
+
+  }
+
+
+  if (
+    makerLetterIndex >=
+    selectedMakerName.length
+  ) {
+
+    return;
+
+  }
+
+
+  recognition =
+    new SpeechRecognition();
+
+
+  /*
+    Indian English works reasonably
+    for Hinglish speech.
+  */
+
+  recognition.lang =
+    "en-IN";
+
+
+  recognition.continuous =
+    false;
+
+
+  recognition.interimResults =
+    false;
+
+
+  recognition.maxAlternatives =
+    1;
+
+
+  button.disabled =
+    true;
+
+
+  status.innerHTML =
+    "🎤 Sun raha hoon... Ab joke bolo!";
+
+
+  document.getElementById(
+    "spokenJoke"
+  ).innerHTML =
+    "🎤 Listening...";
+
+
+  recognition.onresult =
+    function(event) {
+
+      const transcript =
+        event
+          .results[0][0]
+          .transcript
+          .trim();
+
+
+      document.getElementById(
+        "spokenJoke"
+      ).innerHTML =
+        `🗣️ <strong>Tumne bola:</strong><br>${escapeHtml(transcript)}`;
+
+
+      submitMakerJoke(
+        transcript
+      );
+
+    };
+
+
+  recognition.onerror =
+    function(event) {
+
+      button.disabled =
+        false;
+
+
+      if (
+        event.error === "no-speech"
+      ) {
+
+        status.innerHTML =
+          "😶 Kuch suna nahi. Dobara Joke Bolo.";
+
+      } else {
+
+        status.innerHTML =
+          "⚠️ Voice problem. Dobara try karo.";
+
+      }
+
+    };
+
+
+  recognition.onend =
+    function() {
+
+      button.disabled =
+        false;
+
+    };
+
+
+  try {
+
+    recognition.start();
+
+  } catch(error) {
+
+    button.disabled =
+      false;
+
+    status.innerHTML =
+      "⚠️ Mic start nahi hua. Dobara try karo.";
+
+  }
+
+}
+
+
+/* =====================================================
+   USE REVEALED CODE
+   ===================================================== */
+
+function useRevealedCode() {
+
+  const input =
+    document.getElementById(
+      "redeemInput"
+    );
+
+
+  input.value =
+    selectedMakerName;
+
+
+  redeemCode();
+
+}
+
+
+/* =====================================================
+   NEW RANDOM SECRET
+   ===================================================== */
+
+function startNewMakerGame() {
+
+  chooseRandomMakerName();
+
+
+  document.getElementById(
+    "makerProgress"
+  ).innerHTML =
+    "";
+
+
+  document.getElementById(
+    "makerCount"
+  ).innerHTML =
+    `😂 Valid joke 1 of ${selectedMakerName.length}`;
+
+
+  document.getElementById(
+    "makerJokeResult"
+  ).innerHTML =
+    "👀 New mystery code ready. Joke bolo!";
+
+
+  document.getElementById(
+    "spokenJoke"
+  ).innerHTML =
+    "🎤 Tumhara joke yahan dikhega.";
+
+
+  document.getElementById(
+    "voiceButton"
+  ).disabled =
+    false;
+
+
+  document.getElementById(
+    "unlockButton"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "newGameButton"
+  ).style.display =
+    "none";
+
+
+  renderMakerProgress();
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+   ===================================================== */
+
+function escapeHtml(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text;
+
+  return div.innerHTML;
+
+}
+
+
+/* =====================================================
+   FUN CONTENT
+   ===================================================== */
+
+const data = {
+
+  excuse: [
+
+    "Sir, homework ready tha... bas notebook ne ghar pe rehne ka decision le liya. 😂",
+
+    "Maine homework kiya tha, lekin mera bag usko accept nahi kar raha tha. 😭",
+
+    "Network slow tha... isliye mera homework bhi upload nahi hua. 😂",
+
+    "Kal pakka karunga. Ye line main khud ko bhi roz bolta hoon. 😭",
+
+    "Homework karne baitha tha, phir 2 minute phone dekha... aur history ban gayi."
+
+  ],
+
+
+  future: [
+
+    "Tumhara future bright hai... bas screen brightness kam karni padegi. 🔮",
+
+    "Kal tumhe ek unexpected message milega. Shayad 'Homework complete?' 😂",
+
+    "Tumhare future mein success hai... aur uske saath thoda homework bhi.",
+
+    "Aaj luck tumhare side hai. Kal ka pata nahi. 😂",
+
+    "Future scanner kehta hai: tum kuch bada karoge... pehle room clean karo."
+
+  ],
+
+
+  fact: [
+
+    "Octopus ke teen hearts hote hain. 🐙",
+
+    "Bananas technically berries hote hain, lekin strawberries nahi. 🍌",
+
+    "Honey bahut long time tak spoil nahi hota.",
+
+    "Sharks dinosaurs se bhi purane hain. 🦈",
+
+    "Wombat cube-shaped poop karta hai. Nature overcreative hai. 😂"
+
+  ],
+
+
+  roast: [
+
+    "Tumhari planning Wi-Fi signal jaisi hai: naam strong, connection zero. 😂",
+
+    "Tumhara confidence impressive hai... evidence abhi tak nahi mila. 😭",
+
+    "Tum itne late ho ki clock bhi tumhara wait karte-karte tired ho gayi. 😂",
+
+    "Tumhara brain loading screen pe permanently atka hua lagta hai. 💀",
+
+    "Tum multitasking kar sakte ho: ek saath kuch bhi complete nahi karna. 😂"
+
+  ],
+
+
+  fate: [
+
+    "🎲 Fate says: Aaj tumhara lucky number 7 hai.",
+
+    "🎲 Fate says: Aaj kuch random hoga. Exactly kya, fate bhi nahi jaanta.",
+
+    "🎲 Fate says: Tumhe ek funny coincidence milega.",
+
+    "🎲 Fate says: Aaj procrastination ka level dangerous ho sakta hai. 😂",
+
+    "🎲 Fate says: Tumhari next decision ka result surprisingly funny hoga."
+
+  ]
+
+};
+
+
+/* =====================================================
+   RANDOM GENERATOR
+   ===================================================== */
+
+const usedIndexes = {
+
+  excuse: [],
+  future: [],
+  fact: [],
+  roast: [],
+  fate: []
+
+};
+
+
+function getRandom(category) {
+
+  const array =
+    data[category];
+
+
+  if (
+    usedIndexes[category].length >=
+    array.length
+  ) {
+
+    usedIndexes[category] = [];
+
+  }
+
+
+  let index;
+
+
+  do {
+
+    index =
+      Math.floor(
+        Math.random() *
+        array.length
+      );
+
+  } while (
+    usedIndexes[category].includes(index)
+  );
+
+
+  usedIndexes[category].push(index);
+
+
+  return array[index];
+
+}
+
+
+/* =====================================================
+   GENERATE
+   ===================================================== */
+
+function generate(category) {
+
+  if (!checkAccess()) {
+
+    return;
+
+  }
+
+
+  showResult(
+    getRandom(category)
+  );
+
+}
+
+
+/* =====================================================
+   SHOW RESULT
+   ===================================================== */
+
+function showResult(text) {
+
+  document.getElementById(
+    "result"
+  ).textContent =
+    text;
+
+
+  addRecent(text);
+
+}
+
+
+/* =====================================================
+   SHAYARI
+   ===================================================== */
+
+function generateShayari() {
+
+  if (!checkAccess()) {
+
+    return;
+
+  }
+
+
+  let name =
+    document
+      .getElementById("nameInput")
+      .value
+      .trim();
+
+
+  if (!name) {
+
+    name = "Dost";
+
+  }
+
+
+  name =
+    name.charAt(0).toUpperCase() +
+    name.slice(1);
+
+
+  const shayaris = [
+
+    `${name} naam hai tera, style tera kamaal, entry teri ho toh ruk jaaye pura hall. 😂`,
+
+    `${name} ka naam suna, mood ho gaya bright, attitude tera kabhi low, kabhi full flight. 😎`,
+
+    `${name} naam mein hai swag ka sound, jahan tu aaye wahan comedy ka ground. 😂`,
+
+    `${name} naam chhota nahi, pura brand hai bhai, bas homework wali file thodi missing hai bhai. 😭`,
+
+    `${name} ki entry hui, scene hua set, ab kya hoga next? Ye toh internet bhi predict nahi kar sakta. 😂`
+
+  ];
+
+
+  const random =
+    shayaris[
+      Math.floor(
+        Math.random() *
+        shayaris.length
+      )
+    ];
+
+
+  showResult(random);
+
+}
+
+
+/* =====================================================
+   SURPRISE
+   ===================================================== */
+
+function surprise() {
+
+  if (!checkAccess()) {
+
+    return;
+
+  }
+
+
+  const categories = [
+    "excuse",
+    "future",
+    "fact",
+    "roast",
+    "fate"
+  ];
+
+
+  const category =
+    categories[
+      Math.floor(
+        Math.random() *
+        categories.length
+      )
+    ];
+
+
+  showResult(
+    getRandom(category)
+  );
+
+}
+
+
+/* =====================================================
+   RECENT RESULTS
+   ===================================================== */
+
+let recentResults =
+  JSON.parse(
+    localStorage.getItem(
+      "funboxRecent"
+    ) || "[]"
+  );
+
+
+function addRecent(text) {
+
+  recentResults.unshift(text);
+
+
+  if (
+    recentResults.length > 8
+  ) {
+
+    recentResults.pop();
+
+  }
+
+
+  localStorage.setItem(
+    "funboxRecent",
+    JSON.stringify(recentResults)
+  );
+
+
+  renderRecent();
+
+}
+
+
+function renderRecent() {
+
+  const box =
+    document.getElementById(
+      "recentResults"
+    );
+
+
+  if (
+    recentResults.length === 0
+  ) {
+
+    box.innerHTML =
+      `
+        <p style="opacity:0.6; margin-top:15px;">
+          Abhi kuch nahi hai...
+        </p>
+      `;
+
+    return;
+
+  }
+
+
+  box.innerHTML = "";
+
+
+  recentResults.forEach(
+    function(item) {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.className =
+        "recent-item";
+
+
+      div.textContent =
+        item;
+
+
+      box.appendChild(div);
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   COPY
+   ===================================================== */
+
+function copyResult() {
+
+  const text =
+    document.getElementById(
+      "result"
+    ).textContent;
+
+
+  if (
+    !text ||
+    text.includes(
+      "Select a button"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  navigator.clipboard
+    .writeText(text)
+    .then(
+      function() {
+
+        alert("📋 Copied!");
+
+      }
+    )
+    .catch(
+      function() {
+
+        alert(
+          "Copy nahi hua."
+        );
 
       }
     );
 
-  }
+}
 
 
-  /* =====================================================
-     COPY
-     ===================================================== */
+/* =====================================================
+   CLEAR
+   ===================================================== */
 
-  function copyResult() {
+function clearResult() {
 
-    const text =
-      document.getElementById(
-        "result"
-      ).textContent;
+  document.getElementById(
+    "result"
+  ).textContent =
+    "Select a button and let the chaos begin...";
 
-
-    if (
-      !text ||
-      text.includes(
-        "Select a button"
-      )
-    ) {
-
-      return;
-
-    }
+}
 
 
-    navigator.clipboard
-      .writeText(text)
-      .then(
-        function() {
+/* =====================================================
+   START
+   ===================================================== */
 
-          alert(
-            "📋 Copied!"
-          );
+updateAccessStatus();
 
-        }
-      )
-      .catch(
-        function() {
+renderRecent();
 
-          alert(
-            "Copy nahi hua. Text manually copy kar lo."
-          );
-
-        }
-      );
-
-  }
-
-
-  /* =====================================================
-     CLEAR
-     ===================================================== */
-
-  function clearResult() {
-
-    document.getElementById(
-      "result"
-    ).textContent =
-      "Select a button and let the chaos begin...";
-
-  }
-
-
-  /* =====================================================
-     STARTUP
-     ===================================================== */
-
-  updateAccessStatus();
-
-  renderRecent();
-
-
-  /*
-    Agar unlimited already unlocked hai
-    aur page refresh hua hai, maker continue
-    karega wahi se.
-  */
-
-  if (unlimitedUnlocked) {
-
-    document.getElementById(
-      "makerSection"
-    ).style.display = "block";
-
-    renderMakerProgress();
-
-  }
+renderMakerProgress();
 
 </script>
 
