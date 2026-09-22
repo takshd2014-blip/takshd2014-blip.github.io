@@ -15,6 +15,10 @@
       font-family: Arial, sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       min-height: 100vh;
       background:
@@ -33,6 +37,8 @@
       text-align: center;
     }
 
+    /* LOGO */
+
     .logo {
       width: 125px;
       height: 125px;
@@ -41,6 +47,8 @@
       margin-bottom: 18px;
       box-shadow: 0 18px 50px rgba(0,0,0,0.45);
     }
+
+    /* HERO */
 
     .hero-badge {
       display: inline-block;
@@ -73,6 +81,8 @@
       font-size: 16px;
     }
 
+    /* MAIN BOX */
+
     .box {
       background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.13);
@@ -97,6 +107,8 @@
     input:focus {
       box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
     }
+
+    /* BUTTONS */
 
     .buttons {
       display: grid;
@@ -131,9 +143,11 @@
       color: white;
     }
 
+    /* RESULT */
+
     .result {
       margin-top: 25px;
-      min-height: 140px;
+      min-height: 145px;
       padding: 25px;
       border-radius: 17px;
       background: rgba(0,0,0,0.28);
@@ -145,6 +159,8 @@
       line-height: 1.7;
       white-space: pre-line;
     }
+
+    /* ACTIONS */
 
     .actions {
       margin-top: 15px;
@@ -159,6 +175,8 @@
       padding: 10px 20px;
       font-size: 13px;
     }
+
+    /* RECENT */
 
     .recent {
       margin-top: 28px;
@@ -181,13 +199,74 @@
       line-height: 1.5;
     }
 
-    footer {
-      margin-top: 22px;
-      color: #64748b;
-      font-size: 12px;
+    /* ABOUT */
+
+    .about {
+      margin-top: 35px;
+      padding: 25px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      text-align: left;
     }
 
+    .about h2 {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 23px;
+    }
+
+    .about p {
+      color: #94a3b8;
+      line-height: 1.7;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .features {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .feature {
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      margin-top: 30px;
+      padding: 25px 15px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .footer-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .footer-credit {
+      margin-top: 10px;
+    }
+
+    .footer-credit strong {
+      color: #c4b5fd;
+    }
+
+    /* MOBILE */
+
     @media (max-width: 600px) {
+
       body {
         padding: 25px 14px;
       }
@@ -216,6 +295,10 @@
         width: 100px;
         height: 100px;
       }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -224,7 +307,15 @@
 
 <div class="container">
 
-  <img src="22.png" alt="FunBox Logo" class="logo">
+  <!-- LOGO -->
+
+  <img
+    src="22.png"
+    alt="FunBox Logo"
+    class="logo"
+  >
+
+  <!-- HERO -->
 
   <div class="hero-badge">
     ⚡ RANDOM FUN • ZERO BORING
@@ -236,9 +327,12 @@
 
   <p class="hero-subtitle">
     Boredom ka ilaaj nahi mila?
-    Excuses, roasts, facts, predictions aur naam ki shayari —
-    sab ek hi jagah.
+    Excuses, roasts, facts, predictions aur
+    naam ke rhyme wali shayari — sab ek jagah.
   </p>
+
+
+  <!-- MAIN -->
 
   <div class="box">
 
@@ -271,33 +365,124 @@
         💫 Naam Ki Shayari
       </button>
 
-      <button class="surprise" onclick="surprise()">
+      <button
+        class="surprise"
+        onclick="surprise()"
+      >
         🎲 Randomize My Fate
       </button>
 
     </div>
 
-    <div class="result" id="result">
+
+    <!-- RESULT -->
+
+    <div
+      class="result"
+      id="result"
+    >
       Yahan tumhara result aayega 😎
     </div>
 
+
+    <!-- ACTIONS -->
+
     <div class="actions">
-      <button onclick="copyResult()">📋 Copy</button>
-      <button onclick="clearResult()">🗑️ Clear</button>
+
+      <button onclick="copyResult()">
+        📋 Copy
+      </button>
+
+      <button onclick="clearResult()">
+        🗑️ Clear
+      </button>
+
     </div>
 
+
+    <!-- RECENT -->
+
     <div class="recent">
-      <h3>🕘 Recent Results</h3>
+
+      <h3>
+        🕘 Recent Results
+      </h3>
+
       <div id="recentResults"></div>
+
     </div>
 
   </div>
 
+
+  <!-- ABOUT -->
+
+  <section
+    class="about"
+    id="about"
+  >
+
+    <h2>
+      ℹ️ About FunBox
+    </h2>
+
+    <p>
+      FunBox ek simple random-fun website hai
+      jahan boredom ko thoda roast kiya jaata hai.
+      Naam daalo, button dabao aur dekho kya nikalta hai.
+    </p>
+
+    <div class="features">
+
+      <div class="feature">
+        😈 Savage Roasts
+      </div>
+
+      <div class="feature">
+        💫 Name Rhyming Shayari
+      </div>
+
+      <div class="feature">
+        🔮 Random Predictions
+      </div>
+
+      <div class="feature">
+        🧠 Weird Facts
+      </div>
+
+      <div class="feature">
+        📝 Random Excuses
+      </div>
+
+      <div class="feature">
+        🎲 Pure Random Chaos
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
   <footer>
-    FunBox • Because boring is overrated ⚡
+
+    <div class="footer-title">
+      ⚡ FunBox
+    </div>
+
+    <div>
+      Made by <strong>Taksh</strong>
+    </div>
+
+    <div class="footer-credit">
+      FunBox © 2026 • Because boring is overrated.
+    </div>
+
   </footer>
 
 </div>
+
 
 <script>
 
@@ -308,101 +493,173 @@
   const data = {
 
     excuse: [
+
       "Kaam karne baitha tha, phir phone haath mein aa gaya. Phone jeet gaya.",
+
       "Main late nahi tha. Bas meri timing normal logon se thodi advanced hai.",
+
       "5 minute ka break liya tha. Time ne personal grudge le liya.",
+
       "Plan solid tha. Execution ne resignation de diya.",
+
       "Kaam almost complete tha. 'Almost' bhi ek achievement hai.",
+
       "Alarm baja, aankh khuli, decision hua — kal se pakka.",
+
       "Task dekha aur laga pehle proper planning zaroori hai. Planning abhi chal rahi hai.",
+
       "Main busy tha. Kis cheez mein tha, ye investigation ka subject hai.",
+
       "Deadline ignore nahi ki. Bas thoda distance maintain kiya.",
+
       "Mera laptop open tha. Technically main kaam ke environment mein tha.",
+
       "Motivation aayi thi. Main ready nahi tha. Woh chali gayi.",
+
       "Kaam start karne wala tha, phir ek random thought ne career badal diya."
+
     ],
+
 
     future: [
+
       "Aaj tum kuch productive karoge. Haan, prediction mein risk hai.",
+
       "Jaldi hi tum ek problem solve karoge jo tumne khud create ki thi.",
+
       "Tumhe brilliant idea milega. Execute karna optional lag sakta hai.",
+
       "Ek din tum bina procrastinate kiye kaam complete karoge. Historic moment.",
+
       "Tumhari productivity achanak online hogi. Date classified hai.",
+
       "Future mein tum apne purane decisions dekh kar bologe: interesting choice.",
+
       "Ek unexpected good moment aayega. Screenshot ready rakhna.",
+
       "Tum kuch naya seekhoge aur 10 minute baad expert advice dene lagoge.",
+
       "Ek plan actually plan ke according chalega. Universe bhi kabhi-kabhi try karta hai.",
+
       "Tum ek din itne organized hoge ki khud ko suspicious lagega.",
+
       "Tumhara motivation wapas aayega. Bas uska GPS thoda kharab hai.",
-      "Aane wale time mein tum ek smart decision loge. Details abhi confidential hain."
+
+      "Aane wale time mein tum ek smart decision loge. Details confidential hain."
+
     ],
+
 
     fact: [
+
       "Octopus ke 3 hearts hote hain. Phir bhi tumse zyada emotionally stable lagte hain.",
+
       "Banana technically berry hai, strawberry technically nahi. Nature bhi confusion create karti hai.",
+
       "Sharks trees se bhi purane hain. Ancient management chal raha hai.",
+
       "Venus par ek day uske ek year se bhi lamba hota hai. Monday wahan dangerous hoga.",
+
       "Butterflies feet se taste karti hain. Food review literally pairon se.",
+
       "Wombat cube-shaped poop karta hai. Science ne geometry bhi add kar di.",
+
       "Crows ke group ko murder kaha jaata hai. Birds ke naam bhi dramatic hain.",
+
       "Lightning Sun ki surface se bhi hotter ho sakti hai. Nature casually overreact karti hai.",
+
       "Koala fingerprints humans se surprisingly similar hote hain. Suspicious.",
+
       "Cows best friends bana sakti hain. Unki social life bhi sorted hai.",
+
       "Space mein sound travel nahi karta. Isliye space argument ka winner decide nahi hota.",
+
       "Honey properly stored ho toh bahut long time tak edible reh sakta hai. Honey has better planning."
+
     ],
 
+
     roast: [
+
       "Tera confidence dekh ke lagta hai preparation banned hai.",
+
       "Tere plans itne detailed hain ki execution unhe dekh ke resign kar deta hai.",
+
       "Tera 5 minute aur normal duniya ka 5 minute alag species hain.",
+
       "Teri productivity ka status: last seen long ago.",
+
       "Tu procrastinate nahi karta. Tu future wale khud ko surprise deta hai.",
+
       "Tera focus Wi-Fi jaisa hai — important time pe signal gayab.",
+
       "Tere ideas Formula 1 ki speed se aate hain, execution bullock cart ki.",
+
       "Tera brain: Let's do it. Tera body: Kal se pakka.",
+
       "Tu multitasking nahi karta. Tu multiple cheezein incomplete rakhta hai.",
+
       "Tu 'kal se' ka itna loyal hai ki kal bhi tujhe avoid karta hoga.",
+
       "Tere excuses itne polished hain ki kaam se zyada effort unpe laga hai.",
+
       "Tu shortcut dhoondte-dhoondte kabhi-kabhi destination bhool jata hai."
+
     ]
+
   };
 
 
   /* =========================
-     USED RESULTS
+     NO REPEAT SYSTEM
   ========================= */
 
   const used = {
+
     excuse: [],
     future: [],
     fact: [],
-    roast: [],
-    shayari: []
+    roast: []
+
   };
+
 
   let recent = [];
 
 
-  /* =========================
-     RANDOM WITHOUT REPEAT
-  ========================= */
-
   function getRandom(type) {
 
-    if (used[type].length >= data[type].length) {
+    if (
+      used[type].length >=
+      data[type].length
+    ) {
+
       used[type] = [];
+
     }
+
 
     let index;
 
+
     do {
-      index = Math.floor(Math.random() * data[type].length);
-    } while (used[type].includes(index));
+
+      index =
+        Math.floor(
+          Math.random() *
+          data[type].length
+        );
+
+    } while (
+      used[type].includes(index)
+    );
+
 
     used[type].push(index);
 
+
     return data[type][index];
+
   }
 
 
@@ -413,114 +670,172 @@
   function generate(type) {
 
     const name =
-      document.getElementById("nameInput").value.trim();
+      document
+        .getElementById("nameInput")
+        .value
+        .trim();
 
-    let text = getRandom(type);
+
+    let text =
+      getRandom(type);
+
 
     if (name) {
-      text = name + ", " + text;
+
+      text =
+        name +
+        ", " +
+        text;
+
     }
 
+
     showResult(text);
+
   }
 
 
   /* =========================
-     NAME RHYME DETECTOR
+     RHYME DETECTOR
   ========================= */
 
-  function getRhymeData(name) {
+  function getRhyme(name) {
 
-    const n = name.toLowerCase().replace(/\s+/g, "");
+    const n =
+      name
+        .toLowerCase()
+        .replace(/\s+/g, "");
 
-    /* A / YA */
 
     if (
       n.endsWith("iya") ||
-      n.endsWith("riya") ||
-      n.endsWith("iya")
+      n.endsWith("riya")
     ) {
-      return {
-        words: ["diya", "piya", "jiya", "duniya"]
-      };
-    }
 
-    if (
-      n.endsWith("a") ||
-      n.endsWith("ya")
-    ) {
-      return {
-        words: ["nirala", "ujala", "masala", "hungama"]
-      };
+      return [
+        "diya",
+        "piya",
+        "jiya",
+        "duniya"
+      ];
+
     }
 
 
-    /* AN / AAN / N */
-
     if (
-      n.endsWith("man") ||
       n.endsWith("an") ||
       n.endsWith("aan") ||
+      n.endsWith("man") ||
       n.endsWith("n")
     ) {
-      return {
-        words: ["shaan", "tufaan", "armaan", "jaan"]
-      };
+
+      return [
+        "shaan",
+        "tufaan",
+        "armaan",
+        "jaan"
+      ];
+
     }
 
-
-    /* I / EE */
 
     if (
       n.endsWith("i") ||
       n.endsWith("ee")
     ) {
-      return {
-        words: ["sahi", "wahi", "tabahi", "kahi"]
-      };
+
+      return [
+        "sahi",
+        "wahi",
+        "tabahi",
+        "kahi"
+      ];
+
     }
 
-
-    /* U / OO */
 
     if (
       n.endsWith("u") ||
       n.endsWith("oo")
     ) {
-      return {
-        words: ["guru", "shuru", "babu", "bekabu"]
-      };
+
+      return [
+        "guru",
+        "shuru",
+        "babu",
+        "bekabu"
+      ];
+
     }
 
-
-    /* R / AR */
 
     if (
       n.endsWith("ar") ||
       n.endsWith("er")
     ) {
-      return {
-        words: ["dhamakedar", "zabardast yaar", "taiyaar", "bekaar"]
-      };
+
+      return [
+        "dhamakedar",
+        "zabardast yaar",
+        "taiyaar",
+        "bekaar"
+      ];
+
     }
 
 
-    /* DEFAULT */
+    if (
+      n.endsWith("a") ||
+      n.endsWith("ya")
+    ) {
 
-    return {
-      words: ["kamaal", "bawaal", "sawaal", "dhamaal"]
-    };
+      return [
+        "nirala",
+        "ujala",
+        "masala",
+        "hungama"
+      ];
+
+    }
+
+
+    return [
+      "kamaal",
+      "bawaal",
+      "sawaal",
+      "dhamaal"
+    ];
+
   }
 
 
   /* =========================
-     DYNAMIC SHAYARI
+     SHAYARI
   ========================= */
 
-  function createShayari(name) {
+  function generateShayari() {
+
+    const name =
+      document
+        .getElementById("nameInput")
+        .value
+        .trim();
+
+
+    if (!name) {
+
+      showResult(
+        "Pehle naam daal 💀\nBlank naam ka rhyme nikalne ke liye NASA bhi busy hai."
+      );
+
+      return;
+
+    }
+
 
     const rhyme =
-      getRhymeData(name).words;
+      getRhyme(name);
+
 
     const a = rhyme[0];
     const b = rhyme[1];
@@ -528,42 +843,49 @@
     const d = rhyme[3];
 
 
-    const templates = [
+    const shayaris = [
 
 `${name} ka naam, ${a} kamaal,
 Confidence full, logic thoda bawaal,
 Kaam ka poocha toh bola "kal",
-${name} ki productivity — ${d}! 💀`,
+${name} ki productivity — pura dhamaal. 💀`,
+
 
 `${name} ki entry, scene ${a},
 Attitude dekho, level ${b},
 Task mila toh face hua ${c},
-Aur kaam gaya seedha ${d}. 😭`,
+Kaam gaya aur reh gaya ${d}. 😭`,
+
 
 `${name} ka naam sunke laga ${a},
-Phir kaam dekha — pura ${b},
+Phir kaam dekha — pura bawaal,
 Planning mein banda ek number,
-Execution mein direct ${d}. 💀`,
+Execution mein direct sawaal. 💀`,
+
 
 `${name} ke sapne bade ${a},
 Plans bhi lagte hain ${b},
 Deadline jab saamne aaye,
-Excuses ban jaate hain ${d}. 😭`,
+Excuses ban jaate hain kamaal. 😭`,
+
 
 `${name} ka swag hai ${a},
-Confidence ka koi nahi ${b},
+Confidence ka koi nahi jawaab,
 Kaam ki baari aate hi,
-System bolta hai — ${d}! 💀`,
+System bolta hai — bhai saab! 💀`,
+
 
 `${name} bole main hoon ${a},
-Reality bole thoda ${b},
+Reality bole thoda bawaal,
 Kaam ke time gayab banda,
-Milta hai sirf "kal" mein ${d}. 😭`,
+Milta hai sirf kal ka sawaal. 😭`,
+
 
 `${name} ki vibe full ${a},
 Baaton mein level ${b},
 Task diya toh silence aisa,
-Jaise phone mein nahi ho ${d}. 💀`,
+Jaise phone mein network hi nahi. 💀`,
+
 
 `${name} ka naam hai ${a},
 Par kaam ka scene ${b},
@@ -572,31 +894,18 @@ Phir bolti hai — "main chalti, bye." 😭`
 
     ];
 
-    return templates[
-      Math.floor(Math.random() * templates.length)
-    ];
-  }
+
+    const randomShayari =
+      shayaris[
+        Math.floor(
+          Math.random() *
+          shayaris.length
+        )
+      ];
 
 
-  /* =========================
-     SHAYARI GENERATOR
-  ========================= */
+    showResult(randomShayari);
 
-  function generateShayari() {
-
-    const name =
-      document.getElementById("nameInput").value.trim();
-
-    if (!name) {
-      showResult(
-        "Pehle naam daal 💀\nBlank naam ka rhyme nikalne ke liye NASA bhi busy hai."
-      );
-      return;
-    }
-
-    const shayari = createShayari(name);
-
-    showResult(shayari);
   }
 
 
@@ -613,52 +922,87 @@ Phir bolti hai — "main chalti, bye." 😭`
       "roast"
     ];
 
+
     const randomType =
-      types[Math.floor(Math.random() * types.length)];
+      types[
+        Math.floor(
+          Math.random() *
+          types.length
+        )
+      ];
+
 
     generate(randomType);
+
   }
 
 
   /* =========================
-     RESULT
+     SHOW RESULT
   ========================= */
 
   function showResult(text) {
 
-    document.getElementById("result").textContent = text;
+    document
+      .getElementById("result")
+      .textContent = text;
+
 
     recent.unshift(text);
 
-    if (recent.length > 5) {
+
+    if (
+      recent.length > 5
+    ) {
+
       recent.pop();
+
     }
 
+
     updateRecent();
+
   }
 
 
   /* =========================
-     RECENT
+     RECENT RESULTS
   ========================= */
 
   function updateRecent() {
 
     const box =
-      document.getElementById("recentResults");
+      document
+        .getElementById(
+          "recentResults"
+        );
+
 
     box.innerHTML = "";
 
-    recent.forEach(item => {
 
-      const div =
-        document.createElement("div");
+    recent.forEach(
+      function(item) {
 
-      div.className = "recent-item";
-      div.textContent = item;
+        const div =
+          document.createElement(
+            "div"
+          );
 
-      box.appendChild(div);
-    });
+
+        div.className =
+          "recent-item";
+
+
+        div.textContent =
+          item;
+
+
+        box.appendChild(div);
+
+      }
+    );
+
   }
 
 
@@ -669,9 +1013,17 @@ Phir bolti hai — "main chalti, bye." 😭`
   function copyResult() {
 
     const text =
-      document.getElementById("result").textContent;
+      document
+        .getElementById(
+          "result"
+        )
+        .textContent;
 
-    navigator.clipboard.writeText(text);
+
+    navigator
+      .clipboard
+      .writeText(text);
+
   }
 
 
@@ -681,7 +1033,11 @@ Phir bolti hai — "main chalti, bye." 😭`
 
   function clearResult() {
 
-    document.getElementById("result").textContent =
+    document
+      .getElementById(
+        "result"
+      )
+      .textContent =
       "Yahan tumhara result aayega 😎";
 
   }
