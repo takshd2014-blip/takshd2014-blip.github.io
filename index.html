@@ -1,73 +1,518 @@
-function generateShayari() {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const name =
-    document
-      .getElementById("nameInput")
-      .value
-      .trim();
+  <title>FunBox ⚡</title>
+  <link rel="icon" type="image/png" href="22.png">
 
-  if (!name) {
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-    showResult(
-      "Naam toh daal bhai 💀\nBlank naam pe shayari likhunga toh computer bhi judge karega."
-    );
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #4c1d95 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #831843 0%, transparent 30%),
+        linear-gradient(135deg, #080b16, #17122b, #080b16);
+      color: white;
+      display: flex;
+      justify-content: center;
+      padding: 35px 20px;
+    }
 
-    return;
-  }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
 
-  const lower = name.toLowerCase();
+    .logo {
+      width: 125px;
+      height: 125px;
+      object-fit: cover;
+      border-radius: 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+    }
 
-  let shayari;
+    .hero-badge {
+      display: inline-block;
+      padding: 7px 15px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: #cbd5e1;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
 
-  const shayaris = [
+    .hero-title {
+      font-size: 62px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      margin-bottom: 10px;
+    }
 
-    `${name} ka naam hai bada kamaal,
+    .hero-title span {
+      color: #a78bfa;
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      margin: 0 auto 30px;
+      color: #94a3b8;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 26px;
+      padding: 30px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+    }
+
+    input {
+      width: 100%;
+      padding: 16px;
+      border-radius: 13px;
+      border: none;
+      outline: none;
+      margin-bottom: 18px;
+      font-size: 16px;
+      background: #f8fafc;
+      color: #111827;
+    }
+
+    input:focus {
+      box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      padding: 15px;
+      border-radius: 13px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.2s ease;
+      background: #f8fafc;
+      color: #111827;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .surprise {
+      grid-column: 1 / -1;
+      background: linear-gradient(90deg, #7c3aed, #db2777);
+      color: white;
+    }
+
+    .result {
+      margin-top: 25px;
+      min-height: 120px;
+      padding: 25px;
+      border-radius: 17px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    .actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .actions button {
+      background: #334155;
+      color: white;
+      padding: 10px 20px;
+      font-size: 13px;
+    }
+
+    .recent {
+      margin-top: 28px;
+      text-align: left;
+    }
+
+    .recent h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .recent-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 11px 13px;
+      border-radius: 11px;
+      margin-top: 7px;
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    footer {
+      margin-top: 22px;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 25px 14px;
+      }
+
+      .hero-title {
+        font-size: 45px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .surprise {
+        grid-column: auto;
+      }
+
+      .box {
+        padding: 20px;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <img src="22.png" alt="FunBox Logo" class="logo">
+
+    <div class="hero-badge">
+      ⚡ RANDOM FUN • ZERO BORING
+    </div>
+
+    <h1 class="hero-title">
+      Fun<span>Box</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Boredom ka ilaaj nahi mila?
+      Excuses, roasts, facts, predictions aur naam ki shayari —
+      sab ek hi jagah.
+    </p>
+
+    <div class="box">
+
+      <input
+        type="text"
+        id="nameInput"
+        placeholder="Apna naam likho..."
+        maxlength="30"
+      >
+
+      <div class="buttons">
+
+        <button onclick="generate('excuse')">
+          📝 Excuse Generator
+        </button>
+
+        <button onclick="generate('future')">
+          🔮 Future Scanner
+        </button>
+
+        <button onclick="generate('fact')">
+          🧠 Random Fact
+        </button>
+
+        <button onclick="generate('roast')">
+          😈 Roast Me
+        </button>
+
+        <button onclick="generateShayari()">
+          💫 Naam Ki Shayari
+        </button>
+
+        <button class="surprise" onclick="surprise()">
+          🎲 Randomize My Fate
+        </button>
+
+      </div>
+
+      <div class="result" id="result">
+        Yahan tumhara result aayega 😎
+      </div>
+
+      <div class="actions">
+        <button onclick="copyResult()">📋 Copy</button>
+        <button onclick="clearResult()">🗑️ Clear</button>
+      </div>
+
+      <div class="recent">
+        <h3>🕘 Recent Results</h3>
+        <div id="recentResults"></div>
+      </div>
+
+    </div>
+
+    <footer>
+      FunBox • Because boring is overrated ⚡
+    </footer>
+
+  </div>
+
+  <script>
+
+    const data = {
+
+      excuse: [
+        "Bhai kaam karne baitha tha, phir phone haath mein aa gaya. Uske baad jo hua, woh history hai.",
+        "Main late nahi tha, bas meri entry timing thodi cinematic hai.",
+        "Kaam almost complete tha... phir maine decide kiya ki 'almost' bhi ek achievement hai.",
+        "Maine 5 minute rest liya tha. Pata nahi calendar ne usse 2 ghante kaise bana diya.",
+        "Plan ekdum solid tha. Bas execution ne bola: main nahi aa raha.",
+        "Alarm baj chuka tha. Main bhi jag gaya tha. Bas uthne ka decision pending tha."
+      ],
+
+      future: [
+        "Aaj tum kuch productive karoge. Haan, mujhe bhi thoda doubt hai.",
+        "Jaldi hi tum ek problem solve karoge... jo tumne khud create ki thi.",
+        "Tumhe ek brilliant idea milega. Usko execute karna tumhari problem hai.",
+        "Ek din tum bina procrastinate kiye kaam complete karoge. Researchers confused honge.",
+        "Tumhari productivity ek din achanak online hogi. Exact date classified hai.",
+        "Future mein tum apne purane decisions ko dekhoge aur kahoge: interesting choice."
+      ],
+
+      fact: [
+        "Octopus ke 3 hearts hote hain. Aur phir bhi tumse zyada emotionally stable lagte hain.",
+        "Banana technically berry hai, lekin strawberry technically nahi. Nature bhi kabhi-kabhi confusing hoti hai.",
+        "Sharks trees se bhi purane hain. Matlab sharks literally ancient management hain.",
+        "Venus par ek day uske ek year se bhi lamba hota hai. Matlab wahan Monday ka wait dangerous hai.",
+        "Butterflies apne feet se taste karti hain. Hum muh se kha rahe hain aur ye feet se review kar rahe hain.",
+        "Wombat cube-shaped poop karta hai. Science ne literally cube bana diya."
+      ],
+
+      roast: [
+        "Tera confidence dekh ke lagta hai preparation sirf optional nahi, banned hai.",
+        "Tere plans itne detailed hote hain ki execution unhe dekh ke resign kar deta hai.",
+        "Tera '5 minute' aur normal duniya ka '5 minute' alag species ke hain.",
+        "Teri productivity ka status: 'last seen long ago'.",
+        "Tu procrastinate nahi karta. Tu future version of yourself ko surprise deta hai.",
+        "Tera focus Wi-Fi jaisa hai — important time pe signal gayab.",
+        "Tere ideas Formula 1 ki speed se aate hain, execution bullock cart ki.",
+        "Tera brain: 'Let's do it.' Tera body: 'Kal se pakka.'",
+        "Tu multitasking nahi karta. Tu ek saath multiple cheezein incomplete rakhta hai.",
+        "Tu 'kal se' ka itna loyal hai ki kal bhi tujhe avoid karta hoga."
+      ]
+
+    };
+
+    const used = {
+      excuse: [],
+      future: [],
+      fact: [],
+      roast: []
+    };
+
+    let recent = [];
+
+    function getRandom(type) {
+
+      if (used[type].length === data[type].length) {
+        used[type] = [];
+      }
+
+      let index;
+
+      do {
+        index = Math.floor(Math.random() * data[type].length);
+      } while (used[type].includes(index));
+
+      used[type].push(index);
+
+      return data[type][index];
+    }
+
+    function generate(type) {
+
+      const name =
+        document.getElementById("nameInput").value.trim();
+
+      let text = getRandom(type);
+
+      if (name) {
+        text = name + ", " + text;
+      }
+
+      showResult(text);
+    }
+
+    /* FUNNY + SAVAGE SHAYARI */
+
+    function generateShayari() {
+
+      const name =
+        document.getElementById("nameInput").value.trim();
+
+      if (!name) {
+        showResult(
+          "Naam toh daal bhai 💀\nBlank naam pe shayari likhunga toh computer bhi judge karega."
+        );
+        return;
+      }
+
+      const shayaris = [
+
+`${name} ka naam hai bada kamaal,
 Confidence dekho toh CEO level ka sawaal,
 Kaam mile toh speed ho jaati hai slow,
 ${name} ko dekh ke loading screen bhi bole — bro. 💀`,
 
-    `${name} ki entry, full attitude ke saath,
+`${name} ki entry, full attitude ke saath,
 Par kaam ke time gayab dono haath,
 Plan banata hai jaise kal duniya jeetega,
 Deadline aaye toh ${name} bole — "bhai dekhenge." 😭`,
 
-    `${name} ka swag hai thoda dangerous,
+`${name} ka swag hai thoda dangerous,
 Productivity ka scene thoda suspicious,
 Naam sunke laga banda hoga smart,
 Task mila toh system ne kiya restart. 💀`,
 
-    `${name} ka confidence hai unlimited,
+`${name} ka confidence hai unlimited,
 Kaam ka record thoda restricted,
 Baaton mein lagta hai legend level,
 Reality mein "kal se" ka permanent member. 😭`,
 
-    `${name} ko dekh ke laga scene hoga tight,
+`${name} ko dekh ke laga scene hoga tight,
 Phir kaam mila aur bola — good night,
 Ideas iske aate hain rocket ki speed,
 Execution dekh ke calculator bhi kare plead. 💀`,
 
-    `${name} ka attitude full HD,
+`${name} ka attitude full HD,
 Productivity abhi bhi loading mein hi,
 Duniya bole "kaam kar le bhai",
 ${name} bole — "haan haan, pehle chai." ☕💀`,
 
-    `${name} ka naam sunke laga tufaan,
+`${name} ka naam sunke laga tufaan,
 Kaam dekha toh nikla halka samaan,
 Confidence iska sky ke paar,
 Execution bole — "main kal aaunga yaar." 😭`,
 
-    `${name} ke plans hain ekdum royal,
-Par execution ka haal thoda loyal-to-delay,
+`${name} ke plans hain ekdum royal,
+Par execution ka haal thoda delay,
 Deadline ko dekhe bina tension ke,
 Phir raat ko search kare — "kaam jaldi kaise karein?" 💀`
 
-  ];
+      ];
 
-  shayari =
-    shayaris[
-      Math.floor(Math.random() * shayaris.length)
-    ];
+      const shayari =
+        shayaris[
+          Math.floor(Math.random() * shayaris.length)
+        ];
 
-  showResult(shayari);
+      showResult(shayari);
+    }
 
-}
+    function surprise() {
+
+      const types = [
+        "excuse",
+        "future",
+        "fact",
+        "roast"
+      ];
+
+      const randomType =
+        types[Math.floor(Math.random() * types.length)];
+
+      generate(randomType);
+    }
+
+    function showResult(text) {
+
+      document.getElementById("result").textContent = text;
+
+      recent.unshift(text);
+
+      if (recent.length > 5) {
+        recent.pop();
+      }
+
+      updateRecent();
+    }
+
+    function updateRecent() {
+
+      const box =
+        document.getElementById("recentResults");
+
+      box.innerHTML = "";
+
+      recent.forEach(item => {
+
+        const div =
+          document.createElement("div");
+
+        div.className = "recent-item";
+        div.textContent = item;
+
+        box.appendChild(div);
+      });
+    }
+
+    function copyResult() {
+
+      const text =
+        document.getElementById("result").textContent;
+
+      navigator.clipboard.writeText(text);
+    }
+
+    function clearResult() {
+
+      document.getElementById("result").textContent =
+        "Yahan tumhara result aayega 😎";
+    }
+
+  </script>
+
+</body>
+</html>
