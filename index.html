@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>FunBox ⚡</title>
+
   <link rel="icon" type="image/png" href="22.png">
 
   <style>
@@ -15,100 +16,62 @@
       font-family: Arial, sans-serif;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, #4c1d95 0%, transparent 35%),
-        radial-gradient(circle at bottom right, #831843 0%, transparent 30%),
-        linear-gradient(135deg, #080b16, #17122b, #080b16);
       color: white;
-      display: flex;
-      justify-content: center;
-      padding: 35px 20px;
+      background:
+        radial-gradient(circle at top left, #302b63, transparent 35%),
+        radial-gradient(circle at bottom right, #24243e, transparent 35%),
+        linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      padding: 20px;
     }
 
     .container {
-      width: 100%;
-      max-width: 900px;
-      text-align: center;
+      max-width: 1000px;
+      margin: auto;
     }
 
-    /* LOGO */
+    header {
+      text-align: center;
+      padding: 25px 15px;
+    }
 
     .logo {
-      width: 125px;
-      height: 125px;
-      object-fit: cover;
-      border-radius: 28px;
-      margin-bottom: 18px;
-      box-shadow: 0 18px 50px rgba(0,0,0,0.45);
-    }
-
-    /* HERO */
-
-    .hero-badge {
-      display: inline-block;
-      padding: 7px 15px;
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: #cbd5e1;
-      font-size: 12px;
-      letter-spacing: 1px;
-      margin-bottom: 14px;
-    }
-
-    .hero-title {
-      font-size: 62px;
-      font-weight: 900;
-      letter-spacing: -4px;
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 25px;
       margin-bottom: 10px;
     }
 
-    .hero-title span {
-      color: #a78bfa;
+    h1 {
+      font-size: 42px;
+      margin-bottom: 8px;
     }
 
-    .hero-subtitle {
-      max-width: 650px;
-      margin: 0 auto 30px;
-      color: #94a3b8;
-      line-height: 1.6;
-      font-size: 16px;
+    .tagline {
+      opacity: 0.75;
     }
 
-    /* MAIN BOX */
-
-    .box {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.13);
-      border-radius: 26px;
-      padding: 30px;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+    .glass {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
     }
 
     input {
       width: 100%;
-      padding: 16px;
-      border-radius: 13px;
+      padding: 15px;
+      border-radius: 12px;
       border: none;
       outline: none;
-      margin-bottom: 18px;
+      margin: 15px 0;
       font-size: 16px;
-      background: #f8fafc;
-      color: #111827;
     }
-
-    input:focus {
-      box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
-    }
-
-    /* BUTTONS */
 
     .buttons {
       display: grid;
@@ -118,185 +81,88 @@
 
     button {
       border: none;
-      padding: 15px;
-      border-radius: 13px;
+      padding: 14px;
+      border-radius: 12px;
       cursor: pointer;
       font-size: 15px;
-      font-weight: 700;
-      transition: 0.2s ease;
-      background: #f8fafc;
-      color: #111827;
+      font-weight: bold;
+      transition: 0.2s;
     }
 
     button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transform: translateY(-2px);
+      filter: brightness(1.1);
     }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .surprise {
-      grid-column: 1 / -1;
-      background: linear-gradient(90deg, #7c3aed, #db2777);
-      color: white;
-    }
-
-    /* RESULT */
 
     .result {
-      margin-top: 25px;
-      min-height: 145px;
-      padding: 25px;
-      border-radius: 17px;
-      background: rgba(0,0,0,0.28);
-      border: 1px solid rgba(255,255,255,0.07);
+      min-height: 120px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 18px;
-      line-height: 1.7;
-      white-space: pre-line;
+      justify-content: center;
+      text-align: center;
+      font-size: 19px;
+      line-height: 1.6;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 15px;
+      background: rgba(0,0,0,0.2);
     }
 
-    /* ACTIONS */
-
     .actions {
-      margin-top: 15px;
       display: flex;
       gap: 10px;
-      justify-content: center;
+      margin-top: 15px;
     }
 
     .actions button {
-      background: #334155;
-      color: white;
-      padding: 10px 20px;
-      font-size: 13px;
+      flex: 1;
     }
-
-    /* RECENT */
 
     .recent {
-      margin-top: 28px;
-      text-align: left;
-    }
-
-    .recent h3 {
-      margin-bottom: 10px;
-      font-size: 16px;
+      margin-top: 20px;
     }
 
     .recent-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.06);
-      padding: 11px 13px;
-      border-radius: 11px;
-      margin-top: 7px;
-      color: #cbd5e1;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    /* ABOUT */
-
-    .about {
-      margin-top: 35px;
-      padding: 25px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      text-align: left;
-    }
-
-    .about h2 {
-      text-align: center;
-      margin-bottom: 12px;
-      font-size: 23px;
-    }
-
-    .about p {
-      color: #94a3b8;
-      line-height: 1.7;
+      padding: 12px;
+      margin: 8px 0;
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
       font-size: 14px;
-      text-align: center;
     }
 
-    .features {
-      margin-top: 20px;
+    .about-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
     }
 
     .feature {
-      padding: 14px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.04);
-      color: #cbd5e1;
-      font-size: 13px;
+      background: rgba(255,255,255,0.06);
+      padding: 18px;
+      border-radius: 14px;
     }
 
-    /* FOOTER */
+    .feature h3 {
+      margin-bottom: 8px;
+    }
 
     footer {
-      margin-top: 30px;
-      padding: 25px 15px;
-      color: #64748b;
-      font-size: 13px;
-      line-height: 1.7;
+      text-align: center;
+      opacity: 0.7;
+      padding: 30px 10px;
     }
 
-    .footer-title {
-      font-size: 22px;
-      font-weight: 800;
-      color: white;
-      margin-bottom: 6px;
-    }
-
-    .footer-credit {
-      margin-top: 10px;
-    }
-
-    .footer-credit strong {
-      color: #c4b5fd;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 600px) {
-
-      body {
-        padding: 25px 14px;
-      }
-
-      .hero-title {
-        font-size: 45px;
-      }
-
-      .hero-subtitle {
-        font-size: 14px;
+    @media (max-width: 700px) {
+      h1 {
+        font-size: 34px;
       }
 
       .buttons {
         grid-template-columns: 1fr;
       }
 
-      .surprise {
-        grid-column: auto;
-      }
-
-      .box {
-        padding: 20px;
-      }
-
-      .logo {
-        width: 100px;
-        height: 100px;
-      }
-
-      .features {
+      .about-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -307,46 +173,28 @@
 
 <div class="container">
 
-  <!-- LOGO -->
-
-  <img
-    src="22.png"
-    alt="FunBox Logo"
-    class="logo"
-  >
-
-  <!-- HERO -->
-
-  <div class="hero-badge">
-    ⚡ RANDOM FUN • ZERO BORING
-  </div>
-
-  <h1 class="hero-title">
-    Fun<span>Box</span>
-  </h1>
-
-  <p class="hero-subtitle">
-    Boredom ka ilaaj nahi mila?
-    Excuses, roasts, facts, predictions aur
-    naam ke rhyme wali shayari — sab ek jagah.
-  </p>
+  <header>
+    <img src="22.png" class="logo" alt="FunBox Logo">
+    <h1>⚡ FunBox</h1>
+    <p class="tagline">Because boring is overrated.</p>
+  </header>
 
 
-  <!-- MAIN -->
+  <section class="glass">
 
-  <div class="box">
+    <h2>🎲 Fun Generator</h2>
 
     <input
       type="text"
       id="nameInput"
-      placeholder="Apna naam likho..."
-      maxlength="30"
+      placeholder="Apna naam enter karo..."
+      autocomplete="off"
     >
 
     <div class="buttons">
 
       <button onclick="generate('excuse')">
-        📝 Excuse Generator
+        😂 Excuse Generator
       </button>
 
       <button onclick="generate('future')">
@@ -354,38 +202,26 @@
       </button>
 
       <button onclick="generate('fact')">
-        🧠 Random Fact
+        🤯 Random Fact
       </button>
 
       <button onclick="generate('roast')">
-        😈 Roast Me
+        🔥 Roast Me
       </button>
 
       <button onclick="generateShayari()">
-        💫 Naam Ki Shayari
+        ✍️ Naam Ki Shayari
       </button>
 
-      <button
-        class="surprise"
-        onclick="surprise()"
-      >
+      <button onclick="surprise()">
         🎲 Randomize My Fate
       </button>
 
     </div>
 
-
-    <!-- RESULT -->
-
-    <div
-      class="result"
-      id="result"
-    >
-      Yahan tumhara result aayega 😎
+    <div class="result" id="result">
+      Select a button and let the chaos begin...
     </div>
-
-
-    <!-- ACTIONS -->
 
     <div class="actions">
 
@@ -399,63 +235,62 @@
 
     </div>
 
+  </section>
 
-    <!-- RECENT -->
 
-    <div class="recent">
+  <section class="glass recent">
 
-      <h3>
-        🕘 Recent Results
-      </h3>
+    <h2>🕘 Recent Results</h2>
 
-      <div id="recentResults"></div>
-
+    <div id="recentResults">
+      <p style="opacity:0.6; margin-top:15px;">
+        Abhi kuch nahi hai...
+      </p>
     </div>
 
-  </div>
+  </section>
 
 
-  <!-- ABOUT -->
+  <section class="glass">
 
-  <section
-    class="about"
-    id="about"
-  >
+    <h2>ℹ️ About FunBox</h2>
 
-    <h2>
-      ℹ️ About FunBox
-    </h2>
-
-    <p>
-      FunBox ek simple random-fun website hai
-      jahan boredom ko thoda roast kiya jaata hai.
-      Naam daalo, button dabao aur dekho kya nikalta hai.
+    <p style="margin-top:12px; line-height:1.7; opacity:0.85;">
+      FunBox ek random entertainment zone hai jahan tum excuses,
+      roasts, weird facts, future predictions aur naam wali shayari
+      generate kar sakte ho.
     </p>
 
-    <div class="features">
+    <div class="about-grid">
 
       <div class="feature">
-        😈 Savage Roasts
+        <h3>🔥 Savage Roasts</h3>
+        <p>Thoda savage. Zero bad words.</p>
       </div>
 
       <div class="feature">
-        💫 Name Rhyming Shayari
+        <h3>✍️ Name Shayari</h3>
+        <p>Naam ke sound ke saath rhyme.</p>
       </div>
 
       <div class="feature">
-        🔮 Random Predictions
+        <h3>🔮 Predictions</h3>
+        <p>Future scanner ka scientific zero percent guarantee.</p>
       </div>
 
       <div class="feature">
-        🧠 Weird Facts
+        <h3>🤯 Weird Facts</h3>
+        <p>Aise facts jo random bhi hain aur interesting bhi.</p>
       </div>
 
       <div class="feature">
-        📝 Random Excuses
+        <h3>😂 Excuses</h3>
+        <p>Homework se bachne ke creative excuses.</p>
       </div>
 
       <div class="feature">
-        🎲 Pure Random Chaos
+        <h3>🎲 Pure Chaos</h3>
+        <p>Random button. Random result. No explanation.</p>
       </div>
 
     </div>
@@ -463,21 +298,19 @@
   </section>
 
 
-  <!-- FOOTER -->
-
   <footer>
 
-    <div class="footer-title">
+    <div style="font-size:20px;">
       ⚡ FunBox
     </div>
 
-    <div>
+    <p style="margin-top:8px;">
       Made by <strong>Taksh</strong>
-    </div>
+    </p>
 
-    <div class="footer-credit">
+    <p style="margin-top:5px;">
       FunBox © 2026 • Because boring is overrated.
-    </div>
+    </p>
 
   </footer>
 
@@ -486,561 +319,284 @@
 
 <script>
 
-  /* =========================
-     CONTENT
-  ========================= */
-
-  const data = {
-
-    excuse: [
-
-      "Kaam karne baitha tha, phir phone haath mein aa gaya. Phone jeet gaya.",
-
-      "Main late nahi tha. Bas meri timing normal logon se thodi advanced hai.",
-
-      "5 minute ka break liya tha. Time ne personal grudge le liya.",
-
-      "Plan solid tha. Execution ne resignation de diya.",
-
-      "Kaam almost complete tha. 'Almost' bhi ek achievement hai.",
-
-      "Alarm baja, aankh khuli, decision hua — kal se pakka.",
-
-      "Task dekha aur laga pehle proper planning zaroori hai. Planning abhi chal rahi hai.",
-
-      "Main busy tha. Kis cheez mein tha, ye investigation ka subject hai.",
-
-      "Deadline ignore nahi ki. Bas thoda distance maintain kiya.",
-
-      "Mera laptop open tha. Technically main kaam ke environment mein tha.",
-
-      "Motivation aayi thi. Main ready nahi tha. Woh chali gayi.",
-
-      "Kaam start karne wala tha, phir ek random thought ne career badal diya."
-
-    ],
-
-
-    future: [
-
-      "Aaj tum kuch productive karoge. Haan, prediction mein risk hai.",
-
-      "Jaldi hi tum ek problem solve karoge jo tumne khud create ki thi.",
-
-      "Tumhe brilliant idea milega. Execute karna optional lag sakta hai.",
-
-      "Ek din tum bina procrastinate kiye kaam complete karoge. Historic moment.",
-
-      "Tumhari productivity achanak online hogi. Date classified hai.",
-
-      "Future mein tum apne purane decisions dekh kar bologe: interesting choice.",
-
-      "Ek unexpected good moment aayega. Screenshot ready rakhna.",
-
-      "Tum kuch naya seekhoge aur 10 minute baad expert advice dene lagoge.",
-
-      "Ek plan actually plan ke according chalega. Universe bhi kabhi-kabhi try karta hai.",
-
-      "Tum ek din itne organized hoge ki khud ko suspicious lagega.",
-
-      "Tumhara motivation wapas aayega. Bas uska GPS thoda kharab hai.",
-
-      "Aane wale time mein tum ek smart decision loge. Details confidential hain."
-
-    ],
-
-
-    fact: [
-
-      "Octopus ke 3 hearts hote hain. Phir bhi tumse zyada emotionally stable lagte hain.",
-
-      "Banana technically berry hai, strawberry technically nahi. Nature bhi confusion create karti hai.",
-
-      "Sharks trees se bhi purane hain. Ancient management chal raha hai.",
-
-      "Venus par ek day uske ek year se bhi lamba hota hai. Monday wahan dangerous hoga.",
-
-      "Butterflies feet se taste karti hain. Food review literally pairon se.",
-
-      "Wombat cube-shaped poop karta hai. Science ne geometry bhi add kar di.",
-
-      "Crows ke group ko murder kaha jaata hai. Birds ke naam bhi dramatic hain.",
-
-      "Lightning Sun ki surface se bhi hotter ho sakti hai. Nature casually overreact karti hai.",
-
-      "Koala fingerprints humans se surprisingly similar hote hain. Suspicious.",
-
-      "Cows best friends bana sakti hain. Unki social life bhi sorted hai.",
-
-      "Space mein sound travel nahi karta. Isliye space argument ka winner decide nahi hota.",
-
-      "Honey properly stored ho toh bahut long time tak edible reh sakta hai. Honey has better planning."
-
-    ],
-
-
-    roast: [
-
-      "Tera confidence dekh ke lagta hai preparation banned hai.",
-
-      "Tere plans itne detailed hain ki execution unhe dekh ke resign kar deta hai.",
-
-      "Tera 5 minute aur normal duniya ka 5 minute alag species hain.",
-
-      "Teri productivity ka status: last seen long ago.",
-
-      "Tu procrastinate nahi karta. Tu future wale khud ko surprise deta hai.",
-
-      "Tera focus Wi-Fi jaisa hai — important time pe signal gayab.",
-
-      "Tere ideas Formula 1 ki speed se aate hain, execution bullock cart ki.",
-
-      "Tera brain: Let's do it. Tera body: Kal se pakka.",
-
-      "Tu multitasking nahi karta. Tu multiple cheezein incomplete rakhta hai.",
-
-      "Tu 'kal se' ka itna loyal hai ki kal bhi tujhe avoid karta hoga.",
-
-      "Tere excuses itne polished hain ki kaam se zyada effort unpe laga hai.",
-
-      "Tu shortcut dhoondte-dhoondte kabhi-kabhi destination bhool jata hai."
-
-    ]
-
-  };
-
-
-  /* =========================
-     NO REPEAT SYSTEM
-  ========================= */
-
-  const used = {
-
-    excuse: [],
-    future: [],
-    fact: [],
-    roast: []
-
-  };
-
-
-  let recent = [];
-
-
-  function getRandom(type) {
-
-    if (
-      used[type].length >=
-      data[type].length
-    ) {
-
-      used[type] = [];
-
-    }
-
-
-    let index;
-
-
-    do {
-
-      index =
-        Math.floor(
-          Math.random() *
-          data[type].length
-        );
-
-    } while (
-      used[type].includes(index)
-    );
-
-
-    used[type].push(index);
-
-
-    return data[type][index];
-
+const data = {
+
+  excuse: [
+    "Sir, homework ready tha... bas notebook ne ghar pe rehne ka decision le liya.",
+    "Maine homework kiya tha, lekin meri handwriting ne khud resign kar diya.",
+    "Internet slow tha... actually internet nahi, mera motivation slow tha.",
+    "Homework karne baitha tha, phir ceiling ko dekhte-dekhte research project ban gaya.",
+    "Mera homework complete tha, bas maine submit karna bhool gaya. Classic.",
+    "Pen mein ink thi, ideas mein nahi.",
+    "Main homework kar raha tha, phir ek notification aaya. Baaki history hai."
+  ],
+
+  future: [
+    "Kal tumhe ek aisi cheez milegi jo tumne expect nahi ki thi.",
+    "Tumhara next lucky moment random hoga. Bilkul FunBox ke result ki tarah.",
+    "Aaj tumhara future bright hai... screen brightness check kar lena.",
+    "Tumhari next achievement ke raste mein sabse bada obstacle tumhara laziness hai.",
+    "Soon tumhe ek unexpected good news mil sakti hai.",
+    "Tumhari life mein ek random plot twist loading hai."
+  ],
+
+  fact: [
+    "Octopus ke teen hearts hote hain. Tumhare excuses ke kitne hain?",
+    "Banana technically berry hai, lekin strawberry technically berry nahi hai.",
+    "Honey bahut lambe time tak kharab nahi hota.",
+    "Sharks trees se bhi purane hain.",
+    "Wombat cube-shaped poop karta hai. Nature ka geometry department.",
+    "Koalas ke fingerprints humans ke fingerprints se kaafi similar hote hain.",
+    "Space mein sound normally travel nahi karta kyunki wahan air nahi hoti."
+  ],
+
+  roast: [
+    "Tumhara confidence impressive hai, especially jab answer galat hota hai.",
+    "Tum slow nahi ho... bas duniya thodi zyada fast hai.",
+    "Tumhara brain loading screen pe permanent membership le chuka hai.",
+    "Tum itne random ho ki Randomize My Fate bhi confused ho gaya.",
+    "Tumhari planning aur reality ka relationship long-distance hai.",
+    "Tumhara attention span notification se bhi jaldi disappear ho jata hai.",
+    "Tumhare ideas interesting hain. Bas kabhi-kabhi unhe idea rehna chahiye."
+  ],
+
+  fate: [
+    "Aaj tumhara fate: 50% luck, 50% jugaad.",
+    "Aaj ka result: kuch random hone wala hai. Obviously.",
+    "Tumhari destiny ne kaha: pehle snacks, baad mein decisions.",
+    "Fate report: chaos detected successfully.",
+    "Universe ne tumhara request dekha aur bola: 'Dekhte hain.'",
+    "Aaj ka future: unexpected but entertaining."
+  ]
+
+};
+
+
+const used = {
+  excuse: [],
+  future: [],
+  fact: [],
+  roast: [],
+  fate: []
+};
+
+
+function getRandom(type) {
+
+  if (used[type].length >= data[type].length) {
+    used[type] = [];
   }
 
+  let index;
 
-  /* =========================
-     NORMAL GENERATOR
-  ========================= */
+  do {
+    index = Math.floor(Math.random() * data[type].length);
+  }
+  while (used[type].includes(index));
 
-  function generate(type) {
+  used[type].push(index);
 
-    const name =
-      document
-        .getElementById("nameInput")
-        .value
-        .trim();
-
-
-    let text =
-      getRandom(type);
+  return data[type][index];
+}
 
 
-    if (name) {
+function showResult(text) {
 
-      text =
-        name +
-        ", " +
-        text;
+  document.getElementById("result").textContent = text;
 
-    }
+  updateRecent(text);
+}
 
 
-    showResult(text);
+function generate(type) {
 
+  const text = getRandom(type);
+
+  showResult(text);
+}
+
+
+function getRhyme(name) {
+
+  const n = name.toLowerCase().trim();
+
+  if (!n) {
+    return ["kamaal", "bawaal", "dhamaal", "sawaal"];
   }
 
-
-  /* =========================
-     RHYME DETECTOR
-  ========================= */
-
-  function getRhyme(name) {
-
-    const n =
-      name
-        .toLowerCase()
-        .replace(/\s+/g, "");
-
-
-    if (
-      n.endsWith("iya") ||
-      n.endsWith("riya")
-    ) {
-
-      return [
-        "diya",
-        "piya",
-        "jiya",
-        "duniya"
-      ];
-
-    }
-
-
-    if (
-      n.endsWith("an") ||
-      n.endsWith("aan") ||
-      n.endsWith("man") ||
-      n.endsWith("n")
-    ) {
-
-      return [
-        "shaan",
-        "tufaan",
-        "armaan",
-        "jaan"
-      ];
-
-    }
-
-
-    if (
-      n.endsWith("i") ||
-      n.endsWith("ee")
-    ) {
-
-      return [
-        "sahi",
-        "wahi",
-        "tabahi",
-        "kahi"
-      ];
-
-    }
-
-
-    if (
-      n.endsWith("u") ||
-      n.endsWith("oo")
-    ) {
-
-      return [
-        "guru",
-        "shuru",
-        "babu",
-        "bekabu"
-      ];
-
-    }
-
-
-    if (
-      n.endsWith("ar") ||
-      n.endsWith("er")
-    ) {
-
-      return [
-        "dhamakedar",
-        "zabardast yaar",
-        "taiyaar",
-        "bekaar"
-      ];
-
-    }
-
-
-    if (
-      n.endsWith("a") ||
-      n.endsWith("ya")
-    ) {
-
-      return [
-        "nirala",
-        "ujala",
-        "masala",
-        "hungama"
-      ];
-
-    }
-
-
-    return [
-      "kamaal",
-      "bawaal",
-      "sawaal",
-      "dhamaal"
-    ];
-
+  if (n.endsWith("iya") || n.endsWith("ia")) {
+    return ["diya", "piya", "jiya", "duniya"];
   }
 
-
-  /* =========================
-     SHAYARI
-  ========================= */
-
-  function generateShayari() {
-
-    const name =
-      document
-        .getElementById("nameInput")
-        .value
-        .trim();
-
-
-    if (!name) {
-
-      showResult(
-        "Pehle naam daal 💀\nBlank naam ka rhyme nikalne ke liye NASA bhi busy hai."
-      );
-
-      return;
-
-    }
-
-
-    const rhyme =
-      getRhyme(name);
-
-
-    const a = rhyme[0];
-    const b = rhyme[1];
-    const c = rhyme[2];
-    const d = rhyme[3];
-
-
-    const shayaris = [
-
-`${name} ka naam, ${a} kamaal,
-Confidence full, logic thoda bawaal,
-Kaam ka poocha toh bola "kal",
-${name} ki productivity — pura dhamaal. 💀`,
-
-
-`${name} ki entry, scene ${a},
-Attitude dekho, level ${b},
-Task mila toh face hua ${c},
-Kaam gaya aur reh gaya ${d}. 😭`,
-
-
-`${name} ka naam sunke laga ${a},
-Phir kaam dekha — pura bawaal,
-Planning mein banda ek number,
-Execution mein direct sawaal. 💀`,
-
-
-`${name} ke sapne bade ${a},
-Plans bhi lagte hain ${b},
-Deadline jab saamne aaye,
-Excuses ban jaate hain kamaal. 😭`,
-
-
-`${name} ka swag hai ${a},
-Confidence ka koi nahi jawaab,
-Kaam ki baari aate hi,
-System bolta hai — bhai saab! 💀`,
-
-
-`${name} bole main hoon ${a},
-Reality bole thoda bawaal,
-Kaam ke time gayab banda,
-Milta hai sirf kal ka sawaal. 😭`,
-
-
-`${name} ki vibe full ${a},
-Baaton mein level ${b},
-Task diya toh silence aisa,
-Jaise phone mein network hi nahi. 💀`,
-
-
-`${name} ka naam hai ${a},
-Par kaam ka scene ${b},
-Motivation aati do minute,
-Phir bolti hai — "main chalti, bye." 😭`
-
-    ];
-
-
-    const randomShayari =
-      shayaris[
-        Math.floor(
-          Math.random() *
-          shayaris.length
-        )
-      ];
-
-
-    showResult(randomShayari);
-
+  if (n.endsWith("an") || n.endsWith("en")) {
+    return ["shaan", "tufaan", "armaan", "jaan"];
   }
 
-
-  /* =========================
-     SURPRISE
-  ========================= */
-
-  function surprise() {
-
-    const types = [
-      "excuse",
-      "future",
-      "fact",
-      "roast"
-    ];
-
-
-    const randomType =
-      types[
-        Math.floor(
-          Math.random() *
-          types.length
-        )
-      ];
-
-
-    generate(randomType);
-
+  if (n.endsWith("a")) {
+    return ["nirala", "ujala", "masala", "hungama"];
   }
 
-
-  /* =========================
-     SHOW RESULT
-  ========================= */
-
-  function showResult(text) {
-
-    document
-      .getElementById("result")
-      .textContent = text;
-
-
-    recent.unshift(text);
-
-
-    if (
-      recent.length > 5
-    ) {
-
-      recent.pop();
-
-    }
-
-
-    updateRecent();
-
+  if (
+    n.endsWith("i") ||
+    n.endsWith("ee") ||
+    n.endsWith("y")
+  ) {
+    return ["sahi", "wahi", "tabahi", "kahi"];
   }
 
-
-  /* =========================
-     RECENT RESULTS
-  ========================= */
-
-  function updateRecent() {
-
-    const box =
-      document
-        .getElementById(
-          "recentResults"
-        );
-
-
-    box.innerHTML = "";
-
-
-    recent.forEach(
-      function(item) {
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-
-        div.className =
-          "recent-item";
-
-
-        div.textContent =
-          item;
-
-
-        box.appendChild(div);
-
-      }
-    );
-
+  if (
+    n.endsWith("u") ||
+    n.endsWith("oo")
+  ) {
+    return ["guru", "shuru", "babu", "bekabu"];
   }
 
-
-  /* =========================
-     COPY
-  ========================= */
-
-  function copyResult() {
-
-    const text =
-      document
-        .getElementById(
-          "result"
-        )
-        .textContent;
-
-
-    navigator
-      .clipboard
-      .writeText(text);
-
+  if (
+    n.endsWith("ar") ||
+    n.endsWith("er")
+  ) {
+    return ["dhamakedar", "zabardast yaar", "taiyaar", "bekaar"];
   }
 
+  return ["kamaal", "bawaal", "dhamaal", "sawaal"];
+}
 
-  /* =========================
-     CLEAR
-  ========================= */
 
-  function clearResult() {
+function generateShayari() {
 
-    document
-      .getElementById(
-        "result"
-      )
-      .textContent =
-      "Yahan tumhara result aayega 😎";
+  const input = document.getElementById("nameInput").value.trim();
 
+  if (!input) {
+    showResult("Pehle naam daal bhai, hawa se shayari nahi banti. 😭");
+    return;
   }
+
+  const name = input;
+  const rhyme = getRhyme(name);
+
+  const templates = [
+
+    `${name} ka style hai ${rhyme[0]}, attitude full ${rhyme[1]}, kaam ki baat aaye to scene thoda ${rhyme[3]}.`,
+
+    `${name} jab aaye to lage ${rhyme[2]}, confidence dekho bilkul ${rhyme[0]}, bas homework dekhte hi ho jaata hai ${rhyme[3]}.`,
+
+    `${name} ka naam sunke bole sab ${rhyme[1]}, personality mein hai full ${rhyme[2]}, par padhai mein kabhi-kabhi system ${rhyme[3]}.`,
+
+    `${name} ki entry ho toh mood ${rhyme[2]}, jokes aaye toh scene ${rhyme[0]}, aur responsibility aaye toh answer: ${rhyme[3]}.`,
+
+    `${name} ka swag bilkul ${rhyme[0]}, attitude full ${rhyme[2]}, par alarm bajte hi life ban jaati hai ${rhyme[3]}.`,
+
+    `${name} ka naam hai ${rhyme[1]}, confidence hai ${rhyme[0]}, bas kaam ki baari aaye toh dimaag bole: ${rhyme[3]}.`,
+
+    `${name} ko samajhna hai bada ${rhyme[3]}, kyunki style mein ${rhyme[2]}, attitude mein ${rhyme[1]}, aur logic mein thoda ${rhyme[3]}.`,
+
+    `${name} ka scene hai ${rhyme[2]}, entry bilkul ${rhyme[0]}, par teacher ke saamne confidence ho jaata hai ${rhyme[3]}.`
+
+  ];
+
+  const index = Math.floor(Math.random() * templates.length);
+
+  showResult(templates[index]);
+}
+
+
+function surprise() {
+
+  const types = [
+    "excuse",
+    "future",
+    "fact",
+    "roast",
+    "fate"
+  ];
+
+  const type =
+    types[Math.floor(Math.random() * types.length)];
+
+  generate(type);
+}
+
+
+function updateRecent(text) {
+
+  let recent =
+    JSON.parse(localStorage.getItem("funboxRecent") || "[]");
+
+  recent.unshift(text);
+
+  recent = recent.slice(0, 5);
+
+  localStorage.setItem(
+    "funboxRecent",
+    JSON.stringify(recent)
+  );
+
+  renderRecent();
+}
+
+
+function renderRecent() {
+
+  const box =
+    document.getElementById("recentResults");
+
+  const recent =
+    JSON.parse(localStorage.getItem("funboxRecent") || "[]");
+
+  if (recent.length === 0) {
+
+    box.innerHTML =
+      `<p style="opacity:0.6;">Abhi kuch nahi hai...</p>`;
+
+    return;
+  }
+
+  box.innerHTML = recent
+    .map(item => `
+      <div class="recent-item">
+        ${escapeHtml(item)}
+      </div>
+    `)
+    .join("");
+}
+
+
+function escapeHtml(text) {
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+}
+
+
+function copyResult() {
+
+  const text =
+    document.getElementById("result").textContent;
+
+  if (
+    !text ||
+    text === "Select a button and let the chaos begin..."
+  ) {
+    return;
+  }
+
+  navigator.clipboard.writeText(text);
+
+  alert("Copied! 📋");
+}
+
+
+function clearResult() {
+
+  document.getElementById("result").textContent =
+    "Select a button and let the chaos begin...";
+}
+
+
+renderRecent();
 
 </script>
 
