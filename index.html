@@ -2,458 +2,686 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>FunBox — Boredom? Not Today.</title>
 
 <meta name="description"
-content="FunBox — jokes, roasts, random facts, games and chaos.">
+content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer, mini games and more.">
+
+<meta name="theme-color" content="#09090f">
 
 <link rel="icon" href="222.png">
 
+<!-- =========================
+     GOOGLE ANALYTICS
+========================= -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07"></script>
+
 <script>
-window.dataLayer=window.dataLayer||[];
-function gtag(){dataLayer.push(arguments)}
-gtag("js",new Date());
-gtag("config","G-JB6ZCD4C07");
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+  dataLayer.push(arguments);
+}
+
+gtag("js", new Date());
+gtag("config", "G-JB6ZCD4C07");
 </script>
 
 <style>
 
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
-box-sizing:border-box;
-margin:0;
-padding:0;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-:root{
---bg:#07070b;
---accent:#a855f7;
---accent2:#7c3aed;
---text:#fff;
---muted:#999;
---card:rgba(255,255,255,.055);
---line:rgba(255,255,255,.11);
+html{
+  scroll-behavior:smooth;
 }
 
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:
-radial-gradient(circle at top left,#24133c 0,transparent 35%),
-radial-gradient(circle at bottom right,#111b42 0,transparent 35%),
-var(--bg);
-color:var(--text);
-min-height:100vh;
-overflow-x:hidden;
-transition:.3s;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at top left,#24133c 0%,transparent 35%),
+    radial-gradient(circle at bottom right,#111b42 0%,transparent 35%),
+    #07070b;
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background .4s ease;
 }
 
-button,input{
-font:inherit;
+button,
+input{
+  font:inherit;
 }
 
 button{
-cursor:pointer;
+  cursor:pointer;
+}
+
+input{
+  outline:none;
 }
 
 .container{
-width:min(1100px,92%);
-margin:auto;
+  width:min(1100px,92%);
+  margin:auto;
 }
 
+
+/* =========================================================
+   HEADER
+========================================================= */
+
 header{
-text-align:center;
-padding:25px 0 12px;
+  text-align:center;
+  padding:35px 0 20px;
 }
 
 .logo-img{
-width:min(520px,90%);
-max-height:220px;
-object-fit:contain;
-display:block;
-margin:auto;
-filter:drop-shadow(0 0 20px rgba(170,80,255,.25));
+  width:min(520px,90%);
+  max-height:220px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 10px;
+  filter:drop-shadow(0 0 20px rgba(170,80,255,.25));
 }
 
 .tagline{
-color:#aaa;
-font-size:14px;
-letter-spacing:2px;
-text-transform:uppercase;
+  color:#aaa;
+  font-size:14px;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
-.top-controls{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
-flex-wrap:wrap;
-margin:10px 0 18px;
-}
 
-.user-pill{
-display:none;
-padding:9px 13px;
-border-radius:999px;
-background:rgba(255,255,255,.08);
-color:#ddd;
-font-size:13px;
-border:1px solid rgba(255,255,255,.08);
-}
+/* =========================================================
+   CARDS
+========================================================= */
 
 .card{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:22px;
-padding:22px;
-margin:18px 0;
-backdrop-filter:blur(15px);
-box-shadow:0 20px 50px rgba(0,0,0,.2);
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:22px;
+  padding:22px;
+  margin:18px 0;
+  backdrop-filter:blur(15px);
+  box-shadow:0 20px 50px rgba(0,0,0,.20);
 }
 
 .card h2{
-margin-bottom:8px;
-font-size:22px;
+  margin-bottom:8px;
+  font-size:22px;
 }
 
 .muted{
-color:var(--muted);
-font-size:14px;
+  color:#999;
+  font-size:14px;
 }
 
-.profile{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
+.small{
+  font-size:12px;
+  color:#777;
 }
 
-.stat{
-background:rgba(255,255,255,.05);
-border-radius:16px;
-padding:15px;
-text-align:center;
-}
 
-.stat strong{
-display:block;
-font-size:23px;
-margin-bottom:4px;
-}
-
-.stat span{
-color:#999;
-font-size:12px;
-}
-
-.level-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:18px;
-}
-
-.level-title{
-font-size:18px;
-font-weight:bold;
-}
-
-.level-current{
-padding:7px 13px;
-border-radius:999px;
-background:rgba(168,85,247,.18);
-color:#d8a8ff;
-border:1px solid rgba(168,85,247,.35);
-font-weight:bold;
-font-size:13px;
-}
-
-.level-slider{
-width:100%;
-accent-color:var(--accent);
-cursor:pointer;
-}
-
-.level-labels{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-margin-top:10px;
-gap:4px;
-}
-
-.level-labels span{
-text-align:center;
-color:#666;
-font-size:11px;
-}
-
-.level-labels span.active{
-color:#d7a5ff;
-font-weight:bold;
-}
-
-.generators{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-margin-top:15px;
-}
-
-.generator{
-padding:18px;
-border-radius:18px;
-background:rgba(255,255,255,.045);
-border:1px solid rgba(255,255,255,.08);
-transition:.2s;
-}
-
-.generator:hover{
-transform:translateY(-3px);
-border-color:rgba(168,85,247,.4);
-}
-
-.generator h3{
-margin-bottom:8px;
-font-size:17px;
-}
-
-.generator p{
-color:#888;
-font-size:12px;
-min-height:34px;
-}
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .btn{
-border:0;
-border-radius:13px;
-padding:12px 17px;
-color:white;
-background:
-linear-gradient(135deg,var(--accent2),var(--accent));
-transition:.2s;
-font-weight:bold;
-box-shadow:0 8px 25px rgba(124,58,237,.18);
-margin-top:10px;
+  border:0;
+  border-radius:13px;
+  padding:12px 17px;
+  color:#fff;
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+  transition:.2s;
+  font-weight:bold;
+  box-shadow:0 8px 25px rgba(124,58,237,.18);
 }
 
 .btn:hover{
-transform:translateY(-2px);
-filter:brightness(1.1);
+  transform:translateY(-2px);
+  filter:brightness(1.1);
 }
 
 .btn.secondary{
-background:rgba(255,255,255,.08);
-box-shadow:none;
+  background:rgba(255,255,255,.08);
+  box-shadow:none;
 }
 
 .btn.danger{
-background:linear-gradient(135deg,#7f1d1d,#dc2626);
+  background:linear-gradient(135deg,#7f1d1d,#dc2626);
 }
 
 .buttons{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:15px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:15px;
 }
 
-.result{
-margin-top:18px;
-min-height:80px;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:20px;
-border-radius:17px;
-background:rgba(0,0,0,.25);
-border:1px solid rgba(255,255,255,.07);
-color:#eee;
-line-height:1.6;
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+.account-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
 }
 
-.result.empty{
-color:#666;
+.account-input{
+  width:100%;
+  padding:12px 13px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#11111a;
+  color:#fff;
 }
 
-.guess-input{
-width:100%;
-padding:13px;
-margin-top:12px;
-border-radius:12px;
-border:1px solid #333;
-background:#111;
-color:#fff;
-outline:none;
+.account-input:focus{
+  border-color:#a855f7;
 }
 
-.guess-input:focus{
-border-color:var(--accent);
+.account-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
 }
 
-.secret-code{
-letter-spacing:6px;
-font-size:25px;
-font-weight:bold;
-margin:15px 0;
-color:#d8a8ff;
-text-align:center;
+.auth-status{
+  margin-top:13px;
+  color:#aaa;
+  font-size:13px;
+  min-height:18px;
 }
 
-.joke-status{
-text-align:center;
-color:#aaa;
-font-size:13px;
-margin-top:10px;
+.user-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(168,85,247,.12);
+  border:1px solid rgba(168,85,247,.3);
+  color:#d8a8ff;
+  font-size:12px;
+  font-weight:bold;
 }
 
-.rewards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin-top:15px;
-}
 
-.reward{
-background:rgba(255,255,255,.045);
-border-radius:15px;
-padding:15px;
-text-align:center;
-}
-
-.reward strong{
-display:block;
-font-size:20px;
-margin-bottom:5px;
-}
-
-.reward span{
-color:#888;
-font-size:12px;
-}
-
-.recent-list{
-display:flex;
-flex-direction:column;
-gap:9px;
-margin-top:15px;
-}
-
-.recent-item{
-padding:12px;
-border-radius:12px;
-background:rgba(255,255,255,.045);
-color:#bbb;
-font-size:13px;
-}
-
-.theme-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin-top:15px;
-}
-
-.theme-btn{
-padding:14px;
-border:1px solid var(--line);
-border-radius:14px;
-background:rgba(255,255,255,.04);
-color:#fff;
-text-align:left;
-font-weight:bold;
-transition:.2s;
-}
-
-.theme-btn:hover,
-.theme-btn.active{
-border-color:var(--accent);
-box-shadow:0 0 18px rgba(168,85,247,.15);
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.78);
-display:none;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:9999;
-}
-
-.modal.show{
-display:flex;
-}
-
-.modal-box{
-width:min(470px,100%);
-background:#121217;
-border:1px solid #333;
-border-radius:20px;
-padding:22px;
-}
-
-.modal-box h2{
-margin-bottom:8px;
-}
-
-.access-expired-box{
-text-align:center;
-border-color:rgba(168,85,247,.35);
-box-shadow:0 20px 70px rgba(0,0,0,.45);
-}
-
-.access-expired-icon{
-font-size:42px;
-margin-bottom:8px;
-}
-
-footer{
-text-align:center;
-padding:30px 0 50px;
-color:#666;
-font-size:12px;
-}
-
-@media(max-width:800px){
+/* =========================================================
+   PROFILE
+========================================================= */
 
 .profile{
-grid-template-columns:1fr 1fr;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:15px;
 }
 
-.generators{
-grid-template-columns:1fr 1fr;
+.stat{
+  background:rgba(255,255,255,.05);
+  border-radius:16px;
+  padding:15px;
+  text-align:center;
 }
 
-.rewards{
-grid-template-columns:1fr 1fr;
+.stat strong{
+  display:block;
+  font-size:23px;
+  margin-bottom:4px;
 }
 
+.stat span{
+  color:#999;
+  font-size:12px;
 }
 
-@media(max-width:520px){
-
-.generators{
-grid-template-columns:1fr;
+.xp-area{
+  margin-top:18px;
 }
 
-.theme-grid{
-grid-template-columns:1fr;
+.xp-header{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:#aaa;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.xp-bar{
+  height:10px;
+  border-radius:999px;
+  background:#191923;
+  overflow:hidden;
+}
+
+.xp-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#7c3aed,#d946ef);
+  border-radius:999px;
+  transition:width .4s ease;
+}
+
+
+/* =========================================================
+   LEVEL SELECTOR
+========================================================= */
+
+.level-card{
+  margin-top:20px;
+}
+
+.level-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.level-title{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.level-current{
+  padding:7px 13px;
+  border-radius:999px;
+  background:rgba(168,85,247,.18);
+  color:#d8a8ff;
+  border:1px solid rgba(168,85,247,.35);
+  font-weight:bold;
+  font-size:13px;
+}
+
+.level-slider{
+  width:100%;
+  accent-color:#a855f7;
+  cursor:pointer;
+}
+
+.level-labels{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  margin-top:10px;
+  gap:4px;
 }
 
 .level-labels span{
-font-size:9px;
+  text-align:center;
+  color:#666;
+  font-size:11px;
+  transition:.2s;
 }
 
-.logo-img{
-width:95%;
+.level-labels span.active{
+  color:#d7a5ff;
+  font-weight:bold;
 }
 
-.card{
-padding:17px;
+
+/* =========================================================
+   CUSTOM THEME
+========================================================= */
+
+.theme-tools{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:14px;
 }
+
+.theme-file{
+  flex:1;
+  min-width:220px;
+  padding:11px;
+  border-radius:12px;
+  border:1px dashed #444;
+  background:#11111a;
+  color:#aaa;
+}
+
+.locked{
+  opacity:.55;
+}
+
+.theme-preview{
+  display:none;
+  margin-top:15px;
+  height:130px;
+  border-radius:16px;
+  background-size:cover;
+  background-position:center;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+
+/* =========================================================
+   DAILY CHALLENGE
+========================================================= */
+
+.challenge-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.challenge-text{
+  flex:1;
+}
+
+.challenge-text h3{
+  margin-bottom:6px;
+}
+
+
+/* =========================================================
+   GENERATORS
+========================================================= */
+
+.generators{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:15px;
+}
+
+.generator{
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  transition:.2s;
+}
+
+.generator:hover{
+  transform:translateY(-3px);
+  border-color:rgba(168,85,247,.4);
+}
+
+.generator h3{
+  margin-bottom:8px;
+  font-size:17px;
+}
+
+.generator p{
+  color:#888;
+  font-size:12px;
+  min-height:34px;
+}
+
+.generator .btn{
+  width:100%;
+  margin-top:13px;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.result{
+  margin-top:18px;
+  min-height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  border-radius:17px;
+  background:rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.07);
+  color:#eee;
+  line-height:1.6;
+}
+
+.result.empty{
+  color:#666;
+}
+
+
+/* =========================================================
+   GUESS GAME
+========================================================= */
+
+.guess-input{
+  width:100%;
+  padding:13px;
+  margin-top:12px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+}
+
+.guess-input:focus{
+  border-color:#a855f7;
+}
+
+
+/* =========================================================
+   JOKE MAKER
+========================================================= */
+
+.secret-code{
+  letter-spacing:6px;
+  font-size:25px;
+  font-weight:bold;
+  margin:15px 0;
+  color:#d8a8ff;
+  text-align:center;
+}
+
+.joke-status{
+  text-align:center;
+  color:#aaa;
+  font-size:13px;
+  margin-top:10px;
+}
+
+
+/* =========================================================
+   REWARDS
+========================================================= */
+
+.rewards{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+  margin-top:15px;
+}
+
+.reward{
+  background:rgba(255,255,255,.045);
+  border-radius:15px;
+  padding:15px 10px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.reward strong{
+  display:block;
+  font-size:18px;
+  margin-bottom:5px;
+}
+
+.reward span{
+  color:#888;
+  font-size:11px;
+}
+
+
+/* =========================================================
+   RECENT
+========================================================= */
+
+.recent-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:15px;
+}
+
+.recent-item{
+  padding:12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.045);
+  color:#bbb;
+  font-size:13px;
+}
+
+
+/* =========================================================
+   ACCESS
+========================================================= */
+
+.access-good{
+  border-color:rgba(34,197,94,.2);
+}
+
+.access-warning{
+  border-color:rgba(234,179,8,.2);
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(460px,100%);
+  background:#121217;
+  border:1px solid #333;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 25px 80px rgba(0,0,0,.6);
+}
+
+.modal-icon{
+  font-size:42px;
+  margin-bottom:8px;
+  text-align:center;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
+  background:#15151e;
+  border:1px solid #333;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:10000;
+  font-size:13px;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+  text-align:center;
+  padding:30px 0 50px;
+  color:#666;
+  font-size:12px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:850px){
+
+  .profile{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .generators{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .rewards{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
+
+@media(max-width:600px){
+
+  .account-grid{
+    grid-template-columns:1fr;
+  }
+
+  .generators{
+    grid-template-columns:1fr;
+  }
+
+  .rewards{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .level-labels span{
+    font-size:9px;
+  }
+
+  .logo-img{
+    width:95%;
+  }
+
+  .card{
+    padding:17px;
+  }
 
 }
 
@@ -464,549 +692,634 @@ padding:17px;
 
 <div class="container">
 
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
 <header>
 
-<img
-src="222.png"
-class="logo-img"
-alt="FunBox Logo"
->
+  <img
+    src="222.png"
+    class="logo-img"
+    alt="FunBox Logo"
+  >
 
-<div class="tagline">
-Boredom? Not Today.
-</div>
+  <div class="tagline">
+    Boredom? Not Today.
+  </div>
 
 </header>
 
-<!-- TOP CONTROLS -->
 
-<div class="top-controls">
-
-<span id="userPill" class="user-pill"></span>
-
-<button
-class="btn secondary"
-onclick="openLoginModal()"
->
-👤 Login
-</button>
-
-<button
-id="logoutBtn"
-class="btn danger"
-style="display:none"
-onclick="logoutUser()"
->
-Logout
-</button>
-
-<button
-class="btn secondary"
-onclick="openThemeModal()"
->
-🎨 Theme
-</button>
-
-</div>
-
-
-<!-- PROFILE -->
+<!-- =========================================================
+     ACCOUNT
+========================================================= -->
 
 <section class="card">
 
-<h2>🎮 Your FunBox Profile</h2>
+  <h2>🔐 FunBox Account</h2>
 
-<p class="muted">
-Progress is saved on this device.
-</p>
+  <p class="muted">
+    Username + email/password ya Google se login.
+  </p>
 
-<div class="profile" style="margin-top:15px">
+  <div
+    id="signedUser"
+    style="margin-top:12px;display:none;"
+  ></div>
 
-<div class="stat">
-<strong id="points">0</strong>
-<span>Points</span>
-</div>
+  <div class="account-grid">
 
-<div class="stat">
-<strong id="profileLevel">1</strong>
-<span>Level</span>
-</div>
+    <input
+      id="authUsername"
+      class="account-input"
+      maxlength="24"
+      placeholder="Username"
+      autocomplete="nickname"
+    >
 
-<div class="stat">
-<strong id="streak">0</strong>
-<span>Streak</span>
-</div>
+    <input
+      id="authEmail"
+      class="account-input"
+      type="email"
+      placeholder="Email"
+      autocomplete="email"
+    >
 
-<div class="stat">
-<strong id="title">Newbie</strong>
-<span>Title</span>
-</div>
+    <input
+      id="authPassword"
+      class="account-input"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
 
-</div>
+  </div>
+
+  <div class="account-actions">
+
+    <button
+      class="btn"
+      onclick="signupAccount()"
+    >
+      Create Account
+    </button>
+
+    <button
+      class="btn secondary"
+      onclick="loginAccount()"
+    >
+      Log In
+    </button>
+
+    <button
+      class="btn secondary"
+      onclick="googleLogin()"
+    >
+      🔵 Google
+    </button>
+
+    <button
+      class="btn danger"
+      onclick="logoutAccount()"
+    >
+      Log Out
+    </button>
+
+  </div>
+
+  <div
+    id="authStatus"
+    class="auth-status"
+  >
+    Not signed in.
+  </div>
+
+  <p class="small" style="margin-top:8px;">
+    Password FunBox mein localStorage mein save nahi hota.
+  </p>
 
 </section>
 
 
-<!-- LEVEL -->
+<!-- =========================================================
+     PROFILE
+========================================================= -->
 
 <section class="card">
 
-<div class="level-top">
+  <h2>🎮 Your FunBox Profile</h2>
 
-<div class="level-title">
-🎚️ Answer Level
-</div>
+  <p class="muted">
+    XP slowly earn karo aur levels unlock karo.
+  </p>
 
-<div
-class="level-current"
-id="levelMode"
->
-Dry
-</div>
+  <div class="profile">
 
-</div>
+    <div class="stat">
+      <strong id="points">0</strong>
+      <span>XP</span>
+    </div>
 
-<input
-id="toneSlider"
-class="level-slider"
-type="range"
-min="0"
-max="5"
-step="1"
-value="0"
-oninput="changeTone(this.value)"
->
+    <div class="stat">
+      <strong id="profileLevel">1</strong>
+      <span>Level</span>
+    </div>
 
-<div class="level-labels">
+    <div class="stat">
+      <strong id="streak">0</strong>
+      <span>Streak</span>
+    </div>
 
-<span class="active">Dry</span>
-<span>Roast</span>
-<span>Savage</span>
-<span>Chaos</span>
-<span>Brutal</span>
-<span>Legend</span>
+    <div class="stat">
+      <strong id="title">Newbie</strong>
+      <span>Title</span>
+    </div>
 
-</div>
+  </div>
+
+  <div class="xp-area">
+
+    <div class="xp-header">
+      <span id="xpLabel">Level 1 progress</span>
+      <span id="xpNumbers">0 / 100 XP</span>
+    </div>
+
+    <div class="xp-bar">
+      <div
+        id="xpFill"
+        class="xp-fill"
+      ></div>
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- DAILY CHALLENGE -->
+<!-- =========================================================
+     CUSTOM THEME
+========================================================= -->
 
-<section class="card">
-
-<div
-style="
-display:flex;
-justify-content:space-between;
-gap:15px;
-align-items:center;
-flex-wrap:wrap;
-"
+<section
+  class="card"
+  id="themeCard"
 >
 
-<div>
+  <h2>🎨 Custom Theme</h2>
 
-<h3>🏆 Daily Challenge</h3>
+  <p
+    class="muted"
+    id="themeStatus"
+  >
+    🔒 Unlocks at 500 XP.
+  </p>
 
-<p
-class="muted"
-id="challengeText"
->
-Use any FunBox generator today.
-</p>
+  <div class="theme-tools">
 
-</div>
+    <input
+      id="themeImage"
+      class="theme-file"
+      type="file"
+      accept="image/*"
+      disabled
+    >
 
-<button
-class="btn"
-onclick="completeChallenge()"
->
-Complete
-</button>
+    <button
+      class="btn secondary"
+      onclick="resetCustomTheme()"
+    >
+      Reset Theme
+    </button>
 
-</div>
+  </div>
+
+  <div
+    id="themePreview"
+    class="theme-preview"
+  ></div>
 
 </section>
 
 
-<!-- GENERATORS -->
+<!-- =========================================================
+     ANSWER LEVEL
+========================================================= -->
 
-<section class="card">
+<section class="card level-card">
 
-<h2>🔥 Fun Generators</h2>
+  <div class="level-top">
 
-<p class="muted">
-No sugar-coating. Pick your weapon.
-</p>
+    <div class="level-title">
+      🎚️ Answer Level
+    </div>
 
-<div class="generators">
+    <div
+      class="level-current"
+      id="levelMode"
+    >
+      Dry
+    </div>
 
+  </div>
 
-<div class="generator">
+  <input
+    id="toneSlider"
+    class="level-slider"
+    type="range"
+    min="0"
+    max="5"
+    step="1"
+    value="0"
+    oninput="changeTone(this.value)"
+  >
 
-<h3>😎 Excuse Generator</h3>
+  <div class="level-labels">
 
-<p>
-For when responsibility starts acting suspicious.
-</p>
+    <span class="active">Dry</span>
+    <span>Roast</span>
+    <span>Savage</span>
+    <span>Chaos</span>
+    <span>Brutal</span>
+    <span>Legend</span>
 
-<button
-class="btn"
-onclick="runGenerator('excuse')"
->
-Generate
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🔮 Future Scanner</h3>
-
-<p>
-Science definitely didn't approve this.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('future')"
->
-Scan Future
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🧠 Random Fact</h3>
-
-<p>
-Pointless knowledge, now available.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('fact')"
->
-Tell Me
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🔥 Roast Me</h3>
-
-<p>
-Dry, savage, but not personal or hateful.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('roast')"
->
-Roast
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🎲 Randomize My Fate</h3>
-
-<p>
-Your destiny has questionable management.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('fate')"
->
-Randomize
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🆘 I'm Bored</h3>
-
-<p>
-FunBox chooses your next side quest.
-</p>
-
-<button
-class="btn"
-onclick="surprise()"
->
-Fix It
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>😂 Joke Drop</h3>
-
-<p>
-Fresh joke. Zero dignity required.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('joke')"
->
-Drop Joke
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🧨 Chaos Answer</h3>
-
-<p>
-A random answer to absolutely nothing.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('chaos')"
->
-Unleash
-</button>
-
-</div>
-
-
-<div class="generator">
-
-<h3>🧩 Decision Machine</h3>
-
-<p>
-Stop overthinking. Let the machine pretend.
-</p>
-
-<button
-class="btn"
-onclick="runGenerator('decision')"
->
-Decide
-</button>
-
-</div>
-
-
-</div>
-
-
-<div
-id="result"
-class="result empty"
->
-Your result will appear here...
-</div>
+  </div>
 
 </section>
 
 
-<!-- GUESS GAME -->
+<!-- =========================================================
+     DAILY CHALLENGE
+========================================================= -->
 
 <section class="card">
 
-<h2>🎯 Guess the Number</h2>
+  <div class="challenge-box">
 
-<p class="muted">
-I'm thinking of a number between 1 and 50.
-</p>
+    <div class="challenge-text">
 
-<input
-id="guessInput"
-class="guess-input"
-type="number"
-min="1"
-max="50"
-placeholder="Enter your guess"
->
+      <h3>
+        🏆 Daily Challenge
+      </h3>
 
-<div class="buttons">
+      <p
+        class="muted"
+        id="challengeText"
+      >
+        Use any FunBox generator today.
+      </p>
 
-<button
-class="btn"
-onclick="guessNumber()"
->
-Guess
-</button>
+    </div>
 
-<button
-class="btn secondary"
-onclick="newGuessGame()"
->
-New Game
-</button>
+    <button
+      class="btn"
+      onclick="completeChallenge()"
+    >
+      Complete
+    </button>
 
-</div>
-
-<div
-id="guessResult"
-class="result empty"
->
-Make your first guess.
-</div>
+  </div>
 
 </section>
 
 
-<!-- JOKE GAME -->
+<!-- =========================================================
+     GENERATORS
+========================================================= -->
 
 <section class="card">
 
-<h2>😂 Joke Maker</h2>
+  <h2>🔥 Fun Generators</h2>
 
-<p class="muted">
-Speak a joke. Pass the detector and reveal a hidden letter.
-</p>
+  <p class="muted">
+    Pick your weapon.
+  </p>
 
-<div
-id="secretDisplay"
-class="secret-code"
->
-? ? ? ? ?
-</div>
+  <div class="generators">
 
-<div class="buttons">
+    <div class="generator">
 
-<button
-class="btn"
-onclick="startVoiceJoke()"
->
-🎤 Speak Joke
-</button>
+      <h3>😎 Excuse Generator</h3>
 
-<button
-class="btn secondary"
-onclick="openCodeModal()"
->
-🔑 Enter Code
-</button>
+      <p>
+        Need an excuse? We got you.
+      </p>
 
-<button
-class="btn secondary"
-onclick="newJokeGame()"
->
-🔄 New Game
-</button>
+      <button
+        class="btn"
+        onclick="runGenerator('excuse')"
+      >
+        Generate
+      </button>
 
-</div>
+    </div>
 
-<div
-id="jokeStatus"
-class="joke-status"
->
-Voice recognition works best in Chrome.
-</div>
+
+    <div class="generator">
+
+      <h3>🔮 Future Scanner</h3>
+
+      <p>
+        Let's see what happens next.
+      </p>
+
+      <button
+        class="btn"
+        onclick="runGenerator('future')"
+      >
+        Scan Future
+      </button>
+
+    </div>
+
+
+    <div class="generator">
+
+      <h3>🧠 Random Fact</h3>
+
+      <p>
+        Something random for your brain.
+      </p>
+
+      <button
+        class="btn"
+        onclick="runGenerator('fact')"
+      >
+        Tell Me
+      </button>
+
+    </div>
+
+
+    <div class="generator">
+
+      <h3>🔥 Roast Me</h3>
+
+      <p>
+        Playful Hinglish roast.
+      </p>
+
+      <button
+        class="btn"
+        onclick="runGenerator('roast')"
+      >
+        Roast
+      </button>
+
+    </div>
+
+
+    <div class="generator">
+
+      <h3>🎲 Randomize My Fate</h3>
+
+      <p>
+        Your totally scientific destiny.
+      </p>
+
+      <button
+        class="btn"
+        onclick="runGenerator('fate')"
+      >
+        Randomize
+      </button>
+
+    </div>
+
+
+    <div class="generator">
+
+      <h3>🆘 I'm Bored</h3>
+
+      <p>
+        FunBox decides what you should do.
+      </p>
+
+      <button
+        class="btn"
+        onclick="surprise()"
+      >
+        Fix It
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="result"
+    class="result empty"
+  >
+    Your result will appear here...
+  </div>
 
 </section>
 
 
-<!-- REWARDS -->
+<!-- =========================================================
+     GUESS GAME
+========================================================= -->
 
 <section class="card">
 
-<h2>🎁 Rewards</h2>
+  <h2>🎯 Guess the Number</h2>
 
-<p class="muted">
-Earn points and unlock bonuses.
-</p>
+  <p class="muted">
+    I'm thinking of a number between 1 and 50.
+  </p>
 
-<div class="rewards">
+  <input
+    id="guessInput"
+    class="guess-input"
+    type="number"
+    min="1"
+    max="50"
+    placeholder="Enter your guess"
+  >
 
-<div class="reward">
-<strong>100</strong>
-<span>+1 Extra Use</span>
-</div>
+  <div class="buttons">
 
-<div class="reward">
-<strong>250</strong>
-<span>Special Theme</span>
-</div>
+    <button
+      class="btn"
+      onclick="guessNumber()"
+    >
+      Guess
+    </button>
 
-<div class="reward">
-<strong>500</strong>
-<span>Chaos Master</span>
-</div>
+    <button
+      class="btn secondary"
+      onclick="newGuessGame()"
+    >
+      New Game
+    </button>
 
-<div class="reward">
-<strong>1000</strong>
-<span>Legend</span>
-</div>
+  </div>
 
-</div>
+  <div
+    id="guessResult"
+    class="result empty"
+  >
+    Make your first guess.
+  </div>
 
 </section>
 
 
-<!-- ACCESS -->
+<!-- =========================================================
+     JOKE MAKER
+========================================================= -->
 
 <section class="card">
 
-<h2>🔓 Daily Access</h2>
+  <h2>😂 Joke Maker</h2>
 
-<p class="muted">
-3 free uses every day. Rewards can give extra uses.
-</p>
+  <p class="muted">
+    Speak a joke. Valid joke par hidden letter reveal hogi.
+  </p>
 
-<div
-id="accessStatus"
-class="result"
->
-Loading...
-</div>
+  <div
+    id="secretDisplay"
+    class="secret-code"
+  >
+    ? ? ? ? ?
+  </div>
+
+  <div class="buttons">
+
+    <button
+      class="btn"
+      onclick="startVoiceJoke()"
+    >
+      🎤 Speak Joke
+    </button>
+
+    <button
+      class="btn secondary"
+      onclick="newJokeGame()"
+    >
+      🔄 New Game
+    </button>
+
+  </div>
+
+  <div
+    id="jokeStatus"
+    class="joke-status"
+  >
+    Voice recognition works best in Chrome.
+  </div>
 
 </section>
 
 
-<!-- RECENT -->
+<!-- =========================================================
+     REWARDS
+========================================================= -->
 
 <section class="card">
 
-<h2>🕘 Recent Results</h2>
+  <h2>🎁 Rewards</h2>
 
-<div
-id="recentList"
-class="recent-list"
->
-<div class="recent-item">
-Nothing here yet.
-</div>
-</div>
+  <p class="muted">
+    XP slowly earn karo aur rewards unlock karo.
+  </p>
+
+  <div class="rewards">
+
+    <div class="reward">
+      <strong>100</strong>
+      <span>Extra Use</span>
+    </div>
+
+    <div class="reward">
+      <strong>500</strong>
+      <span>Custom Theme</span>
+    </div>
+
+    <div class="reward">
+      <strong>1000</strong>
+      <span>Special Badge</span>
+    </div>
+
+    <div class="reward">
+      <strong>2000</strong>
+      <span>Chaos Mode</span>
+    </div>
+
+    <div class="reward">
+      <strong>3500</strong>
+      <span>Secret Feature</span>
+    </div>
+
+    <div class="reward">
+      <strong>5000</strong>
+      <span>Legend</span>
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ABOUT -->
+<!-- =========================================================
+     DAILY ACCESS
+========================================================= -->
 
 <section class="card">
 
-<h2>ℹ️ About FunBox</h2>
+  <h2>🔓 Daily Access</h2>
 
-<p
-class="muted"
-style="line-height:1.7"
->
-FunBox is a browser-based entertainment project with
-generators, mini games, jokes, themes and challenges.
-The Login button currently saves a local nickname on this device.
-It is not a real server account.
-</p>
+  <p class="muted">
+    3 free uses every day.
+  </p>
+
+  <div
+    id="accessStatus"
+    class="result"
+  >
+    Loading...
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     RECENT RESULTS
+========================================================= -->
+
+<section class="card">
+
+  <h2>🕘 Recent Results</h2>
+
+  <div
+    id="recentList"
+    class="recent-list"
+  >
+    <div class="recent-item">
+      Nothing here yet.
+    </div>
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section class="card">
+
+  <h2>ℹ️ About FunBox</h2>
+
+  <p
+    class="muted"
+    style="line-height:1.7;"
+  >
+    FunBox is a browser-based entertainment project with
+    random generators, mini games, jokes and challenges.
+    Your game progress is stored locally on your device.
+  </p>
 
 </section>
 
@@ -1014,308 +1327,216 @@ It is not a real server account.
 
 
 <footer>
-
-FunBox © 2026 • Made by Taksh • Boredom? Not Today.
-
+  FunBox © 2026 • Made by Taksh • Boredom? Not Today.
 </footer>
 
 
-<!-- LOGIN MODAL -->
+<!-- =========================================================
+     ACCESS CODE MODAL
+========================================================= -->
 
 <div
-id="loginModal"
-class="modal"
+  id="codeModal"
+  class="modal"
 >
 
-<div class="modal-box">
+  <div class="modal-box">
 
-<h2>👤 FunBox Login</h2>
+    <div class="modal-icon">
+      🔑
+    </div>
 
-<p class="muted">
-Enter a nickname to save your FunBox profile on this device.
-</p>
+    <h2>
+      Enter Access Code
+    </h2>
 
-<input
-id="loginName"
-class="guess-input"
-maxlength="20"
-placeholder="Your nickname"
-autocomplete="off"
->
+    <p
+      class="muted"
+      style="margin-top:8px;"
+    >
+      Demo access-code system.
+    </p>
 
-<div class="buttons">
+    <input
+      id="codeInput"
+      class="guess-input"
+      placeholder="Enter code"
+      autocomplete="off"
+    >
 
-<button
-class="btn"
-onclick="saveLogin()"
->
-Enter FunBox
-</button>
+    <div class="buttons">
 
-<button
-class="btn secondary"
-onclick="closeLoginModal()"
->
-Cancel
-</button>
+      <button
+        class="btn"
+        onclick="redeemCode()"
+      >
+        Redeem
+      </button>
+
+      <button
+        class="btn secondary"
+        onclick="closeCodeModal()"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+    <div
+      id="codeResult"
+      class="joke-status"
+    ></div>
+
+  </div>
 
 </div>
+
+
+<!-- =========================================================
+     ACCESS EXPIRED MODAL
+========================================================= -->
 
 <div
-id="loginResult"
-class="joke-status"
-></div>
+  id="accessExpiredModal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-icon">
+      🔒
+    </div>
+
+    <h2 style="text-align:center;">
+      Access Khatam
+    </h2>
+
+    <p
+      class="muted"
+      style="margin-top:8px;line-height:1.6;text-align:center;"
+    >
+      Aaj ke free uses khatam ho gaye hain.
+      Kal phir 3 uses milenge.
+    </p>
+
+    <div
+      class="buttons"
+      style="justify-content:center;"
+    >
+
+      <button
+        class="btn secondary"
+        onclick="closeAccessExpired()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-</div>
-
-
-<!-- THEME MODAL -->
 
 <div
-id="themeModal"
-class="modal"
+  id="toast"
+  class="toast"
 >
-
-<div class="modal-box">
-
-<h2>🎨 Choose Theme</h2>
-
-<p class="muted">
-Your selected theme is saved on this device.
-</p>
-
-<div class="theme-grid">
-
-<button
-class="theme-btn"
-onclick="setTheme('void')"
->
-🟣 Void Purple
-</button>
-
-<button
-class="theme-btn"
-onclick="setTheme('blood')"
->
-🔴 Blood Red
-</button>
-
-<button
-class="theme-btn"
-onclick="setTheme('acid')"
->
-🟢 Acid Green
-</button>
-
-<button
-class="theme-btn"
-onclick="setTheme('ocean')"
->
-🔵 Deep Ocean
-</button>
-
-<button
-class="theme-btn"
-onclick="setTheme('gold')"
->
-🟡 Black Gold
-</button>
-
-<button
-class="theme-btn"
-onclick="setTheme('mono')"
->
-⚪ Monochrome
-</button>
-
-</div>
-
-<div class="buttons">
-
-<button
-class="btn secondary"
-onclick="closeThemeModal()"
->
-Close
-</button>
-
-</div>
-
-</div>
-
+  Done
 </div>
 
 
-<!-- CODE MODAL -->
-
-<div
-id="codeModal"
-class="modal"
->
-
-<div class="modal-box">
-
-<h2>🔑 Enter Access Code</h2>
-
-<p class="muted">
-Enter your access code.
-</p>
-
-<input
-id="codeInput"
-class="guess-input"
-placeholder="Enter code"
-autocomplete="off"
->
-
-<div class="buttons">
-
-<button
-class="btn"
-onclick="redeemCode()"
->
-Redeem
-</button>
-
-<button
-class="btn secondary"
-onclick="closeCodeModal()"
->
-Cancel
-</button>
-
-</div>
-
-<div
-id="codeResult"
-class="joke-status"
-></div>
-
-</div>
-
-</div>
-
-
-<!-- ACCESS EXPIRED -->
-
-<div
-id="accessExpiredModal"
-class="modal"
->
-
-<div class="modal-box access-expired-box">
-
-<div class="access-expired-icon">
-🔒
-</div>
-
-<h2>
-Access Khatam
-</h2>
-
-<p
-class="muted"
-style="line-height:1.6;margin-top:8px"
->
-Aaj ke free uses khatam ho gaye.
-Rewards earn karo ya access code use karo.
-</p>
-
-<div
-class="buttons"
-style="justify-content:center"
->
-
-<button
-class="btn"
-onclick="openCodeFromExpired()"
->
-🔑 Enter Code
-</button>
-
-<button
-class="btn secondary"
-onclick="closeAccessExpired()"
->
-Close
-</button>
-
-</div>
-
-</div>
-
-</div>
-
+<!-- =========================================================
+     MAIN JAVASCRIPT
+========================================================= -->
 
 <script>
 
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+function trackEvent(name,params={}){
+  if(typeof gtag==="function"){
+    gtag("event",name,params);
+  }
+}
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
 const STORAGE={
 
-points:"funboxPoints",
+  points:"funboxPoints",
+  streak:"funboxStreak",
+  lastDay:"funboxLastDay",
+  tone:"funboxTone",
 
-streak:"funboxStreak",
+  uses:"funboxUses",
+  useDate:"funboxUseDate",
 
-lastDay:"funboxLastDay",
+  extraUses:"funboxExtraUses",
 
-tone:"funboxTone",
+  unlimited:"funboxUnlimitedUntil",
 
-uses:"funboxUses",
+  recent:"funboxRecent",
 
-useDate:"funboxUseDate",
+  challenge:"funboxChallenge",
 
-extraUses:"funboxExtraUses",
+  theme:"funboxThemeImage",
 
-unlimited:"funboxUnlimitedUntil",
-
-recent:"funboxRecent",
-
-challenge:"funboxChallenge",
-
-username:"funboxUsername",
-
-theme:"funboxTheme"
+  username:"funboxUsername"
 
 };
 
 
+/* =========================================================
+   STATE
+========================================================= */
+
 let points=
-Number(localStorage.getItem(STORAGE.points)||0);
+  Number(localStorage.getItem(STORAGE.points)||0);
 
 let streak=
-Number(localStorage.getItem(STORAGE.streak)||0);
+  Number(localStorage.getItem(STORAGE.streak)||0);
 
 let tone=
-Number(localStorage.getItem(STORAGE.tone)||0);
+  Number(localStorage.getItem(STORAGE.tone)||0);
 
 let uses=
-Number(localStorage.getItem(STORAGE.uses)||0);
+  Number(localStorage.getItem(STORAGE.uses)||0);
 
 let extraUses=
-Number(localStorage.getItem(STORAGE.extraUses)||0);
+  Number(localStorage.getItem(STORAGE.extraUses)||0);
 
 let unlimitedUntil=
-Number(localStorage.getItem(STORAGE.unlimited)||0);
-
+  Number(localStorage.getItem(STORAGE.unlimited)||0);
 
 let guessNumberTarget=
-Math.floor(Math.random()*50)+1;
+  Math.floor(Math.random()*50)+1;
 
 let guessAttempts=0;
 
 
+/* =========================================================
+   TONE MODES
+========================================================= */
+
 const toneModes=[
-
-"Dry",
-"Roast",
-"Savage",
-"Chaos",
-"Brutal",
-"Legend"
-
+  "Dry",
+  "Roast",
+  "Savage",
+  "Chaos",
+  "Brutal",
+  "Legend"
 ];
 
+
+/* =========================================================
+   CONTENT
+========================================================= */
 
 const content={
 
@@ -1323,161 +1544,158 @@ excuse:[
 
 [
 "Aaj mera brain maintenance mode mein hai.",
-"Productivity ne mujhe seen pe chhod diya.",
-"Kaam important hai. Main bhi... theoretically."
+"Mera system aaj thoda loading pe hai.",
+"Aaj productivity ne mujhe block kar diya."
 ],
 
 [
+"Main karta, but mera motivation abhi online nahi hai.",
 "Plan solid tha. Execution ne resign kar diya.",
-"Main busy tha. Haan, isi baat ko repeat karna hai.",
-"Aaj schedule ne mujhe khud cancel kar diya."
+"Aaj ka schedule mujhe dekh ke khud confuse hai."
 ],
 
 [
-"Mera brain aur kaam ek dusre ko avoid kar rahe hain.",
-"Productivity ka notification aaya. Ignore kar diya.",
-"Main kaam ko avoid nahi karta, strategic distance rakhta hoon."
+"Mera brain aur kaam dono ek dusre ko avoid kar rahe hain.",
+"Productivity ka notification aaya tha. Ignore kar diya.",
+"Main busy tha... kuch bhi na karne mein."
 ],
 
 [
 "Kaam mujhe dekh raha hai. Main bhi usko dekh raha hoon. Bas.",
-"Mere excuses ab mujhse zyada organized hain.",
-"Effort ka demo version aaj available nahi hai."
+"Mere excuses bhi ab mujhse zyada organized hain.",
+"Aaj effort ka demo version bhi available nahi hai."
 ],
 
 [
-"Maine kaam start karne ka socha. Thought process hi khatam ho gaya.",
-"Productivity ne knock kiya. Main ghar pe nahi tha.",
-"Aaj brain officially airplane mode pe hai."
+"Maine kaam start karne ka socha. Phir thought process hi khatam ho gaya.",
+"Productivity ne knock kiya. Maine pretend kiya ghar pe nahi hoon.",
+"Aaj mera brain officially airplane mode pe hai."
 ],
 
 [
-"Legendary excuse unlocked: motivation abhi loading screen pe hai.",
-"Kaam kal hoga. Kal ko bhi ek chance do.",
+"Legendary excuse unlocked: main productive hone ke liye mentally buffering kar raha hoon.",
+"Kaam kal hoga. Kal ko bhi chance chahiye life mein.",
 "Aaj main achievement nahi, lore create kar raha hoon."
 ]
 
 ],
 
-
 future:[
 
 [
-"Aaj ka plot surprisingly normal rahega. Probably.",
-"Next few hours mein ek random good moment aa sakta hai.",
-"Luck tumhare side pe thoda online hai."
+"Aaj tumhe ek unexpected good moment milega.",
+"Tumhara next few hours surprisingly chill ho sakta hai.",
+"Aaj luck tumhare side pe thoda online hai."
 ],
 
 [
-"Aaj kuch random funny hone wala hai.",
-"Tumhe kuch aisa milega jiske baare mein socha nahi tha.",
-"Plot twist incoming. Details classified."
+"Aaj kuch random aur funny hone wala hai.",
+"Tumhe ek aisi cheez milegi jiske baare mein tumne socha bhi nahi tha.",
+"Aaj ka plot thoda interesting ho sakta hai."
 ],
 
 [
-"Future scanner: tum bina reason phone check karoge.",
-"Prediction: ek kaam postpone karke doosra start karoge.",
-"Productivity ke naam pe kuch aur karoge."
+"Future scanner detected: tum phir phone check karoge bina reason ke.",
+"Prediction: tum ek kaam postpone karke doosra random kaam start karoge.",
+"Scanner says: productivity ke naam pe tum kuch aur karoge."
 ],
 
 [
-"Attention span phir vacation pe jayega.",
-"Brain ek unnecessary side quest start karega.",
-"Drama department active."
+"Future update: tumhara attention span phir vacation pe jayega.",
+"Aaj tumhara brain ek unnecessary side quest start karega.",
+"Plot twist incoming. Exact details unavailable. Drama department active."
 ],
 
 [
-"Scanner overheated. Tumhari timeline suspiciously random hai.",
-"Tum kuch karne jaoge aur kuch aur karoge.",
+"Scanner overheated. Tumhari life ka plot apparently too random hai.",
+"Future detected: tum kuch karne jaoge aur kuch aur karoge.",
 "Timeline unstable. Snacks recommended."
 ],
 
 [
-"Legendary prediction: tum khud plot twist banoge.",
-"Future refuses to cooperate.",
-"Main character energy detected. Side quests incoming."
+"Legendary prediction: tumhara next decision completely unpredictable hoga.",
+"Future refuses to cooperate. Apparently tum hi plot twist ho.",
+"Scanner result: main character energy detected. Side quests incoming."
 ]
 
 ],
-
 
 roast:[
 
 [
+"Tum boring nahi ho. Bas tumhara software update pending hai.",
 "Tumhara brain kabhi-kabhi loading screen jaisa lagta hai.",
-"Ideas ka Wi-Fi signal weak hai.",
-"Tum boring nahi ho, bas software update pending hai."
+"Tumhare ideas ka Wi-Fi signal thoda weak hai."
 ],
 
 [
-"Plan banane mein professional. Execute karna optional.",
-"Decisions ko kabhi-kabhi tutorial chahiye.",
-"Productivity aur tum long-distance relationship mein ho."
+"Tumhari productivity aur Monday morning ka same relationship hai.",
+"Tum plan banane mein professional ho. Execute karna optional hai.",
+"Tumhare decisions ko kabhi-kabhi tutorial chahiye."
 ],
 
 [
-"Attention span goldfish se competition kar raha hai.",
-"Tumhare plans impressive hain. Reality mein cameo missing hai.",
-"Tum kaam ko avoid nahi karte, usko strategic distance dete ho."
+"Tumhara attention span goldfish se competition kar raha hai.",
+"Tum kaam ko avoid nahi karte, tum usko strategic distance dete ho.",
+"Tumhare plans impressive hain. Bas reality mein unka cameo nahi hota."
 ],
 
 [
 "Tumhare excuses ka startup khul sakta hai.",
-"Productivity ne resignation letter draft kar liya hai.",
-"Multitasking: ek saath kuch bhi complete nahi."
+"Tumhari productivity ne resignation letter draft kar liya hai.",
+"Tumhara brain multitasking karta hai: ek saath kuch bhi complete nahi karta."
 ],
 
 [
 "Tum ek walking side quest ho.",
-"Loading bar 97% pe permanently stuck hai.",
-"Brain tabs kholta bahut hai, close koi nahi karta."
+"Tumhari life ka loading bar 97% pe permanently stuck hai.",
+"Tumhara brain tabs kholta bahut hai, close koi nahi karta."
 ],
 
 [
-"Tum FunBox ka premium bug ho.",
-"Tumhari chaos energy ko engineers reproduce nahi kar sakte.",
-"Life ka genre: comedy with unexpected updates."
+"Tum normal nahi ho. Tum FunBox ka premium bug ho.",
+"Tumhari chaos energy ko software engineers bhi reproduce nahi kar sakte.",
+"Tumhari life ka genre: comedy with unexpected updates."
 ]
 
 ],
 
-
 fate:[
 
 [
-"Fate says: ek chhota break le.",
-"Aaj random luck allowed hai.",
-"Your destiny says: snacks first, decisions later."
+"You will find something interesting today.",
+"Today: random luck + random decisions.",
+"Your fate says: take a small break."
 ],
 
 [
-"Universe ne side quest assign ki hai.",
-"Aaj normal plan ko thoda disturb karo.",
-"Next hour mein plot twist possible."
+"Fate says: do something you normally wouldn't.",
+"The universe has assigned you a side quest.",
+"Your next hour contains at least one plot twist."
 ],
 
 [
-"Procrastination detected.",
-"Universe ne tumhari tabs dekhi hain. Concerned.",
-"Destiny airplane mode pe hai."
+"Fate says: procrastination detected.",
+"The universe has seen your tabs. It is concerned.",
+"Destiny has entered airplane mode."
 ],
 
 [
-"Accidentally 7 minutes productive hone ka chance hai.",
-"Side quest first, responsibility later.",
-"Universe ke paas explanation nahi hai."
+"Your fate: accidentally become productive for 7 minutes.",
+"Destiny says: side quest first, responsibility later.",
+"The universe has no explanation. Continue anyway."
 ],
 
 [
-"Fate.exe stopped responding.",
-"Destiny buffering.",
-"Chaos ne tumhari application accept kar li."
+"Fate.exe has stopped responding.",
+"Your destiny is currently buffering.",
+"Chaos has officially accepted your application."
 ],
 
 [
-"Legendary fate: tum plot twist ho.",
-"Destiny says: unpredictable variable detected.",
-"Universe: make it interesting."
+"Legendary fate: you become the plot twist.",
+"Destiny has marked you as an unpredictable variable.",
+"The universe says: make it interesting."
 ]
 
 ]
@@ -1485,1498 +1703,1931 @@ fate:[
 };
 
 
-const jokes=[
-
-"Teacher: Homework kahan hai? Student: Sir, cloud mein save tha. Wi-Fi ne dhoka de diya.",
-
-"Friend: Tu itna late kyun? Me: Main time pe nikla tha. Time hi jaldi chala gaya.",
-
-"Phone: 1% battery. Me: Ab dekhte hain kiski willpower strong hai.",
-
-"Mom: Padhai hui? Me: Haan. Book kholi thi. Progress documented hai.",
-
-"Me: Kal se productive. Also me tomorrow: Kal se productive.",
-
-"Brain at 2 AM: Chalo purani embarrassing memories replay karte hain.",
-
-"Alarm: Wake up. Me: Nice suggestion. Rejected.",
-
-"Notebook: Blank page. Me: Finally, someone understands my plans.",
-
-"Life: Choose a path. Me: Randomize.",
-
-"My attention span entered the chat, then immediately left.",
-
-"I opened my notes to study. The notes opened a different problem: me.",
-
-"Productivity and I are currently not following each other.",
-
-"Teacher: Why are you late? Student: Because I came after being early.",
-
-"Brain: Let's focus. Also brain: Remember that random thing from 2017?",
-
-"Phone battery: 5%. Me: We have enough for one more scroll.",
-
-"Friend: What's your plan? Me: That's classified information.",
-
-"Me opening one tab: I can handle this. Me five minutes later: 37 tabs.",
-
-"Homework: Finish me. Me: You first.",
-
-"Alarm clock: I exist to ruin your dreams. Literally.",
-
-"Me: I'll sleep early today. Also me at 2 AM: Interesting video."
-];
-
-
-const chaosAnswers=[
-
-"Error 404: useful answer not found.",
-
-"The machine has chosen confusion.",
-
-"Your aura today: browser with 47 tabs.",
-
-"Chaos level stable. Common sense unavailable.",
-
-"Congratulations. Nothing practical happened.",
-
-"You clicked this, so apparently we both make questionable decisions.",
-
-"System verdict: do it for the plot.",
-
-"Breaking news: you are still reading this."
-
-];
-
-
-const decisions=[
-
-"Do it.",
-
-"Don't do it.",
-
-"Do it later.",
-
-"Ask someone you trust.",
-
-"Flip a coin and blame probability.",
-
-"Randomize again.",
-
-"Yes.",
-
-"No.",
-
-"Maybe.",
-
-"Absolutely not."
-
-];
-
+/* =========================================================
+   FACTS
+========================================================= */
 
 const facts=[
 
 "Octopuses have three hearts.",
-
-"Bananas are botanically berries.",
-
+"Bananas are technically berries.",
+"Honey can last for an extremely long time when properly stored.",
 "A group of flamingos is called a flamboyance.",
-
-"Butterflies taste using receptors on their feet.",
-
-"A day on Venus is longer than its year.",
-
-"Wombat poop is cube-shaped.",
-
-"Some turtles can breathe through specialized skin.",
-
-"Cows can form close social relationships.",
-
-"Honey can stay edible for a very long time when properly stored.",
-
+"Some turtles can breathe through specialized skin areas.",
 "The shortest war in recorded history lasted less than an hour.",
-
-"Sharks existed before trees.",
-
-"Some frogs can freeze and later thaw back to life.",
-
-"Sea otters sometimes hold hands while sleeping.",
-
-"Koalas have fingerprints that can resemble human fingerprints.",
-
-"Ravens can solve multi-step problems.",
-
-"Bananas naturally contain tiny amounts of radioactive potassium.",
-
-"Lightning can be hotter than the surface of the Sun.",
-
-"Some clouds can weigh hundreds of thousands of kilograms.",
-
-"Your nose can remember thousands of different smells.",
-
-"Space is silent because sound needs a medium to travel."
+"Wombat poop is cube-shaped.",
+"Butterflies taste using receptors on their feet.",
+"A day on Venus is longer than its year.",
+"Cows can form close social relationships."
 
 ];
 
+
+/* =========================================================
+   SURPRISE IDEAS
+========================================================= */
 
 const surpriseIdeas=[
 
-"🎧 One song. No scrolling.",
-
+"🎧 Put on one song and just listen without touching your phone.",
+"🧠 Learn one random fact and remember it for tomorrow.",
 "🎨 Draw the weirdest creature you can imagine.",
-
 "🧩 Solve a small puzzle.",
-
-"📸 Photograph an ordinary object like it's a movie poster.",
-
-"✍️ Write a 3-line ridiculous story.",
-
+"📸 Take a funny photo of an ordinary object.",
+"✍️ Write a 3-line mini story.",
 "🎮 Play a quick game.",
-
-"🚶 Take a short walk and notice five things.",
-
-"😂 Invent a terrible joke.",
-
-"📚 Read one page of anything.",
-
-"🧠 Learn one random fact.",
-
-"🧹 Clean one tiny thing for exactly five minutes.",
-
-"🎯 Try to beat your previous guess-game attempt."
+"🚶 Take a short walk and notice five things around you.",
+"😂 Make up a terrible joke.",
+"📚 Read one page of anything interesting."
 
 ];
 
 
-function randomItem(array){
+/* =========================================================
+   LEVEL SYSTEM
+========================================================= */
 
-return array[
-Math.floor(Math.random()*array.length)
+const levelThresholds=[
+  0,
+  100,
+  250,
+  500,
+  850,
+  1300,
+  1900,
+  2700,
+  3750,
+  5000
 ];
 
-}
-
-
-function getToday(){
-
-let d=new Date();
-
-return d.getFullYear()
-+"-"+
-String(d.getMonth()+1).padStart(2,"0")
-+"-"+
-String(d.getDate()).padStart(2,"0");
-
-}
-
-
-function trackEvent(name,params={}){
-
-if(typeof gtag==="function"){
-
-gtag("event",name,params);
-
-}
-
-}
+const levelTitles=[
+  "Newbie",
+  "Explorer",
+  "Regular",
+  "Theme Hunter",
+  "FunBox Pro",
+  "Chaos Runner",
+  "Chaos Master",
+  "Secret Hunter",
+  "Legendary",
+  "Legend"
+];
 
 
 function getProfileLevel(){
 
-if(points>=1000)return 10;
-if(points>=750)return 9;
-if(points>=500)return 8;
-if(points>=400)return 7;
-if(points>=300)return 6;
-if(points>=250)return 5;
-if(points>=150)return 4;
-if(points>=100)return 3;
-if(points>=50)return 2;
+  if(points>=5000) return 10;
+  if(points>=3750) return 9;
+  if(points>=2700) return 8;
+  if(points>=1900) return 7;
+  if(points>=1300) return 6;
+  if(points>=850) return 5;
+  if(points>=500) return 4;
+  if(points>=250) return 3;
+  if(points>=100) return 2;
 
-return 1;
-
+  return 1;
 }
 
 
 function getTitle(){
 
-if(points>=1000)return"Legend";
-if(points>=500)return"Chaos Master";
-if(points>=250)return"FunBox Pro";
-if(points>=100)return"Explorer";
-if(points>=50)return"Regular";
+  const level=getProfileLevel();
 
-return"Newbie";
-
+  return levelTitles[level-1]||"Newbie";
 }
 
+
+function getNextLevelXP(){
+
+  const level=getProfileLevel();
+
+  if(level>=10) return 5000;
+
+  return levelThresholds[level];
+}
+
+
+/* =========================================================
+   PROFILE RENDER
+========================================================= */
 
 function renderProfile(){
 
-document.getElementById("points").textContent=points;
+  const level=getProfileLevel();
 
-document.getElementById("profileLevel").textContent=
-getProfileLevel();
+  document.getElementById("points").textContent=points;
 
-document.getElementById("streak").textContent=
-streak;
+  document.getElementById("profileLevel").textContent=level;
 
-document.getElementById("title").textContent=
-getTitle();
+  document.getElementById("streak").textContent=streak;
 
-localStorage.setItem(
-STORAGE.points,
-points
-);
+  document.getElementById("title").textContent=getTitle();
+
+  const currentXP=levelThresholds[level-1];
+
+  const nextXP=getNextLevelXP();
+
+  let percent=0;
+
+  if(level>=10){
+
+    percent=100;
+
+  }else{
+
+    percent=
+      ((points-currentXP)/(nextXP-currentXP))*100;
+
+  }
+
+  percent=Math.max(0,Math.min(100,percent));
+
+  document.getElementById("xpFill").style.width=
+    percent+"%";
+
+  if(level>=10){
+
+    document.getElementById("xpLabel").textContent=
+      "MAX LEVEL";
+
+    document.getElementById("xpNumbers").textContent=
+      points+" XP";
+
+  }else{
+
+    document.getElementById("xpLabel").textContent=
+      "Level "+level+" progress";
+
+    document.getElementById("xpNumbers").textContent=
+      points+" / "+nextXP+" XP";
+
+  }
+
+  updateThemeLock();
+
+  localStorage.setItem(STORAGE.points,String(points));
 
 }
 
 
-function addPoints(amount,source){
+/* =========================================================
+   XP
+========================================================= */
 
-points+=amount;
+function addPoints(amount,source="unknown"){
 
-renderProfile();
+  points+=amount;
 
-trackEvent(
-"funbox_points",
-{
-value:amount,
-source:source||"unknown"
+  localStorage.setItem(
+    STORAGE.points,
+    String(points)
+  );
+
+  renderProfile();
+
+  trackEvent(
+    "earn_virtual_currency",
+    {
+      virtual_currency_name:"XP",
+      value:amount,
+      source:source
+    }
+  );
+
+  if(amount>0){
+
+    showToast("+"+amount+" XP");
+
+  }
+
 }
-);
 
-}
 
+/* =========================================================
+   TONE
+========================================================= */
 
 function changeTone(value){
 
-tone=Number(value);
+  tone=Number(value);
 
-localStorage.setItem(
-STORAGE.tone,
-tone
-);
+  localStorage.setItem(
+    STORAGE.tone,
+    String(tone)
+  );
 
-document.getElementById("levelMode").textContent=
-toneModes[tone];
+  document.getElementById("levelMode").textContent=
+    toneModes[tone];
 
-document
-.querySelectorAll(".level-labels span")
-.forEach(
-(element,index)=>{
-element.classList.toggle(
-"active",
-index===tone
-);
-});
+  document.querySelectorAll(
+    ".level-labels span"
+  ).forEach((el,index)=>{
+
+    el.classList.toggle(
+      "active",
+      index===tone
+    );
+
+  });
 
 }
 
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function getToday(){
+
+  const d=new Date();
+
+  return d.getFullYear()+"-"+
+    String(d.getMonth()+1).padStart(2,"0")+"-"+
+    String(d.getDate()).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   STREAK
+========================================================= */
+
+function updateStreak(){
+
+  const today=getToday();
+
+  const last=
+    localStorage.getItem(
+      STORAGE.lastDay
+    );
+
+  if(last===today){
+
+    return;
+
+  }
+
+  if(!last){
+
+    streak=1;
+
+    addStreakReward(1);
+
+  }else{
+
+    const previous=new Date(last);
+
+    const current=new Date(today);
+
+    const diff=Math.round(
+      (current-previous)/
+      (1000*60*60*24)
+    );
+
+    if(diff===1){
+
+      streak++;
+
+      addStreakReward(streak);
+
+    }else{
+
+      streak=1;
+
+    }
+
+  }
+
+  localStorage.setItem(
+    STORAGE.lastDay,
+    today
+  );
+
+  localStorage.setItem(
+    STORAGE.streak,
+    String(streak)
+  );
+
+}
+
+
+function addStreakReward(currentStreak){
+
+  if(currentStreak===1){
+
+    addPoints(3,"daily_login");
+
+  }
+
+  if(currentStreak===3){
+
+    addPoints(10,"three_day_streak");
+
+  }
+
+  if(currentStreak===7){
+
+    addPoints(25,"seven_day_streak");
+
+  }
+
+}
+
+
+/* =========================================================
+   DAILY USE SYSTEM
+========================================================= */
 
 function resetDailyUsesIfNeeded(){
 
-let today=getToday();
+  const today=getToday();
 
-let saved=localStorage.getItem(
-STORAGE.useDate
-);
+  const saved=
+    localStorage.getItem(
+      STORAGE.useDate
+    );
 
-if(saved!==today){
+  if(saved!==today){
 
-uses=0;
+    uses=0;
 
-localStorage.setItem(
-STORAGE.uses,
-"0"
-);
+    localStorage.setItem(
+      STORAGE.uses,
+      "0"
+    );
 
-localStorage.setItem(
-STORAGE.useDate,
-today
-);
+    localStorage.setItem(
+      STORAGE.useDate,
+      today
+    );
 
-}
+  }
 
 }
 
 
 function hasUnlimitedAccess(){
 
-return Date.now()<unlimitedUntil;
+  return Date.now()<unlimitedUntil;
 
 }
 
 
 function canUse(){
 
-resetDailyUsesIfNeeded();
+  resetDailyUsesIfNeeded();
 
-return(
-hasUnlimitedAccess()||
-uses<3||
-extraUses>0
-);
+  if(hasUnlimitedAccess()){
 
-}
+    return true;
 
+  }
 
-function showAccessExpired(){
-
-let modal=
-document.getElementById(
-"accessExpiredModal"
-);
-
-if(modal){
-
-modal.classList.add("show");
-
-}
-
-}
-
-
-function closeAccessExpired(){
-
-document
-.getElementById(
-"accessExpiredModal"
-)
-.classList.remove("show");
-
-}
-
-
-function openCodeFromExpired(){
-
-closeAccessExpired();
-
-openCodeModal();
+  return uses<3 || extraUses>0;
 
 }
 
 
 function consumeUse(){
 
-resetDailyUsesIfNeeded();
+  resetDailyUsesIfNeeded();
 
-if(hasUnlimitedAccess()){
+  if(hasUnlimitedAccess()){
 
-updateAccessStatus();
+    updateAccessStatus();
 
-return true;
+    return true;
 
-}
+  }
 
+  if(uses<3){
 
-if(uses<3){
+    uses++;
 
-uses++;
+    localStorage.setItem(
+      STORAGE.uses,
+      String(uses)
+    );
 
-localStorage.setItem(
-STORAGE.uses,
-uses
-);
+    updateAccessStatus();
 
-updateAccessStatus();
+    if(
+      uses>=3 &&
+      extraUses<=0
+    ){
 
+      setTimeout(
+        showAccessExpired,
+        500
+      );
 
-if(
-uses>=3 &&
-extraUses<=0
-){
+    }
 
-setTimeout(
-showAccessExpired,
-300
-);
+    return true;
 
-}
+  }
 
-return true;
+  if(extraUses>0){
 
-}
+    extraUses--;
 
+    localStorage.setItem(
+      STORAGE.extraUses,
+      String(extraUses)
+    );
 
-if(extraUses>0){
+    updateAccessStatus();
 
-extraUses--;
+    return true;
 
-localStorage.setItem(
-STORAGE.extraUses,
-extraUses
-);
+  }
 
-updateAccessStatus();
+  showAccessExpired();
 
-return true;
-
-}
-
-
-showAccessExpired();
-
-return false;
+  return false;
 
 }
 
+
+/* =========================================================
+   ACCESS STATUS
+========================================================= */
 
 function updateAccessStatus(){
 
-resetDailyUsesIfNeeded();
+  resetDailyUsesIfNeeded();
 
-let box=
-document.getElementById(
-"accessStatus"
-);
+  const box=
+    document.getElementById(
+      "accessStatus"
+    );
 
-if(hasUnlimitedAccess()){
+  box.classList.remove(
+    "access-good",
+    "access-warning"
+  );
 
-let hours=Math.ceil(
-Math.max(
-0,
-unlimitedUntil-Date.now()
-)/3600000
-);
+  if(hasUnlimitedAccess()){
 
-box.textContent=
-"🔓 Unlimited access active for about "
-+hours+
-" hour(s).";
+    const remaining=
+      Math.max(
+        0,
+        unlimitedUntil-Date.now()
+      );
 
-return;
+    const hours=Math.ceil(
+      remaining/
+      (1000*60*60)
+    );
+
+    box.textContent=
+      "🔓 Unlimited access active for about "+
+      hours+
+      " hour(s).";
+
+    box.classList.add(
+      "access-good"
+    );
+
+    return;
+
+  }
+
+  const freeLeft=
+    Math.max(0,3-uses);
+
+  box.textContent=
+    "🎟️ Free uses left today: "+
+    freeLeft+
+    " • Extra uses: "+
+    extraUses;
+
+  if(freeLeft===0){
+
+    box.classList.add(
+      "access-warning"
+    );
+
+  }
 
 }
 
 
-box.textContent=
-"🎟️ Free uses left today: "
-+Math.max(0,3-uses)
-+" • Extra uses: "
-+extraUses;
+/* =========================================================
+   ACCESS MODAL
+========================================================= */
+
+function showAccessExpired(){
+
+  const modal=
+    document.getElementById(
+      "accessExpiredModal"
+    );
+
+  if(modal){
+
+    modal.classList.add("show");
+
+  }
 
 }
 
+
+function closeAccessExpired(){
+
+  document.getElementById(
+    "accessExpiredModal"
+  ).classList.remove("show");
+
+}
+
+
+/* =========================================================
+   RECENT RESULTS
+========================================================= */
 
 function addRecent(text){
 
-let recent=
-JSON.parse(
-localStorage.getItem(
-STORAGE.recent
-)||"[]"
-);
+  let recent=
+    JSON.parse(
+      localStorage.getItem(
+        STORAGE.recent
+      )||"[]"
+    );
 
-recent.unshift(text);
+  recent.unshift(text);
 
-recent=recent.slice(0,10);
+  recent=recent.slice(0,8);
 
-localStorage.setItem(
-STORAGE.recent,
-JSON.stringify(recent)
-);
+  localStorage.setItem(
+    STORAGE.recent,
+    JSON.stringify(recent)
+  );
 
-renderRecent();
-
-}
-
-
-function escapeHTML(text){
-
-return String(text)
-
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+  renderRecent();
 
 }
 
 
 function renderRecent(){
 
-let list=
-document.getElementById(
-"recentList"
-);
+  const list=
+    document.getElementById(
+      "recentList"
+    );
 
-let recent=
-JSON.parse(
-localStorage.getItem(
-STORAGE.recent
-)||"[]"
-);
+  const recent=
+    JSON.parse(
+      localStorage.getItem(
+        STORAGE.recent
+      )||"[]"
+    );
 
-if(!recent.length){
+  if(!recent.length){
 
-list.innerHTML=
-'<div class="recent-item">Nothing here yet.</div>';
+    list.innerHTML=
+      '<div class="recent-item">'+
+      'Nothing here yet.'+
+      '</div>';
 
-return;
+    return;
+
+  }
+
+  list.innerHTML=
+    recent.map(item=>
+      '<div class="recent-item">'+
+      escapeHTML(item)+
+      '</div>'
+    ).join("");
 
 }
 
-list.innerHTML=
-recent.map(
-item=>
-`<div class="recent-item">
-${escapeHTML(item)}
-</div>`
-).join("");
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
+
+/* =========================================================
+   RANDOM
+========================================================= */
+
+function randomItem(array){
+
+  return array[
+    Math.floor(
+      Math.random()*array.length
+    )
+  ];
+
+}
+
+
+/* =========================================================
+   GENERATORS
+========================================================= */
 
 function runGenerator(type){
 
-if(
-!canUse()||
-!consumeUse()
-)return;
+  if(!consumeUse()) return;
 
+  let text="";
 
-let text="";
+  if(type==="fact"){
 
+    text=randomItem(facts);
 
-if(type==="fact"){
+  }else{
 
-text=randomItem(facts);
+    text=
+      randomItem(
+        content[type][tone]
+      );
 
-}
+  }
 
-else if(type==="joke"){
+  const result=
+    document.getElementById(
+      "result"
+    );
 
-text=randomItem(jokes);
+  result.textContent=text;
 
-}
+  result.classList.remove("empty");
 
-else if(type==="chaos"){
+  addRecent(text);
 
-text=randomItem(chaosAnswers);
+  addPoints(2,"generator");
 
-}
-
-else if(type==="decision"){
-
-text=randomItem(decisions);
-
-}
-
-else{
-
-let group=
-content[type][tone];
-
-text=randomItem(group);
-
-}
-
-
-let result=
-document.getElementById(
-"result"
-);
-
-result.textContent=text;
-
-result.classList.remove("empty");
-
-addRecent(text);
-
-addPoints(
-5,
-"generator"
-);
-
-trackEvent(
-"funbox_generator_used",
-{
-generator:type,
-level:toneModes[tone]
-}
-);
+  trackEvent(
+    "funbox_generator_used",
+    {
+      generator:type,
+      tone_level:toneModes[tone]
+    }
+  );
 
 }
 
 
 function surprise(){
 
-if(
-!canUse()||
-!consumeUse()
-)return;
+  if(!consumeUse()) return;
 
+  const text=
+    randomItem(
+      surpriseIdeas
+    );
 
-let text=
-randomItem(
-surpriseIdeas
-);
+  const result=
+    document.getElementById(
+      "result"
+    );
 
-let result=
-document.getElementById(
-"result"
-);
+  result.textContent=text;
 
-result.textContent=text;
+  result.classList.remove("empty");
 
-result.classList.remove("empty");
+  addRecent(text);
 
-addRecent(text);
-
-addPoints(
-5,
-"surprise"
-);
+  addPoints(2,"surprise");
 
 }
 
 
-const guessReplies={
-
-low:[
-
-"⬆️ Too low. Even your guess needs elevation.",
-
-"⬆️ Nope. Go higher.",
-
-"⬆️ That number is hiding under the target.",
-
-"⬆️ Wrong direction. Up.",
-
-"⬆️ Higher. The target is not down there.",
-
-"⬆️ Your guess just took the basement route.",
-
-"⬆️ That's below the target. Physics remains undefeated."
-
-],
-
-high:[
-
-"⬇️ Too high. Calm down, calculator.",
-
-"⬇️ Nope. Come back down.",
-
-"⬇️ You overshot reality.",
-
-"⬇️ Lower. The target isn't on the moon.",
-
-"⬇️ That guess has ambition. Not accuracy.",
-
-"⬇️ Your number is living above its pay grade.",
-
-"⬇️ That's higher than the target. Try returning to Earth."
-
-]
-
-};
-
+/* =========================================================
+   GUESS GAME
+========================================================= */
 
 function newGuessGame(){
 
-guessNumberTarget=
-Math.floor(Math.random()*50)+1;
+  guessNumberTarget=
+    Math.floor(Math.random()*50)+1;
 
-guessAttempts=0;
+  guessAttempts=0;
 
-document.getElementById(
-"guessInput"
-).value="";
+  document.getElementById(
+    "guessInput"
+  ).value="";
 
-let result=
-document.getElementById(
-"guessResult"
-);
+  const result=
+    document.getElementById(
+      "guessResult"
+    );
 
-result.textContent=
-"New number selected. Try not to embarrass the calculator.";
+  result.textContent=
+    "New number selected.";
 
-result.classList.remove("empty");
+  result.classList.remove("empty");
 
 }
 
 
 function guessNumber(){
 
-let input=
-document.getElementById(
-"guessInput"
-);
+  const input=
+    document.getElementById(
+      "guessInput"
+    );
 
-let result=
-document.getElementById(
-"guessResult"
-);
+  const result=
+    document.getElementById(
+      "guessResult"
+    );
 
-let guess=
-Number(input.value);
+  const guess=
+    Number(input.value);
 
+  if(
+    !guess ||
+    guess<1 ||
+    guess>50
+  ){
 
-if(
-!guess||
-guess<1||
-guess>50
-){
+    result.textContent=
+      "Enter a number from 1 to 50.";
 
-result.textContent=
-"Enter a number from 1 to 50.";
+    return;
 
-return;
+  }
 
-}
+  guessAttempts++;
 
+  if(guess===guessNumberTarget){
 
-guessAttempts++;
+    result.textContent=
+      "🎉 Correct! You got it in "+
+      guessAttempts+
+      " attempt(s)!";
 
+    addPoints(
+      10,
+      "guess_win"
+    );
 
-if(guess===guessNumberTarget){
+    setTimeout(
+      newGuessGame,
+      1000
+    );
 
-result.textContent=
-"🎯 Correct. "+
-guessAttempts+
-" attempt(s). The machine reluctantly respects you.";
+    return;
 
-addPoints(
-20,
-"guess_win"
-);
+  }
 
-trackEvent(
-"funbox_guess_win",
-{
-attempts:guessAttempts
-}
-);
+  if(guess<guessNumberTarget){
 
-setTimeout(
-newGuessGame,
-1200
-);
+    result.textContent=
+      "⬆️ Too low. Try higher.";
 
-return;
+  }else{
 
-}
+    result.textContent=
+      "⬇️ Too high. Try lower.";
 
-
-if(guess<guessNumberTarget){
-
-result.textContent=
-randomItem(
-guessReplies.low
-);
+  }
 
 }
 
-else{
 
-result.textContent=
-randomItem(
-guessReplies.high
-);
-
-}
-
-}
-
+/* =========================================================
+   JOKE MAKER
+========================================================= */
 
 const jokeMakers=[
-
-"TAKSH",
-"FUNBOX",
-"CHAOS",
-"LEGEND",
-"ROAST",
-"JOKER"
-
+  "TAKSH",
+  "DHRUVI",
+  "RUPAL",
+  "CHERRY"
 ];
 
-
 let currentMaker=
-randomItem(jokeMakers);
+  randomItem(jokeMakers);
 
 let revealedLetters=[];
 
 
 function newJokeGame(){
 
-currentMaker=
-randomItem(jokeMakers);
+  currentMaker=
+    randomItem(jokeMakers);
 
-revealedLetters=[];
+  revealedLetters=[];
 
-renderJokeSecret();
+  renderJokeSecret();
 
-document.getElementById(
-"jokeStatus"
-).textContent=
-"New joke challenge ready.";
+  document.getElementById(
+    "jokeStatus"
+  ).textContent=
+    "New joke challenge ready.";
 
 }
 
 
 function renderJokeSecret(){
 
-document.getElementById(
-"secretDisplay"
-).textContent=
+  const display=
+    currentMaker
+      .split("")
+      .map(
+        (letter,index)=>
+          revealedLetters.includes(index)
+            ?letter
+            :"?"
+      )
+      .join(" ");
 
-currentMaker
-.split("")
-.map(
-(letter,index)=>
-revealedLetters.includes(index)
-?letter
-:"?"
-)
-.join(" ");
+  document.getElementById(
+    "secretDisplay"
+  ).textContent=display;
 
 }
 
 
 function isLikelyJoke(text){
 
-let s=text.toLowerCase();
+  const lower=
+    text.toLowerCase();
 
-return[
+  const jokeWords=[
+    "why",
+    "what",
+    "how",
+    "knock",
+    "joke",
+    "funny",
+    "because",
+    "who",
+    "did",
+    "went",
+    "school",
+    "teacher"
+  ];
 
-"why",
-"what",
-"how",
-"joke",
-"funny",
-"because",
-"who",
-"did",
-"school",
-"teacher",
-"knock",
-"went"
-
-].some(
-word=>s.includes(word)
-);
+  return jokeWords.some(
+    word=>lower.includes(word)
+  );
 
 }
 
 
 function processJoke(text){
 
-if(!text)return;
+  if(!text) return;
 
+  if(!isLikelyJoke(text)){
 
-if(!isLikelyJoke(text)){
+    document.getElementById(
+      "jokeStatus"
+    ).textContent=
+      "Hmm... that didn't sound like a joke. Try again.";
 
-document.getElementById(
-"jokeStatus"
-).textContent=
-"That sounded less like a joke and more like a status update.";
+    return;
 
-return;
+  }
 
-}
+  const hidden=
+    currentMaker
+      .split("")
+      .map((_,index)=>index)
+      .filter(
+        index=>
+          !revealedLetters.includes(index)
+      );
 
+  if(!hidden.length){
 
-let hidden=
-currentMaker
-.split("")
-.map(
-(_,index)=>index
-)
-.filter(
-index=>!revealedLetters.includes(index)
-);
+    document.getElementById(
+      "jokeStatus"
+    ).textContent=
+      "🏆 Challenge already complete.";
 
+    return;
 
-if(!hidden.length)return;
+  }
 
+  const reveal=
+    randomItem(hidden);
 
-revealedLetters.push(
-randomItem(hidden)
-);
+  revealedLetters.push(reveal);
 
-renderJokeSecret();
+  renderJokeSecret();
 
-addPoints(
-10,
-"joke_valid"
-);
+  if(
+    revealedLetters.length===
+    currentMaker.length
+  ){
 
-document.getElementById(
-"jokeStatus"
-).textContent=
-"😂 Accepted. One letter revealed.";
+    addPoints(
+      15,
+      "joke_complete"
+    );
 
+    document.getElementById(
+      "jokeStatus"
+    ).textContent=
+      "🏆 Full code revealed! +15 XP";
 
-if(
-revealedLetters.length===
-currentMaker.length
-){
+  }else{
 
-addPoints(
-50,
-"joke_complete"
-);
+    addPoints(
+      3,
+      "joke_valid"
+    );
 
-document.getElementById(
-"jokeStatus"
-).textContent=
-"🏆 Full code revealed. Somehow you survived.";
+    document.getElementById(
+      "jokeStatus"
+    ).textContent=
+      "😂 Joke accepted! One letter revealed. +3 XP";
 
-}
+  }
 
 }
 
 
 function startVoiceJoke(){
 
-const SpeechRecognition=
-window.SpeechRecognition||
-window.webkitSpeechRecognition;
+  const SpeechRecognition=
+    window.SpeechRecognition||
+    window.webkitSpeechRecognition;
 
+  if(!SpeechRecognition){
 
-if(!SpeechRecognition){
+    document.getElementById(
+      "jokeStatus"
+    ).textContent=
+      "Voice recognition isn't supported here. Try Chrome.";
 
-document.getElementById(
-"jokeStatus"
-).textContent=
-"Voice recognition isn't supported here. Try Chrome.";
+    return;
 
-return;
+  }
 
-}
+  if(!consumeUse()) return;
 
+  const recognition=
+    new SpeechRecognition();
 
-if(
-!canUse()||
-!consumeUse()
-)return;
+  recognition.lang="en-IN";
 
+  recognition.interimResults=false;
 
-let recognition=
-new SpeechRecognition();
+  recognition.maxAlternatives=1;
 
-recognition.lang="en-IN";
+  document.getElementById(
+    "jokeStatus"
+  ).textContent=
+    "🎤 Listening... tell me a joke.";
 
-recognition.interimResults=false;
+  recognition.start();
 
-recognition.maxAlternatives=1;
+  recognition.onresult=function(event){
 
+    const spoken=
+      event.results[0][0].transcript;
 
-document.getElementById(
-"jokeStatus"
-).textContent=
-"🎤 Listening...";
+    processJoke(spoken);
 
+  };
 
-recognition.start();
+  recognition.onerror=function(){
 
+    document.getElementById(
+      "jokeStatus"
+    ).textContent=
+      "Couldn't hear that. Try again.";
 
-recognition.onresult=
-event=>{
-
-processJoke(
-event.results[0][0].transcript
-);
-
-};
-
-
-recognition.onerror=
-()=>{
-
-document.getElementById(
-"jokeStatus"
-).textContent=
-"Couldn't hear that. Try again.";
-
-};
+  };
 
 }
 
 
-function openLoginModal(){
-
-document.getElementById(
-"loginModal"
-).classList.add("show");
-
-document.getElementById(
-"loginName"
-).focus();
-
-}
-
-
-function closeLoginModal(){
-
-document.getElementById(
-"loginModal"
-).classList.remove("show");
-
-}
-
-
-function saveLogin(){
-
-let input=
-document.getElementById(
-"loginName"
-);
-
-let name=
-input.value.trim();
-
-
-if(!name){
-
-document.getElementById(
-"loginResult"
-).textContent=
-"Nickname required.";
-
-return;
-
-}
-
-
-localStorage.setItem(
-STORAGE.username,
-name.slice(0,20)
-);
-
-renderLoginState();
-
-closeLoginModal();
-
-}
-
-
-function logoutUser(){
-
-localStorage.removeItem(
-STORAGE.username
-);
-
-renderLoginState();
-
-}
-
-
-function renderLoginState(){
-
-let name=
-localStorage.getItem(
-STORAGE.username
-);
-
-let pill=
-document.getElementById(
-"userPill"
-);
-
-let logout=
-document.getElementById(
-"logoutBtn"
-);
-
-
-if(name){
-
-pill.textContent=
-"👤 "+name;
-
-pill.style.display=
-"inline-block";
-
-logout.style.display=
-"inline-block";
-
-}
-
-else{
-
-pill.style.display=
-"none";
-
-logout.style.display=
-"none";
-
-}
-
-}
-
-
-const THEMES={
-
-void:{
-bg:"#07070b",
-a:"#24133c",
-b:"#111b42",
-accent:"#a855f7",
-accent2:"#7c3aed"
-},
-
-blood:{
-bg:"#090607",
-a:"#3a1015",
-b:"#25090d",
-accent:"#ef4444",
-accent2:"#b91c1c"
-},
-
-acid:{
-bg:"#050805",
-a:"#123018",
-b:"#071d12",
-accent:"#84cc16",
-accent2:"#16a34a"
-},
-
-ocean:{
-bg:"#050a12",
-a:"#0b2940",
-b:"#061525",
-accent:"#38bdf8",
-accent2:"#0284c7"
-},
-
-gold:{
-bg:"#080705",
-a:"#30240d",
-b:"#171107",
-accent:"#facc15",
-accent2:"#ca8a04"
-},
-
-mono:{
-bg:"#070707",
-a:"#222",
-b:"#111",
-accent:"#f5f5f5",
-accent2:"#777"
-}
-
-};
-
-
-function openThemeModal(){
-
-document.getElementById(
-"themeModal"
-).classList.add("show");
-
-}
-
-
-function closeThemeModal(){
-
-document.getElementById(
-"themeModal"
-).classList.remove("show");
-
-}
-
-
-function setTheme(name){
-
-let theme=
-THEMES[name]||
-THEMES.void;
-
-
-document.body.style.background=
-
-"radial-gradient(circle at top left,"+
-theme.a+
-" 0,transparent 35%),"+
-"radial-gradient(circle at bottom right,"+
-theme.b+
-" 0,transparent 35%),"+
-theme.bg;
-
-
-document.documentElement.style.setProperty(
-"--accent",
-theme.accent
-);
-
-document.documentElement.style.setProperty(
-"--accent2",
-theme.accent2
-);
-
-
-localStorage.setItem(
-STORAGE.theme,
-name
-);
-
-
-document.querySelectorAll(
-".theme-btn"
-).forEach(
-button=>
-button.classList.remove("active")
-);
-
-
-closeThemeModal();
-
-}
-
-
-function loadSavedTheme(){
-
-setTheme(
-localStorage.getItem(
-STORAGE.theme
-)||"void"
-);
-
-}
-
-
-function openCodeModal(){
-
-document.getElementById(
-"codeModal"
-).classList.add("show");
-
-document.getElementById(
-"codeInput"
-).focus();
-
-}
-
-
-function closeCodeModal(){
-
-document.getElementById(
-"codeModal"
-).classList.remove("show");
-
-}
-
-
-function redeemCode(){
-
-let code=
-document.getElementById(
-"codeInput"
-).value.trim();
-
-
-if(!code){
-
-document.getElementById(
-"codeResult"
-).textContent=
-"Enter a code.";
-
-return;
-
-}
-
-
-unlimitedUntil=
-Date.now()+86400000;
-
-
-localStorage.setItem(
-STORAGE.unlimited,
-unlimitedUntil
-);
-
-
-document.getElementById(
-"codeResult"
-).textContent=
-"✅ 24-hour unlimited access activated.";
-
-
-updateAccessStatus();
-
-addPoints(
-25,
-"code_redeemed"
-);
-
-
-setTimeout(
-closeCodeModal,
-800
-);
-
-}
-
+/* =========================================================
+   DAILY CHALLENGE
+========================================================= */
 
 function renderChallenge(){
 
-let completed=
-localStorage.getItem(
-STORAGE.challenge
-)===
-getToday();
+  const today=getToday();
 
+  const completed=
+    localStorage.getItem(
+      STORAGE.challenge
+    )===today;
 
-document.getElementById(
-"challengeText"
-).textContent=
+  const text=
+    document.getElementById(
+      "challengeText"
+    );
 
-completed
-?
-"✅ Today's challenge is already complete."
-:
-"Use any FunBox generator today and claim your bonus.";
+  if(completed){
+
+    text.textContent=
+      "✅ Today's challenge is already complete.";
+
+  }else{
+
+    text.textContent=
+      "Use any FunBox generator today and claim +15 XP.";
+
+  }
 
 }
 
 
 function completeChallenge(){
 
-let today=
-getToday();
+  const today=getToday();
 
+  if(
+    localStorage.getItem(
+      STORAGE.challenge
+    )===today
+  ){
 
-if(
-localStorage.getItem(
-STORAGE.challenge
-)===
-today
-){
+    showToast(
+      "Challenge already complete."
+    );
 
-alert(
-"Today's challenge is already complete!"
-);
+    return;
 
-return;
+  }
 
-}
+  localStorage.setItem(
+    STORAGE.challenge,
+    today
+  );
 
+  addPoints(
+    15,
+    "daily_challenge"
+  );
 
-localStorage.setItem(
-STORAGE.challenge,
-today
-);
+  renderChallenge();
 
-addPoints(
-25,
-"daily_challenge"
-);
-
-renderChallenge();
-
-alert(
-"🏆 Daily Challenge complete! +25 points."
-);
+  showToast(
+    "🏆 Daily Challenge complete! +15 XP"
+  );
 
 }
 
 
-function updateStreak(){
+/* =========================================================
+   REWARDS / EXTRA USE
+========================================================= */
 
-let today=
-getToday();
+function checkRewardUnlocks(){
 
-let last=
-localStorage.getItem(
-STORAGE.lastDay
+  const rewarded=
+    JSON.parse(
+      localStorage.getItem(
+        "funboxRewardUnlocks"
+      )||"{}"
+    );
+
+  if(
+    points>=100 &&
+    !rewarded.extraUse
+  ){
+
+    extraUses++;
+
+    rewarded.extraUse=true;
+
+    localStorage.setItem(
+      STORAGE.extraUses,
+      String(extraUses)
+    );
+
+    showToast(
+      "🎁 Reward unlocked: +1 Extra Use"
+    );
+
+  }
+
+  localStorage.setItem(
+    "funboxRewardUnlocks",
+    JSON.stringify(rewarded)
+  );
+
+}
+
+
+/* =========================================================
+   ACCESS CODE
+========================================================= */
+
+function openCodeModal(){
+
+  document.getElementById(
+    "codeModal"
+  ).classList.add("show");
+
+  document.getElementById(
+    "codeInput"
+  ).focus();
+
+}
+
+
+function closeCodeModal(){
+
+  document.getElementById(
+    "codeModal"
+  ).classList.remove("show");
+
+}
+
+
+function redeemCode(){
+
+  const input=
+    document.getElementById(
+      "codeInput"
+    );
+
+  const code=
+    input.value.trim();
+
+  if(!code){
+
+    document.getElementById(
+      "codeResult"
+    ).textContent=
+      "Enter a code.";
+
+    return;
+
+  }
+
+  /*
+    Demo client-side access.
+    This is NOT secure authentication.
+  */
+
+  unlimitedUntil=
+    Date.now()+
+    24*60*60*1000;
+
+  localStorage.setItem(
+    STORAGE.unlimited,
+    String(unlimitedUntil)
+  );
+
+  document.getElementById(
+    "codeResult"
+  ).textContent=
+    "✅ 24-hour unlimited access activated!";
+
+  updateAccessStatus();
+
+  addPoints(
+    25,
+    "code_redeemed"
+  );
+
+  setTimeout(
+    closeCodeModal,
+    900
+  );
+
+}
+
+
+/* =========================================================
+   CUSTOM THEME
+========================================================= */
+
+function updateThemeLock(){
+
+  const input=
+    document.getElementById(
+      "themeImage"
+    );
+
+  const status=
+    document.getElementById(
+      "themeStatus"
+    );
+
+  const unlocked=
+    points>=500;
+
+  input.disabled=!unlocked;
+
+  if(unlocked){
+
+    status.textContent=
+      "🎨 Custom Theme unlocked! Device se photo choose karo.";
+
+  }else{
+
+    status.textContent=
+      "🔒 Custom Theme unlocks at 500 XP. "+
+      (500-points)+
+      " XP remaining.";
+
+  }
+
+}
+
+
+function applyCustomTheme(){
+
+  const image=
+    localStorage.getItem(
+      STORAGE.theme
+    );
+
+  const preview=
+    document.getElementById(
+      "themePreview"
+    );
+
+  if(!image){
+
+    preview.style.display="none";
+
+    return;
+
+  }
+
+  document.body.style.backgroundImage=
+    'linear-gradient(rgba(7,7,11,.78),rgba(7,7,11,.90)),url("'+
+    image+
+    '")';
+
+  document.body.style.backgroundSize="cover";
+
+  document.body.style.backgroundPosition="center";
+
+  document.body.style.backgroundAttachment="fixed";
+
+  preview.style.display="block";
+
+  preview.style.backgroundImage=
+    'url("'+image+'")';
+
+}
+
+
+document.getElementById(
+  "themeImage"
+).addEventListener(
+  "change",
+  function(){
+
+    const file=this.files[0];
+
+    if(!file) return;
+
+    if(points<500){
+
+      showToast(
+        "🔒 Theme unlocks at 500 XP."
+      );
+
+      return;
+
+    }
+
+    if(!file.type.startsWith("image/")){
+
+      showToast(
+        "Please choose an image."
+      );
+
+      return;
+
+    }
+
+    /*
+      Browser-local only.
+      Image is stored on this device.
+    */
+
+    const reader=
+      new FileReader();
+
+    reader.onload=function(){
+
+      try{
+
+        localStorage.setItem(
+          STORAGE.theme,
+          reader.result
+        );
+
+        applyCustomTheme();
+
+        showToast(
+          "🎨 Custom theme applied!"
+        );
+
+      }catch(error){
+
+        showToast(
+          "Image too large. Try a smaller photo."
+        );
+
+      }
+
+    };
+
+    reader.readAsDataURL(file);
+
+  }
 );
 
 
-if(last===today)return;
+function resetCustomTheme(){
 
+  localStorage.removeItem(
+    STORAGE.theme
+  );
 
-if(!last){
+  document.body.style.backgroundImage="";
 
-streak=1;
+  document.body.style.background=
+    "radial-gradient(circle at top left,#24133c 0%,transparent 35%),radial-gradient(circle at bottom right,#111b42 0%,transparent 35%),#07070b";
 
-}
+  document.getElementById(
+    "themePreview"
+  ).style.display="none";
 
-else{
-
-let diff=
-Math.round(
-(
-new Date(today)-
-new Date(last)
-)/86400000
-);
-
-
-if(diff===1){
-
-streak++;
-
-}
-
-else{
-
-streak=1;
-
-}
+  showToast(
+    "Theme reset."
+  );
 
 }
 
 
-localStorage.setItem(
-STORAGE.lastDay,
-today
-);
+/* =========================================================
+   TOAST
+========================================================= */
 
-localStorage.setItem(
-STORAGE.streak,
-streak
-);
+let toastTimer=null;
+
+function showToast(message){
+
+  const toast=
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent=message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=
+    setTimeout(
+      ()=>{
+        toast.classList.remove("show");
+      },
+      1800
+    );
 
 }
 
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 function init(){
 
-updateStreak();
+  updateStreak();
 
-resetDailyUsesIfNeeded();
+  resetDailyUsesIfNeeded();
 
-renderProfile();
+  renderProfile();
 
-renderLoginState();
+  document.getElementById(
+    "toneSlider"
+  ).value=tone;
 
-loadSavedTheme();
+  changeTone(tone);
 
-changeTone(tone);
+  renderRecent();
 
-renderRecent();
+  renderChallenge();
 
-renderChallenge();
+  updateAccessStatus();
 
-updateAccessStatus();
+  renderJokeSecret();
 
-renderJokeSecret();
+  newGuessGame();
 
-newGuessGame();
+  applyCustomTheme();
 
+  checkRewardUnlocks();
 
-if(
-!hasUnlimitedAccess()&&
-uses>=3&&
-extraUses<=0
-){
+  /*
+    If user already exhausted today's free uses,
+    show access popup.
+  */
 
-setTimeout(
-showAccessExpired,
-500
-);
+  if(
+    !hasUnlimitedAccess() &&
+    uses>=3 &&
+    extraUses<=0
+  ){
 
-}
+    setTimeout(
+      showAccessExpired,
+      700
+    );
+
+  }
 
 }
 
 
 init();
+
+</script>
+
+
+<!-- =========================================================
+     FIREBASE AUTH
+========================================================= -->
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
+
+/*
+  IMPORTANT:
+
+  Firebase Console →
+  Project Settings →
+  Your apps →
+  Web App →
+
+  Copy your config here.
+*/
+
+const firebaseConfig={
+
+  apiKey:
+    "PASTE_YOUR_FIREBASE_API_KEY",
+
+  authDomain:
+    "PASTE_YOUR_PROJECT.firebaseapp.com",
+
+  projectId:
+    "PASTE_YOUR_PROJECT_ID",
+
+  storageBucket:
+    "PASTE_YOUR_PROJECT.firebasestorage.app",
+
+  messagingSenderId:
+    "PASTE_YOUR_SENDER_ID",
+
+  appId:
+    "PASTE_YOUR_APP_ID"
+
+};
+
+
+/* =========================================================
+   FIREBASE START
+========================================================= */
+
+const firebaseReady=
+  !firebaseConfig.apiKey.startsWith(
+    "PASTE_"
+  );
+
+let auth=null;
+
+if(firebaseReady){
+
+  const app=
+    initializeApp(
+      firebaseConfig
+    );
+
+  auth=getAuth(app);
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function authStatus(){
+
+  return document.getElementById(
+    "authStatus"
+  );
+
+}
+
+
+function setAuthStatus(text){
+
+  authStatus().textContent=text;
+
+}
+
+
+/* =========================================================
+   SIGN UP
+========================================================= */
+
+window.signupAccount=
+async function(){
+
+  if(!firebaseReady){
+
+    setAuthStatus(
+      "⚠️ Firebase config paste karo."
+    );
+
+    return;
+
+  }
+
+  const username=
+    document.getElementById(
+      "authUsername"
+    ).value.trim();
+
+  const email=
+    document.getElementById(
+      "authEmail"
+    ).value.trim();
+
+  const password=
+    document.getElementById(
+      "authPassword"
+    ).value;
+
+  if(!username){
+
+    setAuthStatus(
+      "Username enter karo."
+    );
+
+    return;
+
+  }
+
+  if(!email){
+
+    setAuthStatus(
+      "Email enter karo."
+    );
+
+    return;
+
+  }
+
+  if(password.length<6){
+
+    setAuthStatus(
+      "Password kam se kam 6 characters ka hona chahiye."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const credential=
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    await updateProfile(
+      credential.user,
+      {
+        displayName:username
+      }
+    );
+
+    localStorage.setItem(
+      STORAGE_USERNAME,
+      username
+    );
+
+    setAuthStatus(
+      "✅ Account created: "+
+      username
+    );
+
+    showToast(
+      "Account created!"
+    );
+
+  }catch(error){
+
+    setAuthStatus(
+      firebaseErrorMessage(error)
+    );
+
+  }
+
+};
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+window.loginAccount=
+async function(){
+
+  if(!firebaseReady){
+
+    setAuthStatus(
+      "⚠️ Firebase config paste karo."
+    );
+
+    return;
+
+  }
+
+  const email=
+    document.getElementById(
+      "authEmail"
+    ).value.trim();
+
+  const password=
+    document.getElementById(
+      "authPassword"
+    ).value;
+
+  if(!email||!password){
+
+    setAuthStatus(
+      "Email aur password enter karo."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const credential=
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    setAuthStatus(
+      "✅ Logged in: "+
+      (
+        credential.user.displayName||
+        credential.user.email
+      )
+    );
+
+    showToast(
+      "Logged in!"
+    );
+
+  }catch(error){
+
+    setAuthStatus(
+      firebaseErrorMessage(error)
+    );
+
+  }
+
+};
+
+
+/* =========================================================
+   GOOGLE LOGIN
+========================================================= */
+
+window.googleLogin=
+async function(){
+
+  if(!firebaseReady){
+
+    setAuthStatus(
+      "⚠️ Firebase config paste karo."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const provider=
+      new GoogleAuthProvider();
+
+    const credential=
+      await signInWithPopup(
+        auth,
+        provider
+      );
+
+    setAuthStatus(
+      "✅ Logged in: "+
+      (
+        credential.user.displayName||
+        credential.user.email
+      )
+    );
+
+    showToast(
+      "Google login successful!"
+    );
+
+  }catch(error){
+
+    setAuthStatus(
+      firebaseErrorMessage(error)
+    );
+
+  }
+
+};
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+window.logoutAccount=
+async function(){
+
+  if(!auth){
+
+    setAuthStatus(
+      "Not signed in."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    await signOut(auth);
+
+    setAuthStatus(
+      "Logged out."
+    );
+
+    document.getElementById(
+      "signedUser"
+    ).style.display="none";
+
+    showToast(
+      "Logged out."
+    );
+
+  }catch(error){
+
+    setAuthStatus(
+      firebaseErrorMessage(error)
+    );
+
+  }
+
+};
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+if(auth){
+
+  onAuthStateChanged(
+    auth,
+    user=>{
+
+      const badge=
+        document.getElementById(
+          "signedUser"
+        );
+
+      if(user){
+
+        const name=
+          user.displayName||
+          user.email||
+          "FunBox User";
+
+        badge.style.display=
+          "inline-flex";
+
+        badge.className=
+          "user-badge";
+
+        badge.textContent=
+          "👤 "+name;
+
+        setAuthStatus(
+          "Signed in as "+name
+        );
+
+      }else{
+
+        badge.style.display="none";
+
+        setAuthStatus(
+          "Not signed in."
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FIREBASE ERROR TRANSLATION
+========================================================= */
+
+function firebaseErrorMessage(error){
+
+  const code=
+    error?.code||"";
+
+  const messages={
+
+    "auth/email-already-in-use":
+      "Ye email already registered hai.",
+
+    "auth/invalid-email":
+      "Email address invalid hai.",
+
+    "auth/weak-password":
+      "Password weak hai.",
+
+    "auth/invalid-credential":
+      "Email ya password incorrect hai.",
+
+    "auth/user-not-found":
+      "Account nahi mila.",
+
+    "auth/wrong-password":
+      "Password incorrect hai.",
+
+    "auth/popup-closed-by-user":
+      "Google login popup close ho gaya.",
+
+    "auth/popup-blocked":
+      "Browser ne popup block kar diya.",
+
+    "auth/network-request-failed":
+      "Network error. Dobara try karo."
+
+  };
+
+  return (
+    "⚠️ "+
+    (
+      messages[code]||
+      error.message||
+      "Something went wrong."
+    )
+  );
+
+}
 
 </script>
 
