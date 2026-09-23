@@ -483,6 +483,72 @@
       }
     }
 
+
+    /* =========================
+       CODE FIND GAME
+    ========================== */
+    .code-find-game {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(168,85,247,.20);
+    }
+
+    .secret-code {
+      letter-spacing: 7px;
+      font-size: 26px;
+      font-weight: bold;
+      margin: 16px 0;
+      color: #d8a8ff;
+      text-align: center;
+    }
+
+    .code-timer {
+      text-align: center;
+      color: #bbb;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .code-speed-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .speed-btn.active {
+      border: 1px solid rgba(168,85,247,.7);
+      color: #d8a8ff;
+      background: rgba(168,85,247,.16);
+    }
+
+    .code-input {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: #111;
+      color: #fff;
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    .code-input:focus {
+      border-color: #a855f7;
+    }
+
+    .code-status {
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 22px;
+    }
+
     .account-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0 20px}
     .account-bar input{background:#11111b;color:#fff;border:1px solid #34344b;border-radius:10px;padding:10px;width:180px}
     .account-bar button{padding:10px 14px}
@@ -732,41 +798,54 @@
 
 
   <!-- =========================
-       JOKE MAKER
+       ACCESS CODE + FIND GAME
   ========================== -->
 
   <section class="card">
-
-    <h2>😂 Joke Maker</h2>
-
-    <p class="muted">
-      Speak a joke. If it's valid, one hidden letter gets revealed.
-    </p>
-
-    <div id="secretDisplay" class="secret-code">
-      ? ? ? ? ?
-    </div>
+    <h2>🔑 Access Code</h2>
+    <p class="muted">Code pata hai to direct enter karo. Nahi pata to neeche joke-check game se letters reveal karo.</p>
 
     <div class="buttons">
-
-      <button class="btn" onclick="startVoiceJoke()">
-        🎤 Speak Joke
-      </button>
-
-      <button class="btn secondary" onclick="openCodeModal()">
-        🔑 Enter Code
-      </button>
-
-      <button class="btn secondary" onclick="newJokeGame()">
-        🔄 New Game
-      </button>
-
+      <button class="btn" onclick="openCodeModal()">🔓 Enter Access Code</button>
     </div>
 
-    <div id="jokeStatus" class="joke-status">
-      Voice recognition works best in Chrome.
+    <div class="code-find-game">
+      <h3>🕵️ Find the Access Code</h3>
+      <p class="muted" style="margin-top:6px;">
+        Ek joke check karo. Valid joke hua to hidden code ka ek letter reveal hoga.
+      </p>
+
+      <div id="secretDisplay" class="secret-code">? ? ? ? ?</div>
+
+      <div id="codeTimer" class="code-timer">⏱️ Speed: Normal • Time: 30s</div>
+
+      <div class="buttons" style="justify-content:center;">
+        <button class="btn" onclick="checkJokeForCode()">😂 Check Joke</button>
+        <button class="btn secondary" onclick="newCodeGame()">🔄 New Code</button>
+      </div>
+
+      <input
+        id="jokeInput"
+        class="code-input"
+        placeholder="Apna joke yahan likho..."
+        autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkJokeForCode()"
+      >
+
+      <div class="code-speed-row">
+        <button id="speedSlow" class="btn secondary speed-btn" onclick="setCodeSpeed('slow')">🐢 Slow</button>
+        <button id="speedNormal" class="btn secondary speed-btn active" onclick="setCodeSpeed('normal')">⚡ Normal</button>
+        <button id="speedFast" class="btn secondary speed-btn" onclick="setCodeSpeed('fast')">🔥 Fast</button>
+      </div>
+
+      <div id="codeStatus" class="code-status">
+        Joke likho aur Check Joke dabao.
+      </div>
     </div>
 
+    <div id="codeQuickStatus" class="joke-status">
+      Code mil gaya? Enter karke 24-hour access unlock karo.
+    </div>
   </section>
 
 
@@ -1729,214 +1808,203 @@
 
 
   /* =========================================================
-     JOKE MAKER
+     ACCESS CODE / JOKE CHECK GAME
   ========================================================== */
 
   const jokeMakers = [
-
     "TAKSH",
     "DHRUVI",
     "RUPAL",
     "CHERRY"
-
   ];
 
-
-  let currentMaker =
-    randomItem(jokeMakers);
-
+  let selectedMakerName = randomItem(jokeMakers);
   let revealedLetters = [];
-
   let jokeFinished = false;
+  let codeSpeed = "normal";
+  let codeTimeLeft = 30;
+  let codeTimerInterval = null;
 
+  const codeSpeedSettings = {
+    slow: 60,
+    normal: 30,
+    fast: 15
+  };
 
-  function newJokeGame() {
+  function renderCodeSecret() {
+    const display = selectedMakerName
+      .split("")
+      .map((letter, index) =>
+        revealedLetters.includes(index) ? letter : "?"
+      )
+      .join(" ");
 
-    currentMaker =
-      randomItem(jokeMakers);
+    const secret = document.getElementById("secretDisplay");
+    if (secret) secret.textContent = display;
+  }
 
+  function updateCodeTimerText() {
+    const el = document.getElementById("codeTimer");
+    if (!el) return;
+
+    const speedName =
+      codeSpeed === "slow" ? "Slow" :
+      codeSpeed === "fast" ? "Fast" : "Normal";
+
+    el.textContent =
+      "⏱️ Speed: " + speedName +
+      " • Time: " + codeTimeLeft + "s";
+  }
+
+  function stopCodeTimer() {
+    if (codeTimerInterval) {
+      clearInterval(codeTimerInterval);
+      codeTimerInterval = null;
+    }
+  }
+
+  function startCodeTimer() {
+    stopCodeTimer();
+
+    codeTimeLeft = codeSpeedSettings[codeSpeed];
+    updateCodeTimerText();
+
+    codeTimerInterval = setInterval(() => {
+      codeTimeLeft--;
+      updateCodeTimerText();
+
+      if (codeTimeLeft <= 0) {
+        stopCodeTimer();
+
+        if (!jokeFinished) {
+          document.getElementById("codeStatus").textContent =
+            "⏰ Time up! New code challenge started.";
+          newCodeGame();
+        }
+      }
+    }, 1000);
+  }
+
+  function setCodeSpeed(speed) {
+    codeSpeed = speed;
+
+    document.querySelectorAll(".speed-btn")
+      .forEach(btn => btn.classList.remove("active"));
+
+    const button =
+      document.getElementById(
+        speed === "slow" ? "speedSlow" :
+        speed === "fast" ? "speedFast" :
+        "speedNormal"
+      );
+
+    if (button) button.classList.add("active");
+
+    startCodeTimer();
+
+    trackEvent("funbox_code_speed_changed", {
+      speed: speed
+    });
+  }
+
+  function newCodeGame() {
+    selectedMakerName = randomItem(jokeMakers);
     revealedLetters = [];
-
     jokeFinished = false;
 
-    renderJokeSecret();
+    renderCodeSecret();
 
-    document.getElementById("jokeStatus").textContent =
-      "New joke challenge ready.";
+    const input = document.getElementById("jokeInput");
+    if (input) input.value = "";
 
-    trackEvent("funbox_joke_new_game");
+    const status = document.getElementById("codeStatus");
+    if (status) {
+      status.textContent =
+        "😂 Joke likho. Valid joke par ek hidden letter reveal hoga.";
+    }
 
+    startCodeTimer();
+
+    trackEvent("funbox_code_new_game");
   }
-
-
-  function renderJokeSecret() {
-
-    const display =
-      currentMaker
-        .split("")
-        .map((letter, index) =>
-          revealedLetters.includes(index)
-            ? letter
-            : "?"
-        )
-        .join(" ");
-
-    document.getElementById("secretDisplay")
-      .textContent = display;
-
-  }
-
 
   function isLikelyJoke(text) {
+    const lower = String(text).toLowerCase().trim();
 
-    const lower =
-      text.toLowerCase();
+    if (!lower || lower.length < 8) return false;
 
     const jokeWords = [
-
-      "why",
-      "what",
-      "how",
-      "knock",
-      "joke",
-      "funny",
-      "because",
-      "who",
-      "did",
-      "went",
-      "school",
-      "teacher"
-
+      "why", "what", "how", "knock", "joke",
+      "funny", "because", "who", "did", "went",
+      "school", "teacher", "lol", "haha",
+      "kyun", "kaise", "joke", "hasna", "mazak"
     ];
 
-    return jokeWords.some(
-      word => lower.includes(word)
-    );
-
+    return jokeWords.some(word => lower.includes(word))
+      || /[?!]/.test(lower);
   }
 
+  function checkJokeForCode() {
+    if (jokeFinished) {
+      document.getElementById("codeStatus").textContent =
+        "🏆 Code already revealed. New Code dabao.";
+      return;
+    }
 
-  function processJoke(text) {
+    const input = document.getElementById("jokeInput");
+    const text = input.value.trim();
 
-    if (!text) return;
+    if (!text) {
+      document.getElementById("codeStatus").textContent =
+        "Pehle joke likho.";
+      return;
+    }
 
     if (!isLikelyJoke(text)) {
-
-      document.getElementById("jokeStatus").textContent =
-        "Hmm... that didn't sound like a joke. Try again.";
-
+      document.getElementById("codeStatus").textContent =
+        "❌ Ye joke jaisa nahi lag raha. Ek proper joke try karo.";
       trackEvent("funbox_joke_invalid");
-
       return;
-
     }
 
-    const hidden =
-      currentMaker
-        .split("")
-        .map((_, index) => index)
-        .filter(index =>
-          !revealedLetters.includes(index)
-        );
+    const hidden = selectedMakerName
+      .split("")
+      .map((_, index) => index)
+      .filter(index => !revealedLetters.includes(index));
 
     if (!hidden.length) {
-
       jokeFinished = true;
-
-      document.getElementById("jokeStatus").textContent =
-        "🎉 Challenge complete!";
-
       return;
-
     }
 
-    const reveal =
-      randomItem(hidden);
-
+    const reveal = randomItem(hidden);
     revealedLetters.push(reveal);
 
-    renderJokeSecret();
+    renderCodeSecret();
 
-    addPoints(5, "joke_valid");
+    addPoints(10, "joke_valid");
 
-    document.getElementById("jokeStatus").textContent =
-      "😂 Joke accepted! One letter revealed.";
+    document.getElementById("codeStatus").textContent =
+      "😂 Joke accepted! Ek letter reveal ho gaya.";
 
     trackEvent("funbox_joke_valid", {
-
       tone_level: toneModes[tone]
-
     });
 
-    if (revealedLetters.length === currentMaker.length) {
-
+    if (revealedLetters.length === selectedMakerName.length) {
       jokeFinished = true;
+      stopCodeTimer();
 
       addPoints(15, "joke_complete");
 
-      document.getElementById("jokeStatus").textContent =
-        "🏆 Full code revealed!";
+      document.getElementById("codeStatus").textContent =
+        "🏆 Full access code revealed! Ab direct Enter Access Code mein use karo.";
 
+      document.getElementById("codeQuickStatus").textContent =
+        "✅ Code mil gaya — ab Enter Access Code se unlock karo.";
     }
 
-  }
-
-
-  function startVoiceJoke() {
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-
-      document.getElementById("jokeStatus").textContent =
-        "Voice recognition isn't supported in this browser. Try Chrome.";
-
-      return;
-
-    }
-
-    if (!consumeUse()) return;
-
-    const recognition =
-      new SpeechRecognition();
-
-    recognition.lang = "en-IN";
-
-    recognition.interimResults = false;
-
-    recognition.maxAlternatives = 1;
-
-    document.getElementById("jokeStatus").textContent =
-      "🎤 Listening... tell me a joke.";
-
-    trackEvent("funbox_joke_voice");
-
-    recognition.start();
-
-    recognition.onresult = function(event) {
-
-      const spoken =
-        event.results[0][0].transcript;
-
-      /*
-        IMPORTANT:
-        We intentionally DO NOT send the spoken joke
-        to Google Analytics.
-      */
-
-      processJoke(spoken);
-
-    };
-
-    recognition.onerror = function() {
-
-      document.getElementById("jokeStatus").textContent =
-        "Couldn't hear that. Try again.";
-
-    };
-
+    input.value = "";
   }
 
 
@@ -1965,25 +2033,20 @@
 
   function redeemCode() {
 
-    const input =
-      document.getElementById("codeInput");
-
-    const code =
-      input.value.trim();
+    const input = document.getElementById("codeInput");
+    const code = input.value.trim().toUpperCase();
+    const result = document.getElementById("codeResult");
 
     if (!code) {
-
-      document.getElementById("codeResult").textContent =
-        "Enter a code.";
-
+      result.textContent = "Enter a code.";
       return;
-
     }
 
-    /*
-      Client-side demo access system.
-      Do NOT use this as secure authentication.
-    */
+    if (code !== selectedMakerName) {
+      result.textContent = "❌ Wrong code.";
+      trackEvent("funbox_code_failed", { access_type: "unlimited" });
+      return;
+    }
 
     unlimitedUntil =
       Date.now() +
@@ -1994,27 +2057,18 @@
       unlimitedUntil
     );
 
-    document.getElementById("codeResult").textContent =
+    result.textContent =
       "✅ 24-hour unlimited access activated!";
 
-    /*
-      Never send the actual code to Analytics.
-    */
-
     trackEvent("funbox_code_redeemed", {
-
       access_type: "unlimited"
-
     });
 
     updateAccessStatus();
-
     addPoints(15, "code_redeemed");
 
     setTimeout(() => {
-
       closeCodeModal();
-
     }, 900);
 
   }
@@ -2075,11 +2129,11 @@
     trackEvent("funbox_challenge_complete", {
 
       challenge_type: "daily_generator",
-      reward: 25
+      reward: 15
 
     });
 
-    alert("🏆 Daily Challenge complete! +25 points.");
+    alert("🏆 Daily Challenge complete! +15 points.");
 
   }
 
@@ -2169,9 +2223,8 @@
       setTimeout(showAccessExpired, 500);
     }
 
-    renderJokeSecret();
-
     newGuessGame();
+    newCodeGame();
 
   }
 
