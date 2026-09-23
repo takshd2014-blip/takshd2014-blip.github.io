@@ -821,6 +821,7 @@
 
       <div class="buttons" style="justify-content:center;">
         <button class="btn" onclick="checkJokeForCode()">😂 Check Joke</button>
+        <button class="btn secondary" onclick="startVoiceJoke()">🎤 Bolke Check</button>
         <button class="btn secondary" onclick="newCodeGame()">🔄 New Code</button>
       </div>
 
@@ -837,6 +838,8 @@
         <button id="speedNormal" class="btn secondary speed-btn active" onclick="setCodeSpeed('normal')">⚡ Normal</button>
         <button id="speedFast" class="btn secondary speed-btn" onclick="setCodeSpeed('fast')">🔥 Fast</button>
       </div>
+
+      <div id="voiceStatus" class="code-status"></div>
 
       <div id="codeStatus" class="code-status">
         Joke likho aur Check Joke dabao.
@@ -2005,6 +2008,65 @@
     }
 
     input.value = "";
+  }
+
+
+  /* =========================================================
+     VOICE JOKE CHECK
+  ========================================================== */
+
+  function startVoiceJoke() {
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    const status = document.getElementById("voiceStatus");
+
+    if (!SpeechRecognition) {
+      status.textContent =
+        "🎤 Voice recognition browser mein supported nahi hai. Chrome try karo.";
+      return;
+    }
+
+    status.textContent = "🎤 Listening... joke bolo.";
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function(event) {
+      const spoken = event.results[0][0].transcript;
+
+      document.getElementById("jokeInput").value = spoken;
+      status.textContent = "✅ Joke suna: checking...";
+
+      checkJokeForCode();
+
+      setTimeout(() => {
+        if (document.getElementById("voiceStatus")) {
+          document.getElementById("voiceStatus").textContent =
+            "🎤 Voice check complete.";
+        }
+      }, 700);
+    };
+
+    recognition.onerror = function() {
+      status.textContent =
+        "❌ Voice clear nahi mili. Dobara Bolke Check dabao.";
+    };
+
+    recognition.onend = function() {
+      if (status.textContent === "🎤 Listening... joke bolo.") {
+        status.textContent = "🎤 Listening stopped.";
+      }
+    };
+
+    try {
+      recognition.start();
+    } catch (e) {
+      status.textContent = "🎤 Voice start nahi ho payi. Dobara try karo.";
+    }
   }
 
 
