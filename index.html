@@ -1393,6 +1393,8 @@
 
     });
 
+    if (window.funboxCloudSave) window.funboxCloudSave();
+
   }
 
 
@@ -1422,6 +1424,8 @@
 
     });
 
+    if (window.funboxCloudSave) window.funboxCloudSave();
+
   }
 
 
@@ -1446,6 +1450,8 @@
         STORAGE.useDate,
         today
       );
+
+      if (window.funboxCloudSave) window.funboxCloudSave();
 
     }
 
@@ -1517,6 +1523,7 @@
 
       localStorage.setItem(STORAGE.uses, String(uses));
       updateAccessStatus();
+      if (window.funboxCloudSave) window.funboxCloudSave();
 
       // Show the popup immediately after the 3rd free use.
       if (uses >= 3 && extraUses <= 0) {
@@ -1532,6 +1539,7 @@
       extraUses--;
       localStorage.setItem(STORAGE.extraUses, String(extraUses));
       updateAccessStatus();
+      if (window.funboxCloudSave) window.funboxCloudSave();
 
       if (uses >= 3 && extraUses <= 0) {
         setTimeout(showAccessExpired, 450);
@@ -1609,6 +1617,7 @@
     );
 
     renderRecent();
+    if (window.funboxCloudSave) window.funboxCloudSave();
 
   }
 
@@ -2138,6 +2147,7 @@
 
     updateAccessStatus();
     addPoints(15, "code_redeemed");
+    if (window.funboxCloudSave) window.funboxCloudSave();
 
     setTimeout(() => {
       closeCodeModal();
@@ -2197,6 +2207,7 @@
     addPoints(15, "daily_challenge");
 
     renderChallenge();
+    if (window.funboxCloudSave) window.funboxCloudSave();
 
     trackEvent("funbox_challenge_complete", {
 
@@ -2267,12 +2278,63 @@
       streak
     );
 
+    if (window.funboxCloudSave) window.funboxCloudSave();
+
   }
 
 
   /* =========================================================
      INITIALIZE
   ========================================================== */
+
+  /* =========================================================
+     FIRESTORE ACCOUNT SYNC BRIDGE
+  ========================================================== */
+
+  window.getFunboxCloudState = function () {
+    return {
+      points: points,
+      streak: streak,
+      lastDay: localStorage.getItem(STORAGE.lastDay) || "",
+      tone: tone,
+      uses: uses,
+      useDate: localStorage.getItem(STORAGE.useDate) || getToday(),
+      extraUses: extraUses,
+      unlimitedUntil: unlimitedUntil,
+      recent: JSON.parse(localStorage.getItem(STORAGE.recent) || "[]"),
+      challenge: localStorage.getItem(STORAGE.challenge) || "",
+      rewards: JSON.parse(localStorage.getItem(STORAGE.rewards) || "{}")
+    };
+  };
+
+  window.applyFunboxCloudState = function (data) {
+    if (!data) return;
+
+    points = Number(data.points || 0);
+    streak = Number(data.streak || 0);
+    tone = Math.max(0, Math.min(5, Number(data.tone || 0)));
+    uses = Number(data.uses || 0);
+    extraUses = Number(data.extraUses || 0);
+    unlimitedUntil = Number(data.unlimitedUntil || 0);
+
+    localStorage.setItem(STORAGE.points, String(points));
+    localStorage.setItem(STORAGE.streak, String(streak));
+    localStorage.setItem(STORAGE.tone, String(tone));
+    localStorage.setItem(STORAGE.uses, String(uses));
+    localStorage.setItem(STORAGE.extraUses, String(extraUses));
+    localStorage.setItem(STORAGE.unlimited, String(unlimitedUntil));
+    localStorage.setItem(STORAGE.lastDay, data.lastDay || "");
+    localStorage.setItem(STORAGE.useDate, data.useDate || getToday());
+    localStorage.setItem(STORAGE.recent, JSON.stringify(Array.isArray(data.recent) ? data.recent.slice(0,8) : []));
+    localStorage.setItem(STORAGE.challenge, data.challenge || "");
+    localStorage.setItem(STORAGE.rewards, JSON.stringify(data.rewards || {}));
+
+    renderProfile();
+    renderRecent();
+    renderChallenge();
+    updateAccessStatus();
+    changeTone(tone);
+  };
 
   function init() {
 
@@ -2309,6 +2371,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtnob7lOAb7RCOz5sqssgMNI9gvBUf4wM",
@@ -2320,8 +2383,60 @@
   };
   const firebaseReady = !firebaseConfig.apiKey.startsWith("PASTE_");
   let auth = null;
-  if(firebaseReady){ auth=getAuth(initializeApp(firebaseConfig)); }
+  let db = null;
+  let cloudUid = null;
+  let cloudSaveTimer = null;
+  let cloudApplying = false;
+
+  if(firebaseReady){
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  }
+
   const statusEl=()=>document.getElementById('authStatus');
+
+  async function loadFunboxCloudData(user){
+    if(!db || !user) return;
+    cloudUid = user.uid;
+    try {
+      const ref = doc(db, 'users', user.uid);
+      const snap = await getDoc(ref);
+
+      if (snap.exists()) {
+        cloudApplying = true;
+        window.applyFunboxCloudState(snap.data());
+        cloudApplying = false;
+        statusEl().textContent = '☁️ Synced: ' + (user.displayName || user.email);
+      } else {
+        await saveFunboxCloudData(user.uid);
+        statusEl().textContent = '☁️ Cloud profile created: ' + (user.displayName || user.email);
+      }
+    } catch(e) {
+      cloudApplying = false;
+      console.error('Firestore load error', e);
+      statusEl().textContent = '⚠️ Cloud sync failed: ' + e.message;
+    }
+  }
+
+  async function saveFunboxCloudData(uid = cloudUid){
+    if(!db || !uid || cloudApplying) return;
+    const data = window.getFunboxCloudState();
+    data.updatedAt = serverTimestamp();
+    try {
+      await setDoc(doc(db, 'users', uid), data, { merge: true });
+    } catch(e) {
+      console.error('Firestore save error', e);
+      const el = statusEl();
+      if(el) el.textContent = '⚠️ Cloud save failed: ' + e.message;
+    }
+  }
+
+  window.funboxCloudSave = function(){
+    if(!cloudUid || cloudApplying) return;
+    clearTimeout(cloudSaveTimer);
+    cloudSaveTimer = setTimeout(() => saveFunboxCloudData(), 350);
+  };
   window.signupAccount=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir signup chalega.';
     const email=authEmail.value.trim(), pass=authPassword.value, username=authUsername.value.trim()||'FunBox User';
@@ -2336,7 +2451,14 @@
     try{const c=await signInWithPopup(auth,new GoogleAuthProvider()); statusEl().textContent='Logged in: '+(c.user.displayName||c.user.email);}catch(e){statusEl().textContent=e.message;}
   };
   window.logoutAccount=async()=>{if(auth){await signOut(auth);statusEl().textContent='Logged out';}};
-  if(auth) onAuthStateChanged(auth,u=>{statusEl().textContent=u?'Signed in: '+(u.displayName||u.email):'Not signed in';});
+  if(auth) onAuthStateChanged(auth, async u=>{
+    if(u){
+      await loadFunboxCloudData(u);
+    } else {
+      cloudUid = null;
+      statusEl().textContent='Not signed in';
+    }
+  });
 
   const themeInput=document.getElementById('themeImage');
   const themeStatus=document.getElementById('themeStatus');
