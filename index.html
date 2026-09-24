@@ -594,7 +594,7 @@
   <section class="card">
 
     <h2>🎮 Your FunBox Profile</h2>
-    <p class="muted">Your progress is saved on this device.</p>
+    <p class="muted">☁️ Your progress syncs across devices when you are signed in.</p>
 
     <div class="profile" style="margin-top:15px;">
 
@@ -2371,7 +2371,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtnob7lOAb7RCOz5sqssgMNI9gvBUf4wM",
@@ -2396,22 +2396,64 @@
 
   const statusEl=()=>document.getElementById('authStatus');
 
+  let cloudUnsubscribe = null;
+
+  function mergeCloudStateWithLocal(data){
+    const localPoints = Number(localStorage.getItem(STORAGE.points) || 0);
+    const localStreak = Number(localStorage.getItem(STORAGE.streak) || 0);
+    const localExtraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
+    const localUnlimited = Number(localStorage.getItem(STORAGE.unlimited) || 0);
+
+    const cloudRewards = (data && data.rewards && typeof data.rewards === 'object') ? data.rewards : {};
+    const localRewards = JSON.parse(localStorage.getItem(STORAGE.rewards) || '{}');
+    const rewards = {...localRewards, ...cloudRewards};
+
+    return {
+      ...data,
+      points: Math.max(Number(data?.points || 0), localPoints),
+      streak: Math.max(Number(data?.streak || 0), localStreak),
+      extraUses: Math.max(Number(data?.extraUses || 0), localExtraUses),
+      unlimitedUntil: Math.max(Number(data?.unlimitedUntil || 0), localUnlimited),
+      rewards
+    };
+  }
+
   async function loadFunboxCloudData(user){
     if(!db || !user) return;
     cloudUid = user.uid;
+    if(cloudUnsubscribe) { cloudUnsubscribe(); cloudUnsubscribe = null; }
+
     try {
       const ref = doc(db, 'users', user.uid);
-      const snap = await getDoc(ref);
+      const firstSnap = await getDoc(ref);
 
-      if (snap.exists()) {
-        cloudApplying = true;
-        window.applyFunboxCloudState(snap.data());
-        cloudApplying = false;
-        statusEl().textContent = '☁️ Synced: ' + (user.displayName || user.email);
-      } else {
+      if (!firstSnap.exists()) {
+        // First login: migrate this device's existing progress to the cloud.
         await saveFunboxCloudData(user.uid);
-        statusEl().textContent = '☁️ Cloud profile created: ' + (user.displayName || user.email);
+      } else {
+        cloudApplying = true;
+        window.applyFunboxCloudState(mergeCloudStateWithLocal(firstSnap.data()));
+        cloudApplying = false;
+        // If this device had newer monotonic progress, push the merged result.
+        await saveFunboxCloudData(user.uid);
       }
+
+      statusEl().textContent = '☁️ Synced: ' + (user.displayName || user.email);
+
+      // Real-time sync: changes made on another browser/device appear here automatically.
+      cloudUnsubscribe = onSnapshot(ref, snap => {
+        if(!snap.exists() || cloudApplying) return;
+        cloudApplying = true;
+        try {
+          window.applyFunboxCloudState(snap.data());
+          statusEl().textContent = '☁️ Synced: ' + (user.displayName || user.email);
+        } finally {
+          cloudApplying = false;
+        }
+      }, err => {
+        console.error('Firestore realtime sync error', err);
+        statusEl().textContent = '⚠️ Realtime sync failed: ' + err.message;
+      });
     } catch(e) {
       cloudApplying = false;
       console.error('Firestore load error', e);
@@ -2425,6 +2467,7 @@
     data.updatedAt = serverTimestamp();
     try {
       await setDoc(doc(db, 'users', uid), data, { merge: true });
+      statusEl().textContent = '☁️ Synced: ' + (auth?.currentUser?.displayName || auth?.currentUser?.email || 'Account');
     } catch(e) {
       console.error('Firestore save error', e);
       const el = statusEl();
@@ -2437,6 +2480,16 @@
     clearTimeout(cloudSaveTimer);
     cloudSaveTimer = setTimeout(() => saveFunboxCloudData(), 350);
   };
+
+  // Safety net: every FunBox local state write also schedules a cloud save.
+  // This keeps XP, streaks, uses, rewards, tone, challenge and recent data synced.
+  const originalSetItem = localStorage.setItem.bind(localStorage);
+  localStorage.setItem = function(key, value){
+    originalSetItem(key, value);
+    if(!cloudApplying && cloudUid && String(key).startsWith('funbox')) {
+      window.funboxCloudSave();
+    }
+  };
   window.signupAccount=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir signup chalega.';
     const email=authEmail.value.trim(), pass=authPassword.value, username=authUsername.value.trim()||'FunBox User';
@@ -2448,9 +2501,16 @@
   };
   window.googleLogin=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir Google login chalega.';
-    try{const c=await signInWithPopup(auth,new GoogleAuthProvider()); statusEl().textContent='Logged in: '+(c.user.displayName||c.user.email);}catch(e){statusEl().textContent=e.message;}
+    try{
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({prompt:'select_account'});
+      const c=await signInWithPopup(auth,provider);
+      statusEl().textContent='Logged in: '+(c.user.displayName||c.user.email);
+    }catch(e){
+      statusEl().textContent='Google login failed: '+(e.code||e.message);
+    }
   };
-  window.logoutAccount=async()=>{if(auth){await signOut(auth);statusEl().textContent='Logged out';}};
+  window.logoutAccount=async()=>{if(cloudUnsubscribe){cloudUnsubscribe();cloudUnsubscribe=null;} if(auth){await signOut(auth);statusEl().textContent='Logged out';}};
   if(auth) onAuthStateChanged(auth, async u=>{
     if(u){
       await loadFunboxCloudData(u);
