@@ -821,7 +821,7 @@
 
       <div class="buttons" style="justify-content:center;">
         <button class="btn" onclick="checkJokeForCode()">😂 Check Joke</button>
-        <button class="btn secondary" onclick="startVoiceJoke()">🎤 Bolke Check</button>
+        <button class="btn secondary" onclick="startVoiceJoke()">🎤 Bolke ke batao</button>
         <button class="btn secondary" onclick="newCodeGame()">🔄 New Code</button>
       </div>
 
@@ -853,37 +853,47 @@
 
 
   <!-- =========================
-       REWARDS
+       MILESTONES
   ========================== -->
 
   <section class="card">
 
-    <h2>🎁 Rewards</h2>
+    <h2>🏆 FunBox Milestones</h2>
 
     <p class="muted">
-      Earn points and unlock bonuses.
+      Earn XP and unlock these milestones as you progress.
     </p>
 
     <div class="rewards" style="margin-top:15px;">
 
       <div class="reward">
-        <strong>100</strong>
-        <span>+1 Extra Use</span>
+        <strong>100 XP</strong>
+        <span>🎟️ +1 Extra Use</span>
       </div>
 
       <div class="reward">
-        <strong>250</strong>
-        <span>Special Theme</span>
+        <strong>500 XP</strong>
+        <span>🖼️ Custom Theme</span>
       </div>
 
       <div class="reward">
-        <strong>500</strong>
-        <span>Chaos Master</span>
+        <strong>1000 XP</strong>
+        <span>🏅 Special Badge</span>
       </div>
 
       <div class="reward">
-        <strong>1000</strong>
-        <span>Legend</span>
+        <strong>2000 XP</strong>
+        <span>🌪️ Chaos Mode</span>
+      </div>
+
+      <div class="reward">
+        <strong>3500 XP</strong>
+        <span>🔐 Secret Feature</span>
+      </div>
+
+      <div class="reward">
+        <strong>5000 XP</strong>
+        <span>👑 Legend</span>
       </div>
 
     </div>
@@ -2053,7 +2063,7 @@
 
     recognition.onerror = function() {
       status.textContent =
-        "❌ Voice clear nahi mili. Dobara Bolke Check dabao.";
+        "❌ Voice clear nahi mili. Dobara 🎤 Bolke ke batao dabao.";
     };
 
     recognition.onend = function() {
