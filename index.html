@@ -323,6 +323,78 @@
       color: #666;
     }
 
+
+    /* =========================
+       MINI GAMES
+    ========================== */
+
+    .mini-games {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 15px;
+    }
+
+    .mini-game {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .mini-game h3 {
+      margin-bottom: 7px;
+    }
+
+    .mini-game .muted {
+      min-height: 38px;
+    }
+
+    .game-answer {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 11px;
+      border: 1px solid #333;
+      background: #111;
+      color: #fff;
+      outline: none;
+    }
+
+    .game-answer:focus {
+      border-color: #a855f7;
+    }
+
+    .game-status {
+      min-height: 42px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 11px;
+      background: rgba(0,0,0,.2);
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .mini-game .btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .ten-sec-timer {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 800;
+      margin: 14px 0;
+      color: #d8a8ff;
+    }
+
+    @media (max-width: 850px) {
+      .mini-games {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* =========================
        GUESS GAME
     ========================== */
@@ -818,6 +890,106 @@
 
 
   <!-- =========================
+       MINI GAMES
+  ========================== -->
+
+  <section class="card">
+
+    <h2>🎮 Quick Mini Games</h2>
+    <p class="muted">
+      3 tiny games. Fast fun. Extra XP.
+    </p>
+
+    <div class="mini-games">
+
+      <div class="mini-game">
+        <h3>🧩 Riddle Rush</h3>
+        <p class="muted">Riddle solve karo. Correct answer = +10 XP.</p>
+
+        <div id="riddleText" class="game-status">
+          Loading riddle...
+        </div>
+
+        <input
+          id="riddleInput"
+          class="game-answer"
+          placeholder="Your answer"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter') checkRiddle()"
+        >
+
+        <button class="btn" onclick="checkRiddle()">
+          Check Answer
+        </button>
+
+        <button class="btn secondary" onclick="newRiddle()">
+          New Riddle
+        </button>
+
+        <div id="riddleStatus" class="game-status">
+          Good luck.
+        </div>
+      </div>
+
+
+      <div class="mini-game">
+        <h3>🕵️ Who Am I?</h3>
+        <p class="muted">Clues padho aur hidden character guess karo.</p>
+
+        <div id="whoText" class="game-status">
+          Loading clues...
+        </div>
+
+        <input
+          id="whoInput"
+          class="game-answer"
+          placeholder="Your guess"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter') checkWhoAmI()"
+        >
+
+        <button class="btn" onclick="checkWhoAmI()">
+          Guess
+        </button>
+
+        <button class="btn secondary" onclick="newWhoAmI()">
+          New Character
+        </button>
+
+        <div id="whoStatus" class="game-status">
+          3 clues. One answer.
+        </div>
+      </div>
+
+
+      <div class="mini-game">
+        <h3>⏱️ 10-Second Challenge</h3>
+        <p class="muted">Timer start karo. 10 seconds ke andar button hit karo.</p>
+
+        <div id="tenSecTimer" class="ten-sec-timer">
+          Ready
+        </div>
+
+        <button class="btn" onclick="startTenSecondChallenge()">
+          Start
+        </button>
+
+        <button class="btn secondary" onclick="hitTenSecondChallenge()">
+          I Did It
+        </button>
+
+        <div id="tenSecStatus" class="game-status">
+          Start dabao. Timer secretly count hoga.
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
        ACCESS CODE + FIND GAME
   ========================== -->
 
@@ -968,7 +1140,7 @@
     <p class="muted" style="line-height:1.7;">
       FunBox is a browser-based entertainment project with random generators,
       mini games, jokes and challenges.
-      Your profile data is stored locally in your browser.
+      Your profile data is stored locally and can sync through your signed-in FunBox account.
     </p>
 
   </section>
@@ -1936,6 +2108,252 @@
 
 
   /* =========================================================
+     QUICK MINI GAMES
+  ========================================================== */
+
+  const riddleGames = [
+    {
+      q: "Main bolta nahi, phir bhi answer deta hoon. Main kya hoon?",
+      a: ["google", "search", "search engine"]
+    },
+    {
+      q: "Jitna zyada nikaloge, utna hi bada hota jaunga. Main kya hoon?",
+      a: ["hole", "gaddha", "pit"]
+    },
+    {
+      q: "Mere paas keys hain, par locks nahi. Main kya hoon?",
+      a: ["keyboard"]
+    },
+    {
+      q: "Main toot sakta hoon bina touch kiye. Main kya hoon?",
+      a: ["promise", "vaada", "promise"]
+    }
+  ];
+
+  const whoGames = [
+    {
+      clues: [
+        "Main ek fictional yellow character hoon.",
+        "Mujhe pineapple ghar bahut pasand hai.",
+        "Mera best friend ek starfish hai."
+      ],
+      a: ["spongebob", "sponge bob", "spongebob squarepants"]
+    },
+    {
+      clues: [
+        "Main ek famous fictional detective hoon.",
+        "Meri observation skills kaafi strong hain.",
+        "Mera naam London se strongly associated hai."
+      ],
+      a: ["sherlock holmes", "sherlock"]
+    },
+    {
+      clues: [
+        "Main ek wizarding world ka famous student hoon.",
+        "Mere forehead par lightning-shaped scar hai.",
+        "Mere glasses round hain."
+      ],
+      a: ["harry potter", "harry"]
+    }
+  ];
+
+  let currentRiddle = 0;
+  let currentWho = 0;
+  let tenSecStartedAt = 0;
+  let tenSecActive = false;
+  let tenSecTimer = null;
+
+  function normalizeGameAnswer(value) {
+    return String(value)
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, " ");
+  }
+
+  function newRiddle() {
+    currentRiddle = Math.floor(Math.random() * riddleGames.length);
+
+    const game = riddleGames[currentRiddle];
+
+    document.getElementById("riddleText").textContent =
+      "❓ " + game.q;
+
+    document.getElementById("riddleInput").value = "";
+
+    document.getElementById("riddleStatus").textContent =
+      "Answer do. No cheating, browser ko pata hai. 😭";
+
+    trackEvent("funbox_mini_game_started", {
+      game: "riddle"
+    });
+  }
+
+  function checkRiddle() {
+    const input = document.getElementById("riddleInput");
+    const status = document.getElementById("riddleStatus");
+    const answer = normalizeGameAnswer(input.value);
+
+    if (!answer) {
+      status.textContent = "Pehle answer likho.";
+      return;
+    }
+
+    const correct = riddleGames[currentRiddle].a
+      .some(item => normalizeGameAnswer(item) === answer);
+
+    if (correct) {
+      status.textContent = "🎉 Correct! +10 XP";
+      addPoints(10, "riddle_win");
+
+      trackEvent("funbox_mini_game_win", {
+        game: "riddle"
+      });
+
+      input.value = "";
+      return;
+    }
+
+    status.textContent =
+      "❌ Nope. Dobara try karo ya New Riddle dabao.";
+
+    trackEvent("funbox_mini_game_miss", {
+      game: "riddle"
+    });
+  }
+
+
+  function newWhoAmI() {
+    currentWho = Math.floor(Math.random() * whoGames.length);
+
+    const game = whoGames[currentWho];
+
+    document.getElementById("whoText").innerHTML =
+      "🔎 " +
+      game.clues
+        .map((clue, index) => (index + 1) + ". " + clue)
+        .join("<br>");
+
+    document.getElementById("whoInput").value = "";
+
+    document.getElementById("whoStatus").textContent =
+      "Who am I? Guess karo.";
+
+    trackEvent("funbox_mini_game_started", {
+      game: "who_am_i"
+    });
+  }
+
+  function checkWhoAmI() {
+    const input = document.getElementById("whoInput");
+    const status = document.getElementById("whoStatus");
+    const answer = normalizeGameAnswer(input.value);
+
+    if (!answer) {
+      status.textContent = "Guess likho pehle.";
+      return;
+    }
+
+    const correct = whoGames[currentWho].a
+      .some(item => normalizeGameAnswer(item) === answer);
+
+    if (correct) {
+      status.textContent = "🎯 Correct! +10 XP";
+      addPoints(10, "who_am_i_win");
+
+      trackEvent("funbox_mini_game_win", {
+        game: "who_am_i"
+      });
+
+      input.value = "";
+      return;
+    }
+
+    status.textContent =
+      "❌ Wrong guess. Clues ko dobara dekho.";
+
+    trackEvent("funbox_mini_game_miss", {
+      game: "who_am_i"
+    });
+  }
+
+
+  function startTenSecondChallenge() {
+    clearInterval(tenSecTimer);
+
+    tenSecStartedAt = performance.now();
+    tenSecActive = true;
+
+    document.getElementById("tenSecTimer").textContent = "GO!";
+
+    document.getElementById("tenSecStatus").textContent =
+      "⏱️ Ab I Did It dabao. 10 seconds ke andar.";
+
+    tenSecTimer = setInterval(() => {
+      if (!tenSecActive) {
+        clearInterval(tenSecTimer);
+        return;
+      }
+
+      const elapsed = (performance.now() - tenSecStartedAt) / 1000;
+
+      document.getElementById("tenSecTimer").textContent =
+        elapsed.toFixed(1) + "s";
+
+      if (elapsed >= 10) {
+        tenSecActive = false;
+        clearInterval(tenSecTimer);
+
+        document.getElementById("tenSecTimer").textContent = "10.0s";
+
+        document.getElementById("tenSecStatus").textContent =
+          "⌛ Time! Close enough. Phir try karo.";
+
+        trackEvent("funbox_mini_game_timeout", {
+          game: "ten_second"
+        });
+      }
+    }, 50);
+
+    trackEvent("funbox_mini_game_started", {
+      game: "ten_second"
+    });
+  }
+
+  function hitTenSecondChallenge() {
+    if (!tenSecActive) {
+      document.getElementById("tenSecStatus").textContent =
+        "Pehle Start dabao.";
+      return;
+    }
+
+    const elapsed = (performance.now() - tenSecStartedAt) / 1000;
+
+    tenSecActive = false;
+    clearInterval(tenSecTimer);
+
+    document.getElementById("tenSecTimer").textContent =
+      elapsed.toFixed(2) + "s";
+
+    if (elapsed <= 10) {
+      document.getElementById("tenSecStatus").textContent =
+        "🔥 Nice! +10 XP";
+
+      addPoints(10, "ten_second_win");
+
+      trackEvent("funbox_mini_game_win", {
+        game: "ten_second",
+        elapsed_seconds: Number(elapsed.toFixed(2))
+      });
+    } else {
+      document.getElementById("tenSecStatus").textContent =
+        "⌛ Too late. Try again.";
+    }
+  }
+
+
+
+  /* =========================================================
      ACCESS CODE / JOKE CHECK GAME
   ========================================================== */
 
@@ -2284,7 +2702,7 @@
     } else {
 
       text.textContent =
-        "Use any FunBox generator today and claim your bonus.";
+        "Use any FunBox generator today, then claim your +15 XP bonus.";
 
     }
 
@@ -2465,6 +2883,8 @@
 
     newGuessGame();
     newCodeGame();
+    newRiddle();
+    newWhoAmI();
 
   }
 
