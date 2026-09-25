@@ -27,6 +27,14 @@
   </script>
 
   <style>
+    html {
+      min-height: 100%;
+      height: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -41,7 +49,10 @@
         #07070b;
       color: #fff;
       min-height: 100vh;
+      height: auto;
       overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     button,
@@ -555,10 +566,48 @@
     .theme-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
     .theme-tools input[type=file]{max-width:100%}
     .locked{opacity:.55}
+  
+    /* =========================
+       QUICK SCROLL BUTTON
+    ========================== */
+    #quickScrollBottom {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 998;
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 50%;
+      background: rgba(18,18,24,.92);
+      color: #fff;
+      font-size: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+
+    #quickScrollBottom:active {
+      transform: scale(.94);
+    }
+
+    @media (max-width: 520px) {
+      #quickScrollBottom {
+        right: 12px;
+        bottom: 12px;
+        width: 48px;
+        height: 48px;
+      }
+    }
+
   </style>
 </head>
 
 <body>
+
+<!-- QUICK SCROLL TO BOTTOM -->
+<button id="quickScrollBottom" type="button" aria-label="Scroll to bottom" title="Neeche jao">⬇️</button>
+
+
 
 <div class="container">
 
@@ -850,7 +899,7 @@
        ACCESS CODE + FIND GAME
   ========================== -->
 
-  <section class="card">
+  <section class="card" id="accessCodeSection">
     <h2>🔑 Access Code</h2>
     <p class="muted">Code pata hai to direct enter karo. Nahi pata to neeche joke-check game se letters reveal karo.</p>
 
@@ -1466,6 +1515,27 @@
 
   }
 
+
+
+  function scrollToAccessCode() {
+    const section = document.getElementById("accessCodeSection");
+    if (!section) return;
+
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+    // Small highlight so the destination is obvious.
+    section.style.transition = "box-shadow .25s ease, border-color .25s ease";
+    section.style.borderColor = "rgba(168,85,247,.65)";
+    section.style.boxShadow = "0 0 0 2px rgba(168,85,247,.18), 0 20px 60px rgba(168,85,247,.12)";
+
+    setTimeout(() => {
+      section.style.borderColor = "";
+      section.style.boxShadow = "";
+    }, 1800);
+  }
 
   function canUse() {
 
@@ -2345,11 +2415,6 @@
 
     updateAccessStatus();
 
-    // If the user already used all free uses, show the popup on page load too.
-    if (!hasUnlimitedAccess() && uses >= 3 && extraUses <= 0) {
-      setTimeout(showAccessExpired, 500);
-    }
-
     newGuessGame();
     newCodeGame();
 
@@ -2523,5 +2588,20 @@
   const oldRender=window.renderProfile;
   if(oldRender){window.renderProfile=function(){oldRender();updateThemeLock();};}
 </script>
+
+  <script>
+    (function () {
+      const btn = document.getElementById("quickScrollBottom");
+      if (!btn) return;
+
+      btn.addEventListener("click", function () {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth"
+        });
+      });
+    })();
+  </script>
+
 </body>
 </html>
