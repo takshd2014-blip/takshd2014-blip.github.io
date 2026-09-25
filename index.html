@@ -290,6 +290,20 @@
        RESULT
     ========================== */
 
+    /* =========================
+       SHARE RESULT
+    ========================== */
+
+    .share-result-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .share-result-btn {
+      min-width: 170px;
+    }
+
     .result {
       margin-top: 18px;
       min-height: 80px;
@@ -755,6 +769,12 @@
 
     <div id="result" class="result empty">
       Your result will appear here...
+    </div>
+
+    <div class="share-result-wrap">
+      <button class="btn secondary share-result-btn" onclick="shareResult()">
+        📤 Share Result
+      </button>
     </div>
 
   </section>
@@ -1708,6 +1728,92 @@
 
     });
 
+  }
+
+
+  /* =========================================================
+     SHARE RESULT
+  ========================================================== */
+
+  async function shareResult() {
+
+    const resultBox = document.getElementById("result");
+
+    if (!resultBox || resultBox.classList.contains("empty")) {
+      alert("Pehle koi FunBox result generate karo.");
+      return;
+    }
+
+    const resultText = resultBox.textContent.trim();
+
+    if (!resultText) {
+      alert("Pehle koi FunBox result generate karo.");
+      return;
+    }
+
+    const shareText =
+      "😂 FunBox Result:\n\n" +
+      resultText +
+      "\n\nTry FunBox: " +
+      window.location.href;
+
+    try {
+
+      if (navigator.share) {
+
+        await navigator.share({
+          title: "FunBox Result",
+          text: shareText
+        });
+
+        trackEvent("funbox_result_shared", {
+          method: "native_share"
+        });
+
+        return;
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+
+        await navigator.clipboard.writeText(shareText);
+
+        trackEvent("funbox_result_shared", {
+          method: "clipboard"
+        });
+
+        alert("📋 Result copy ho gaya! Ab jahan chaho paste/share karo.");
+        return;
+      }
+
+      const textarea = document.createElement("textarea");
+
+      textarea.value = shareText;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      document.execCommand("copy");
+      textarea.remove();
+
+      trackEvent("funbox_result_shared", {
+        method: "fallback_copy"
+      });
+
+      alert("📋 Result copy ho gaya!");
+
+    } catch (error) {
+
+      if (error && error.name === "AbortError") {
+        return;
+      }
+
+      console.error("Share/copy failed:", error);
+
+      alert("Share nahi ho paya. Result manually copy kar lo.");
+    }
   }
 
 
