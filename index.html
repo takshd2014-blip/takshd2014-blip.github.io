@@ -2281,13 +2281,19 @@
   function startTenSecondChallenge() {
     clearInterval(tenSecTimer);
 
+    // Har round mein random target time: 3.0s se 10.0s.
+    const targetSeconds =
+      Number((Math.random() * 7 + 3).toFixed(1));
+
     tenSecStartedAt = performance.now();
     tenSecActive = true;
 
-    document.getElementById("tenSecTimer").textContent = "GO!";
+    document.getElementById("tenSecTimer").textContent =
+      "GO!";
 
     document.getElementById("tenSecStatus").textContent =
-      "⏱️ Ab I Did It dabao. 10 seconds ke andar.";
+      "⏱️ Target: " + targetSeconds.toFixed(1) +
+      "s — I Did It dabao!";
 
     tenSecTimer = setInterval(() => {
       if (!tenSecActive) {
@@ -2295,28 +2301,35 @@
         return;
       }
 
-      const elapsed = (performance.now() - tenSecStartedAt) / 1000;
+      const elapsed =
+        (performance.now() - tenSecStartedAt) / 1000;
 
       document.getElementById("tenSecTimer").textContent =
         elapsed.toFixed(1) + "s";
 
-      if (elapsed >= 10) {
+      if (elapsed >= targetSeconds) {
         tenSecActive = false;
         clearInterval(tenSecTimer);
 
-        document.getElementById("tenSecTimer").textContent = "10.0s";
+        document.getElementById("tenSecTimer").textContent =
+          targetSeconds.toFixed(1) + "s";
 
         document.getElementById("tenSecStatus").textContent =
-          "⌛ Time! Close enough. Phir try karo.";
+          "⌛ Time! Target miss ho gaya. Phir try karo.";
 
         trackEvent("funbox_mini_game_timeout", {
-          game: "ten_second"
+          game: "ten_second",
+          target_seconds: targetSeconds
         });
       }
     }, 50);
 
+    // Current round ka target memory mein rakho.
+    window.funboxTenSecTarget = targetSeconds;
+
     trackEvent("funbox_mini_game_started", {
-      game: "ten_second"
+      game: "ten_second",
+      target_seconds: targetSeconds
     });
   }
 
@@ -2335,20 +2348,65 @@
     document.getElementById("tenSecTimer").textContent =
       elapsed.toFixed(2) + "s";
 
-    if (elapsed <= 10) {
-      document.getElementById("tenSecStatus").textContent =
-        "🔥 Nice! +10 XP";
+    const targetSeconds =
+      Number(window.funboxTenSecTarget || 10);
 
-      addPoints(10, "ten_second_win");
+    const difference =
+      Math.abs(elapsed - targetSeconds);
 
-      trackEvent("funbox_mini_game_win", {
-        game: "ten_second",
-        elapsed_seconds: Number(elapsed.toFixed(2))
-      });
-    } else {
-      document.getElementById("tenSecStatus").textContent =
-        "⌛ Too late. Try again.";
+    /*
+      XP closeness ke according:
+      <= 0.10s  → 10 XP
+      <= 0.25s  → 9 XP
+      <= 0.50s  → 8 XP
+      <= 1.00s  → 6 XP
+      <= 2.00s  → 4 XP
+      <= 3.00s  → 2 XP
+      uske baad → 1 XP
+
+      Matlab koi bhi valid number hit karoge,
+      reward milega — bas target ke jitna close,
+      utna zyada XP.
+    */
+
+    let earnedXP = 1;
+    let message = "😅 Nice try!";
+
+    if (difference <= 0.10) {
+      earnedXP = 10;
+      message = "🔥 VERY GOOD! Almost perfect!";
+    } else if (difference <= 0.25) {
+      earnedXP = 9;
+      message = "🔥 Excellent! Bahut close!";
+    } else if (difference <= 0.50) {
+      earnedXP = 8;
+      message = "👏 Great timing!";
+    } else if (difference <= 1.00) {
+      earnedXP = 6;
+      message = "😎 Good!";
+    } else if (difference <= 2.00) {
+      earnedXP = 4;
+      message = "👍 Decent!";
+    } else if (difference <= 3.00) {
+      earnedXP = 2;
+      message = "🙂 Thoda aur close!";
     }
+
+    addPoints(earnedXP, "ten_second_timing");
+
+    document.getElementById("tenSecStatus").textContent =
+      message +
+      " Target " + targetSeconds.toFixed(1) +
+      "s tha, tum " + elapsed.toFixed(2) +
+      "s par hit hue. +" + earnedXP + " XP";
+
+    trackEvent("funbox_mini_game_win", {
+      game: "ten_second",
+      target_seconds: targetSeconds,
+      elapsed_seconds: Number(elapsed.toFixed(2)),
+      difference_seconds: Number(difference.toFixed(2)),
+      earned_xp: earnedXP
+    });
   }
 
 
