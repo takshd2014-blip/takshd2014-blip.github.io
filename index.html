@@ -1521,12 +1521,25 @@
     const section = document.getElementById("accessCodeSection");
     if (!section) return;
 
-    section.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
+    // Force the actual page scroll position. scrollIntoView can fail when
+    // a browser is handling a nested scrolling context, so use the document
+    // scrolling element directly.
+    const scroller = document.scrollingElement || document.documentElement;
+    const top = Math.max(0, section.getBoundingClientRect().top + scroller.scrollTop - 12);
+
+    window.scrollTo({
+      top: top,
+      behavior: "smooth"
     });
 
-    // Small highlight so the destination is obvious.
+    // Fallback for browsers/webviews that ignore smooth window scrolling.
+    setTimeout(() => {
+      const nowTop = section.getBoundingClientRect().top;
+      if (Math.abs(nowTop) > 80) {
+        window.scrollTo(0, Math.max(0, section.getBoundingClientRect().top + (document.scrollingElement || document.documentElement).scrollTop - 12));
+      }
+    }, 700);
+
     section.style.transition = "box-shadow .25s ease, border-color .25s ease";
     section.style.borderColor = "rgba(168,85,247,.65)";
     section.style.boxShadow = "0 0 0 2px rgba(168,85,247,.18), 0 20px 60px rgba(168,85,247,.12)";
@@ -1613,6 +1626,12 @@
     }
 
     updateAccessStatus();
+
+    // Daily access khatam: popup nahi. Seedha Access Code section par le jao.
+    setTimeout(() => {
+      scrollToAccessCode();
+    }, 50);
+
     return false;
 
   }
@@ -1649,6 +1668,12 @@
 
     const freeLeft =
       Math.max(0, 5 - uses);
+
+    if (freeLeft <= 0 && extraUses <= 0) {
+      box.innerHTML =
+        '🔒 Access khatam. <button type="button" class="btn secondary" style="margin-left:8px;" onclick="scrollToAccessCode()">🔑 Get the Code</button>';
+      return;
+    }
 
     box.textContent =
       "🎟️ Free uses left today: " +
@@ -2398,6 +2423,18 @@
     updateAccessStatus();
     changeTone(tone);
   };
+
+  // Quick bottom button: this was missing a click handler in the previous file.
+  const quickScrollButton = document.getElementById("quickScrollBottom");
+  if (quickScrollButton) {
+    quickScrollButton.addEventListener("click", () => {
+      const scroller = document.scrollingElement || document.documentElement;
+      window.scrollTo({
+        top: scroller.scrollHeight,
+        behavior: "smooth"
+      });
+    });
+  }
 
   function init() {
 
