@@ -290,20 +290,6 @@
        RESULT
     ========================== */
 
-    /* =========================
-       SHARE RESULT
-    ========================== */
-
-    .share-result-wrap {
-      display: flex;
-      justify-content: center;
-      margin-top: 12px;
-    }
-
-    .share-result-btn {
-      min-width: 170px;
-    }
-
     .result {
       margin-top: 18px;
       min-height: 80px;
@@ -321,78 +307,6 @@
 
     .result.empty {
       color: #666;
-    }
-
-
-    /* =========================
-       MINI GAMES
-    ========================== */
-
-    .mini-games {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 15px;
-    }
-
-    .mini-game {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    .mini-game h3 {
-      margin-bottom: 7px;
-    }
-
-    .mini-game .muted {
-      min-height: 38px;
-    }
-
-    .game-answer {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 11px;
-      border: 1px solid #333;
-      background: #111;
-      color: #fff;
-      outline: none;
-    }
-
-    .game-answer:focus {
-      border-color: #a855f7;
-    }
-
-    .game-status {
-      min-height: 42px;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 11px;
-      background: rgba(0,0,0,.2);
-      color: #aaa;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .mini-game .btn {
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .ten-sec-timer {
-      text-align: center;
-      font-size: 30px;
-      font-weight: 800;
-      margin: 14px 0;
-      color: #d8a8ff;
-    }
-
-    @media (max-width: 850px) {
-      .mini-games {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* =========================
@@ -843,12 +757,6 @@
       Your result will appear here...
     </div>
 
-    <div class="share-result-wrap">
-      <button class="btn secondary share-result-btn" onclick="shareResult()">
-        📤 Share Result
-      </button>
-    </div>
-
   </section>
 
 
@@ -890,103 +798,52 @@
 
 
   <!-- =========================
-       MINI GAMES
+       MILESTONES
   ========================== -->
 
   <section class="card">
 
-    <h2>🎮 Quick Mini Games</h2>
+    <h2>🏆 FunBox Milestones</h2>
+
     <p class="muted">
-      3 tiny games. Fast fun. Extra XP.
+      Earn XP and unlock these milestones as you progress.
     </p>
 
-    <div class="mini-games">
+    <div class="rewards" style="margin-top:15px;">
 
-      <div class="mini-game">
-        <h3>🧩 Riddle Rush</h3>
-        <p class="muted">Riddle solve karo. Correct answer = +10 XP.</p>
-
-        <div id="riddleText" class="game-status">
-          Loading riddle...
-        </div>
-
-        <input
-          id="riddleInput"
-          class="game-answer"
-          placeholder="Your answer"
-          autocomplete="off"
-          onkeydown="if(event.key==='Enter') checkRiddle()"
-        >
-
-        <button class="btn" onclick="checkRiddle()">
-          Check Answer
-        </button>
-
-        <button class="btn secondary" onclick="newRiddle()">
-          New Riddle
-        </button>
-
-        <div id="riddleStatus" class="game-status">
-          Good luck.
-        </div>
+      <div class="reward">
+        <strong>100 XP</strong>
+        <span>🎟️ +1 Extra Use</span>
       </div>
 
-
-      <div class="mini-game">
-        <h3>🕵️ Who Am I?</h3>
-        <p class="muted">Clues padho aur hidden character guess karo.</p>
-
-        <div id="whoText" class="game-status">
-          Loading clues...
-        </div>
-
-        <input
-          id="whoInput"
-          class="game-answer"
-          placeholder="Your guess"
-          autocomplete="off"
-          onkeydown="if(event.key==='Enter') checkWhoAmI()"
-        >
-
-        <button class="btn" onclick="checkWhoAmI()">
-          Guess
-        </button>
-
-        <button class="btn secondary" onclick="newWhoAmI()">
-          New Character
-        </button>
-
-        <div id="whoStatus" class="game-status">
-          3 clues. One answer.
-        </div>
+      <div class="reward">
+        <strong>500 XP</strong>
+        <span>🖼️ Custom Theme</span>
       </div>
 
+      <div class="reward">
+        <strong>1000 XP</strong>
+        <span>🏅 Special Badge</span>
+      </div>
 
-      <div class="mini-game">
-        <h3>⏱️ 10-Second Challenge</h3>
-        <p class="muted">Timer start karo. 10 seconds ke andar button hit karo.</p>
+      <div class="reward">
+        <strong>2000 XP</strong>
+        <span>🌪️ Chaos Mode</span>
+      </div>
 
-        <div id="tenSecTimer" class="ten-sec-timer">
-          Ready
-        </div>
+      <div class="reward">
+        <strong>3500 XP</strong>
+        <span>🔐 Secret Feature</span>
+      </div>
 
-        <button class="btn" onclick="startTenSecondChallenge()">
-          Start
-        </button>
-
-        <button class="btn secondary" onclick="hitTenSecondChallenge()">
-          I Did It
-        </button>
-
-        <div id="tenSecStatus" class="game-status">
-          Start dabao. Timer secretly count hoga.
-        </div>
+      <div class="reward">
+        <strong>5000 XP</strong>
+        <span>👑 Legend</span>
       </div>
 
     </div>
 
   </section>
-
 
 
   <!-- =========================
@@ -1044,53 +901,6 @@
   </section>
 
 
-  <!-- =========================
-       MILESTONES
-  ========================== -->
-
-  <section class="card">
-
-    <h2>🏆 FunBox Milestones</h2>
-
-    <p class="muted">
-      Earn XP and unlock these milestones as you progress.
-    </p>
-
-    <div class="rewards" style="margin-top:15px;">
-
-      <div class="reward">
-        <strong>100 XP</strong>
-        <span>🎟️ +1 Extra Use</span>
-      </div>
-
-      <div class="reward">
-        <strong>500 XP</strong>
-        <span>🖼️ Custom Theme</span>
-      </div>
-
-      <div class="reward">
-        <strong>1000 XP</strong>
-        <span>🏅 Special Badge</span>
-      </div>
-
-      <div class="reward">
-        <strong>2000 XP</strong>
-        <span>🌪️ Chaos Mode</span>
-      </div>
-
-      <div class="reward">
-        <strong>3500 XP</strong>
-        <span>🔐 Secret Feature</span>
-      </div>
-
-      <div class="reward">
-        <strong>5000 XP</strong>
-        <span>👑 Legend</span>
-      </div>
-
-    </div>
-
-  </section>
 
 
   <!-- =========================
@@ -1102,7 +912,7 @@
     <h2>🔓 Daily Access</h2>
 
     <p class="muted">
-      You get 3 free uses every day. Rewards can give extra uses.
+      You get 5 free uses every day. Rewards can give extra uses.
     </p>
 
     <div id="accessStatus" class="result">
@@ -1140,7 +950,7 @@
     <p class="muted" style="line-height:1.7;">
       FunBox is a browser-based entertainment project with random generators,
       mini games, jokes and challenges.
-      Your profile data is stored locally and can sync through your signed-in FunBox account.
+      Your profile data is stored locally in your browser.
     </p>
 
   </section>
@@ -1663,7 +1473,7 @@
 
     if (hasUnlimitedAccess()) return true;
 
-    return uses < 3 || extraUses > 0;
+    return uses < 5 || extraUses > 0;
 
   }
 
@@ -1709,18 +1519,13 @@
 
     }
 
-    if (uses < 3) {
+    if (uses < 5) {
 
       uses++;
 
       localStorage.setItem(STORAGE.uses, String(uses));
       updateAccessStatus();
       if (window.funboxCloudSave) window.funboxCloudSave();
-
-      // Show the popup immediately after the 3rd free use.
-      if (uses >= 3 && extraUses <= 0) {
-        setTimeout(showAccessExpired, 450);
-      }
 
       return true;
 
@@ -1733,15 +1538,11 @@
       updateAccessStatus();
       if (window.funboxCloudSave) window.funboxCloudSave();
 
-      if (uses >= 3 && extraUses <= 0) {
-        setTimeout(showAccessExpired, 450);
-      }
-
       return true;
 
     }
 
-    showAccessExpired();
+    updateAccessStatus();
     return false;
 
   }
@@ -1777,12 +1578,12 @@
     }
 
     const freeLeft =
-      Math.max(0, 3 - uses);
+      Math.max(0, 5 - uses);
 
     box.textContent =
       "🎟️ Free uses left today: " +
       freeLeft +
-      " • Extra uses: " +
+      " / 5 • Extra uses: " +
       extraUses;
 
   }
@@ -1904,92 +1705,6 @@
 
 
   /* =========================================================
-     SHARE RESULT
-  ========================================================== */
-
-  async function shareResult() {
-
-    const resultBox = document.getElementById("result");
-
-    if (!resultBox || resultBox.classList.contains("empty")) {
-      alert("Pehle koi FunBox result generate karo.");
-      return;
-    }
-
-    const resultText = resultBox.textContent.trim();
-
-    if (!resultText) {
-      alert("Pehle koi FunBox result generate karo.");
-      return;
-    }
-
-    const shareText =
-      "😂 FunBox Result:\n\n" +
-      resultText +
-      "\n\nTry FunBox: " +
-      window.location.href;
-
-    try {
-
-      if (navigator.share) {
-
-        await navigator.share({
-          title: "FunBox Result",
-          text: shareText
-        });
-
-        trackEvent("funbox_result_shared", {
-          method: "native_share"
-        });
-
-        return;
-      }
-
-      if (navigator.clipboard && window.isSecureContext) {
-
-        await navigator.clipboard.writeText(shareText);
-
-        trackEvent("funbox_result_shared", {
-          method: "clipboard"
-        });
-
-        alert("📋 Result copy ho gaya! Ab jahan chaho paste/share karo.");
-        return;
-      }
-
-      const textarea = document.createElement("textarea");
-
-      textarea.value = shareText;
-      textarea.style.position = "fixed";
-      textarea.style.left = "-9999px";
-
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
-
-      document.execCommand("copy");
-      textarea.remove();
-
-      trackEvent("funbox_result_shared", {
-        method: "fallback_copy"
-      });
-
-      alert("📋 Result copy ho gaya!");
-
-    } catch (error) {
-
-      if (error && error.name === "AbortError") {
-        return;
-      }
-
-      console.error("Share/copy failed:", error);
-
-      alert("Share nahi ho paya. Result manually copy kar lo.");
-    }
-  }
-
-
-  /* =========================================================
      SURPRISE
   ========================================================== */
 
@@ -2105,310 +1820,6 @@
     });
 
   }
-
-
-  /* =========================================================
-     QUICK MINI GAMES
-  ========================================================== */
-
-  const riddleGames = [
-    {
-      q: "Main bolta nahi, phir bhi answer deta hoon. Main kya hoon?",
-      a: ["google", "search", "search engine"]
-    },
-    {
-      q: "Jitna zyada nikaloge, utna hi bada hota jaunga. Main kya hoon?",
-      a: ["hole", "gaddha", "pit"]
-    },
-    {
-      q: "Mere paas keys hain, par locks nahi. Main kya hoon?",
-      a: ["keyboard"]
-    },
-    {
-      q: "Main toot sakta hoon bina touch kiye. Main kya hoon?",
-      a: ["promise", "vaada", "promise"]
-    }
-  ];
-
-  const whoGames = [
-    {
-      clues: [
-        "Main ek fictional yellow character hoon.",
-        "Mujhe pineapple ghar bahut pasand hai.",
-        "Mera best friend ek starfish hai."
-      ],
-      a: ["spongebob", "sponge bob", "spongebob squarepants"]
-    },
-    {
-      clues: [
-        "Main ek famous fictional detective hoon.",
-        "Meri observation skills kaafi strong hain.",
-        "Mera naam London se strongly associated hai."
-      ],
-      a: ["sherlock holmes", "sherlock"]
-    },
-    {
-      clues: [
-        "Main ek wizarding world ka famous student hoon.",
-        "Mere forehead par lightning-shaped scar hai.",
-        "Mere glasses round hain."
-      ],
-      a: ["harry potter", "harry"]
-    }
-  ];
-
-  let currentRiddle = 0;
-  let currentWho = 0;
-  let tenSecStartedAt = 0;
-  let tenSecActive = false;
-  let tenSecTimer = null;
-
-  function normalizeGameAnswer(value) {
-    return String(value)
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s]/g, "")
-      .replace(/\s+/g, " ");
-  }
-
-  function newRiddle() {
-    currentRiddle = Math.floor(Math.random() * riddleGames.length);
-
-    const game = riddleGames[currentRiddle];
-
-    document.getElementById("riddleText").textContent =
-      "❓ " + game.q;
-
-    document.getElementById("riddleInput").value = "";
-
-    document.getElementById("riddleStatus").textContent =
-      "Answer do. No cheating, browser ko pata hai. 😭";
-
-    trackEvent("funbox_mini_game_started", {
-      game: "riddle"
-    });
-  }
-
-  function checkRiddle() {
-    const input = document.getElementById("riddleInput");
-    const status = document.getElementById("riddleStatus");
-    const answer = normalizeGameAnswer(input.value);
-
-    if (!answer) {
-      status.textContent = "Pehle answer likho.";
-      return;
-    }
-
-    const correct = riddleGames[currentRiddle].a
-      .some(item => normalizeGameAnswer(item) === answer);
-
-    if (correct) {
-      status.textContent = "🎉 Correct! +10 XP";
-      addPoints(10, "riddle_win");
-
-      trackEvent("funbox_mini_game_win", {
-        game: "riddle"
-      });
-
-      input.value = "";
-      return;
-    }
-
-    status.textContent =
-      "❌ Nope. Dobara try karo ya New Riddle dabao.";
-
-    trackEvent("funbox_mini_game_miss", {
-      game: "riddle"
-    });
-  }
-
-
-  function newWhoAmI() {
-    currentWho = Math.floor(Math.random() * whoGames.length);
-
-    const game = whoGames[currentWho];
-
-    document.getElementById("whoText").innerHTML =
-      "🔎 " +
-      game.clues
-        .map((clue, index) => (index + 1) + ". " + clue)
-        .join("<br>");
-
-    document.getElementById("whoInput").value = "";
-
-    document.getElementById("whoStatus").textContent =
-      "Who am I? Guess karo.";
-
-    trackEvent("funbox_mini_game_started", {
-      game: "who_am_i"
-    });
-  }
-
-  function checkWhoAmI() {
-    const input = document.getElementById("whoInput");
-    const status = document.getElementById("whoStatus");
-    const answer = normalizeGameAnswer(input.value);
-
-    if (!answer) {
-      status.textContent = "Guess likho pehle.";
-      return;
-    }
-
-    const correct = whoGames[currentWho].a
-      .some(item => normalizeGameAnswer(item) === answer);
-
-    if (correct) {
-      status.textContent = "🎯 Correct! +10 XP";
-      addPoints(10, "who_am_i_win");
-
-      trackEvent("funbox_mini_game_win", {
-        game: "who_am_i"
-      });
-
-      input.value = "";
-      return;
-    }
-
-    status.textContent =
-      "❌ Wrong guess. Clues ko dobara dekho.";
-
-    trackEvent("funbox_mini_game_miss", {
-      game: "who_am_i"
-    });
-  }
-
-
-  function startTenSecondChallenge() {
-    clearInterval(tenSecTimer);
-
-    // Har round mein random target time: 3.0s se 10.0s.
-    const targetSeconds =
-      Number((Math.random() * 7 + 3).toFixed(1));
-
-    tenSecStartedAt = performance.now();
-    tenSecActive = true;
-
-    document.getElementById("tenSecTimer").textContent =
-      "GO!";
-
-    document.getElementById("tenSecStatus").textContent =
-      "⏱️ Target: " + targetSeconds.toFixed(1) +
-      "s — I Did It dabao!";
-
-    tenSecTimer = setInterval(() => {
-      if (!tenSecActive) {
-        clearInterval(tenSecTimer);
-        return;
-      }
-
-      const elapsed =
-        (performance.now() - tenSecStartedAt) / 1000;
-
-      document.getElementById("tenSecTimer").textContent =
-        elapsed.toFixed(1) + "s";
-
-      if (elapsed >= targetSeconds) {
-        tenSecActive = false;
-        clearInterval(tenSecTimer);
-
-        document.getElementById("tenSecTimer").textContent =
-          targetSeconds.toFixed(1) + "s";
-
-        document.getElementById("tenSecStatus").textContent =
-          "⌛ Time! Target miss ho gaya. Phir try karo.";
-
-        trackEvent("funbox_mini_game_timeout", {
-          game: "ten_second",
-          target_seconds: targetSeconds
-        });
-      }
-    }, 50);
-
-    // Current round ka target memory mein rakho.
-    window.funboxTenSecTarget = targetSeconds;
-
-    trackEvent("funbox_mini_game_started", {
-      game: "ten_second",
-      target_seconds: targetSeconds
-    });
-  }
-
-  function hitTenSecondChallenge() {
-    if (!tenSecActive) {
-      document.getElementById("tenSecStatus").textContent =
-        "Pehle Start dabao.";
-      return;
-    }
-
-    const elapsed = (performance.now() - tenSecStartedAt) / 1000;
-
-    tenSecActive = false;
-    clearInterval(tenSecTimer);
-
-    document.getElementById("tenSecTimer").textContent =
-      elapsed.toFixed(2) + "s";
-
-    const targetSeconds =
-      Number(window.funboxTenSecTarget || 10);
-
-    const difference =
-      Math.abs(elapsed - targetSeconds);
-
-    /*
-      XP closeness ke according:
-      <= 0.10s  → 10 XP
-      <= 0.25s  → 9 XP
-      <= 0.50s  → 8 XP
-      <= 1.00s  → 6 XP
-      <= 2.00s  → 4 XP
-      <= 3.00s  → 2 XP
-      uske baad → 1 XP
-
-      Matlab koi bhi valid number hit karoge,
-      reward milega — bas target ke jitna close,
-      utna zyada XP.
-    */
-
-    let earnedXP = 1;
-    let message = "😅 Nice try!";
-
-    if (difference <= 0.10) {
-      earnedXP = 10;
-      message = "🔥 VERY GOOD! Almost perfect!";
-    } else if (difference <= 0.25) {
-      earnedXP = 9;
-      message = "🔥 Excellent! Bahut close!";
-    } else if (difference <= 0.50) {
-      earnedXP = 8;
-      message = "👏 Great timing!";
-    } else if (difference <= 1.00) {
-      earnedXP = 6;
-      message = "😎 Good!";
-    } else if (difference <= 2.00) {
-      earnedXP = 4;
-      message = "👍 Decent!";
-    } else if (difference <= 3.00) {
-      earnedXP = 2;
-      message = "🙂 Thoda aur close!";
-    }
-
-    addPoints(earnedXP, "ten_second_timing");
-
-    document.getElementById("tenSecStatus").textContent =
-      message +
-      " Target " + targetSeconds.toFixed(1) +
-      "s tha, tum " + elapsed.toFixed(2) +
-      "s par hit hue. +" + earnedXP + " XP";
-
-    trackEvent("funbox_mini_game_win", {
-      game: "ten_second",
-      target_seconds: targetSeconds,
-      elapsed_seconds: Number(elapsed.toFixed(2)),
-      difference_seconds: Number(difference.toFixed(2)),
-      earned_xp: earnedXP
-    });
-  }
-
 
 
   /* =========================================================
@@ -2760,7 +2171,7 @@
     } else {
 
       text.textContent =
-        "Use any FunBox generator today, then claim your +15 XP bonus.";
+        "Use any FunBox generator today and claim your bonus.";
 
     }
 
@@ -2941,8 +2352,6 @@
 
     newGuessGame();
     newCodeGame();
-    newRiddle();
-    newWhoAmI();
 
   }
 
