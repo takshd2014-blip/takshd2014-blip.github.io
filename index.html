@@ -642,6 +642,9 @@
     .theme-tools input[type=file]{max-width:100%}
     .locked{opacity:.55}
   </style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3529745369901340"
+     crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -686,7 +689,7 @@
 
       <div class="stat">
         <strong id="points">0</strong>
-        <span>XP / Points</span>
+        <span>⭐ XP</span>
       </div>
 
       <div class="stat">
@@ -711,7 +714,7 @@
 
     </div>
 
-    <p class="muted" style="margin-top:12px;text-align:center;">🪙 Coins are your spendable FunBox currency.</p>
+    <p class="muted" style="margin-top:12px;text-align:center;">⭐ XP = progress & levels • 🪙 Coins = spendable currency.</p>
 
   </section>
 
@@ -1707,57 +1710,24 @@
   }
 
 
-  function getCoinReward(source, xpAmount) {
-
-    const rewards = {
-      generator: 2,
-      surprise: 2,
-      guess_win: 5,
-      riddle_win: 8,
-      who_am_i_win: 8,
-      joke_valid: 3,
-      joke_complete: 10,
-      code_redeemed: 10,
-      daily_challenge: 10
-    };
-
-    if (source === "ten_second_timing") {
-      return Math.min(10, Math.max(3, Number(xpAmount) || 1));
-    }
-
-    return rewards[source] || 0;
-
-  }
-
-
   function addPoints(amount, source = "unknown") {
 
-    points += amount;
+    // XP is progression only. It never automatically gives coins.
+    const value = Math.max(0, Math.floor(Number(amount) || 0));
+
+    if (!value) return;
+
+    points += value;
 
     localStorage.setItem(STORAGE.points, points);
-
-    const coinReward = getCoinReward(source, amount);
-
-    if (coinReward > 0) {
-      coins += coinReward;
-      localStorage.setItem(STORAGE.coins, coins);
-    }
 
     renderProfile();
 
     trackEvent("earn_virtual_currency", {
-      virtual_currency_name: "points",
-      value: amount,
+      virtual_currency_name: "xp",
+      value: value,
       source: source
     });
-
-    if (coinReward > 0) {
-      trackEvent("earn_virtual_currency", {
-        virtual_currency_name: "coins",
-        value: coinReward,
-        source: source
-      });
-    }
 
     if (window.funboxCloudSave) window.funboxCloudSave();
 
@@ -2143,6 +2113,7 @@
     addRecent(text);
 
     addPoints(2, "generator");
+      addCoins(2, "generator");
 
     trackEvent("funbox_generator_used", {
 
@@ -2260,6 +2231,7 @@
     addRecent(text);
 
     addPoints(2, "surprise");
+      addCoins(2, "surprise");
 
     trackEvent("funbox_surprise_used", {
 
@@ -2322,6 +2294,7 @@
         " attempt(s)!";
 
       addPoints(10, "guess_win");
+      addCoins(5, "guess_win");
 
       trackEvent("funbox_guess_result", {
 
@@ -3192,6 +3165,7 @@
     if (correct) {
       status.textContent = "🎉 Correct! +10 XP";
       addPoints(10, "riddle_win");
+      addCoins(8, "riddle_win");
 
       trackEvent("funbox_mini_game_win", {
         game: "riddle"
@@ -3247,6 +3221,7 @@
     if (correct) {
       status.textContent = "🎯 Correct! +10 XP";
       addPoints(10, "who_am_i_win");
+      addCoins(8, "who_am_i_win");
 
       trackEvent("funbox_mini_game_win", {
         game: "who_am_i"
@@ -3388,6 +3363,7 @@
     }
 
     addPoints(earnedXP, "ten_second_timing");
+    addCoins(Math.min(10, Math.max(3, earnedXP)), "ten_second_timing");
 
     document.getElementById("tenSecStatus").textContent =
       message +
@@ -3582,6 +3558,7 @@
     renderCodeSecret();
 
     addPoints(10, "joke_valid");
+      addCoins(3, "joke_valid");
 
     document.getElementById("codeStatus").textContent =
       "😂 Joke accepted! Ek letter reveal ho gaya.";
@@ -3595,6 +3572,7 @@
       stopCodeTimer();
 
       addPoints(15, "joke_complete");
+      addCoins(10, "joke_complete");
 
       document.getElementById("codeStatus").textContent =
         "🏆 Full access code revealed! Ab direct Enter Access Code mein use karo.";
@@ -3724,6 +3702,7 @@
 
     updateAccessStatus();
     addPoints(15, "code_redeemed");
+    addCoins(10, "code_redeemed");
     if (window.funboxCloudSave) window.funboxCloudSave();
 
     setTimeout(() => {
@@ -3782,6 +3761,7 @@
     );
 
     addPoints(15, "daily_challenge");
+    addCoins(10, "daily_challenge");
 
     renderChallenge();
     if (window.funboxCloudSave) window.funboxCloudSave();
@@ -3895,7 +3875,8 @@
       unlimitedUntil: unlimitedUntil,
       recent: JSON.parse(localStorage.getItem(STORAGE.recent) || "[]"),
       challenge: localStorage.getItem(STORAGE.challenge) || "",
-      rewards: JSON.parse(localStorage.getItem(STORAGE.rewards) || "{}")
+      rewards: JSON.parse(localStorage.getItem(STORAGE.rewards) || "{}"),
+      themePass: localStorage.getItem(STORAGE.themePass) === "1"
     };
   };
 
@@ -3922,6 +3903,7 @@
     localStorage.setItem(STORAGE.recent, JSON.stringify(Array.isArray(data.recent) ? data.recent.slice(0,8) : []));
     localStorage.setItem(STORAGE.challenge, data.challenge || "");
     localStorage.setItem(STORAGE.rewards, JSON.stringify(data.rewards || {}));
+    if (data.themePass) localStorage.setItem(STORAGE.themePass, "1");
 
     renderProfile();
     renderRecent();
@@ -4000,6 +3982,7 @@
     const localStreak = Number(localStorage.getItem(STORAGE.streak) || 0);
     const localExtraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
     const localUnlimited = Number(localStorage.getItem(STORAGE.unlimited) || 0);
+    const localThemePass = localStorage.getItem(STORAGE.themePass) === "1";
 
     const cloudRewards = (data && data.rewards && typeof data.rewards === 'object') ? data.rewards : {};
     const localRewards = JSON.parse(localStorage.getItem(STORAGE.rewards) || '{}');
@@ -4012,6 +3995,7 @@
       streak: Math.max(Number(data?.streak || 0), localStreak),
       extraUses: Math.max(Number(data?.extraUses || 0), localExtraUses),
       unlimitedUntil: Math.max(Number(data?.unlimitedUntil || 0), localUnlimited),
+      themePass: Boolean(data?.themePass) || localThemePass,
       rewards
     };
   }
@@ -4039,6 +4023,8 @@
       statusEl().textContent = '☁️ Synced: ' + (user.displayName || user.email);
 
       // Real-time sync: changes made on another browser/device appear here automatically.
+      // The same Firebase account (same UID) works across GitHub Pages, Cloudflare Pages,
+      // and other authorized domains using this Firebase project.
       cloudUnsubscribe = onSnapshot(ref, snap => {
         if(!snap.exists() || cloudApplying) return;
         cloudApplying = true;
@@ -4111,10 +4097,13 @@
   window.logoutAccount=async()=>{if(cloudUnsubscribe){cloudUnsubscribe();cloudUnsubscribe=null;} if(auth){await signOut(auth);statusEl().textContent='Logged out';}};
   if(auth) onAuthStateChanged(auth, async u=>{
     if(u){
+      cloudUid = u.uid;
+      statusEl().textContent='☁️ Connecting cloud: '+(u.displayName||u.email||'Account');
       await loadFunboxCloudData(u);
     } else {
       cloudUid = null;
-      statusEl().textContent='Not signed in';
+      if(cloudUnsubscribe){ cloudUnsubscribe(); cloudUnsubscribe=null; }
+      statusEl().textContent='Not signed in — data stays on this device';
     }
   });
 
