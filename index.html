@@ -720,6 +720,23 @@
 .jb-room-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.jb-room-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.jb-player{padding:14px;border-radius:18px;background:rgba(255,255,255,.06);text-align:center;border:1px solid rgba(255,255,255,.08)}.jb-avatar{font-size:52px;line-height:1.1;filter:drop-shadow(0 7px 12px rgba(0,0,0,.35))}.jb-player strong{display:block;margin-top:7px}.jb-status{font-size:12px;opacity:.72}.jb-actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.jb-actions button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}.jb-draw{background:linear-gradient(135deg,#f59e0b,#ef4444);color:white}.jb-spin{min-height:130px;display:flex;align-items:center;justify-content:center;border-radius:20px;background:radial-gradient(circle,rgba(139,92,246,.25),rgba(255,255,255,.04));font-size:58px;margin:14px 0}.jb-result{text-align:center;font-size:18px;font-weight:900;min-height:30px}.jb-chat{display:grid;grid-template-columns:1fr 280px;gap:14px}.jb-chatbox{min-height:160px;padding:14px;border-radius:18px;background:#08080d;border:1px solid rgba(255,255,255,.08)}.jb-msg{margin:7px 0;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.06)}.jb-chat input{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#161620;color:white;margin-top:8px}.jb-close{background:transparent!important;color:#aaa}.jb-rarity{font-size:11px;letter-spacing:.08em;opacity:.7}.jb-collection{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}.jb-owned{padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.06)}
 @media(max-width:700px){.jb-room-grid{grid-template-columns:repeat(2,1fr)}.jb-chat{grid-template-columns:1fr}}
 .jb-room-create{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.jb-room-create input{flex:1;min-width:190px;padding:11px;border-radius:11px;border:1px solid #333;background:#090910;color:#fff;text-transform:uppercase}.jb-room-create button,.jb-match-controls button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer}.jb-room-code{text-align:center;font-size:20px;font-weight:900;letter-spacing:3px;padding:12px;border-radius:14px;background:rgba(168,85,247,.12);margin:8px 0 14px}.jb-scorebar{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05)}.jb-player-score{margin-top:8px;font-weight:900}.jb-match-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.jb-question-card{padding:18px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}.jb-question-card #jbQuestion{font-size:20px;font-weight:900;margin-bottom:14px}.jb-answer-grid{display:grid;grid-template-columns:1fr;gap:9px}.jb-answer-grid button{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#171722;color:#fff;text-align:left;cursor:pointer;font-weight:700}.jb-answer-grid button:disabled{opacity:.45;cursor:not-allowed}.jb-score-list{display:grid;gap:8px}.jb-score-row{display:flex;justify-content:space-between;padding:10px;border-radius:11px;background:rgba(255,255,255,.05)}
+
+.jb-tools{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.jb-tool-card{padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+.jb-avatar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.jb-avatar-choice{border:1px solid rgba(255,255,255,.1);background:#171722;color:#fff;border-radius:14px;padding:10px;cursor:pointer;text-align:center}
+.jb-avatar-choice.owned{border-color:rgba(168,85,247,.45)}
+.jb-avatar-choice.selected{outline:2px solid #a855f7;transform:translateY(-1px)}
+.jb-avatar-choice .icon{font-size:34px;display:block}
+.jb-avatar-choice .cost{font-size:11px;opacity:.7;margin-top:3px}
+.jb-voice-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.jb-voice-status{font-size:12px;opacity:.72}
+.jb-reaction-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:26px}
+.jb-reaction{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%) scale(.7);font-size:30px;font-weight:1000;opacity:0;animation:jbReaction 1.25s ease forwards;text-shadow:0 5px 20px rgba(0,0,0,.8);white-space:nowrap}
+@keyframes jbReaction{0%{opacity:0;transform:translate(-50%,-50%) scale(.65) rotate(-4deg)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(2deg)}72%{opacity:1;transform:translate(-50%,-62%) scale(1)}100%{opacity:0;transform:translate(-50%,-78%) scale(.92)}}
+.jb-player.reacting{animation:jbPlayerReact .75s ease}
+@keyframes jbPlayerReact{0%,100%{transform:scale(1)}45%{transform:scale(1.08) rotate(-2deg)}}
+@media(max-width:700px){.jb-tools{grid-template-columns:1fr}.jb-avatar-grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 
 </head>
@@ -736,6 +753,7 @@
 
 <div class="jb-room-modal" id="jockRoomModal">
   <div class="jb-room-box">
+    <div id="jbReactionLayer" class="jb-reaction-layer"></div>
     <div class="jb-room-head">
       <div>
         <h2 style="margin:0">🎮 JOCK BOBLO ONLINE</h2>
@@ -768,6 +786,24 @@
       <div id="jbQuestion">Create or join a room first.</div>
       <div id="jbAnswers" class="jb-answer-grid"></div>
       <div id="jbMatchResult" class="jb-result"></div>
+    </div>
+
+    <div class="jb-tools">
+      <div class="jb-tool-card">
+        <h3 style="margin:0">🧑‍🚀 Avatar Locker</h3>
+        <p class="jb-status">Diamonds se avatar direct unlock/select karo. Random paid spin nahi rakha.</p>
+        <div id="jbAvatarGrid" class="jb-avatar-grid"></div>
+      </div>
+      <div class="jb-tool-card">
+        <h3 style="margin:0">🎙️ Room Voice</h3>
+        <p class="jb-status">Mic manually start hoga; sirf current room ke players ke saath audio.</p>
+        <div class="jb-voice-row">
+          <button class="jb-room-btn" type="button" onclick="startJBVoice()">🎙️ Join Voice</button>
+          <button class="jb-room-btn" type="button" onclick="toggleJBVoiceMute()">🔇 Mute</button>
+          <button class="jb-room-btn" type="button" onclick="stopJBVoice()">⛔ Leave Voice</button>
+        </div>
+        <div id="jbVoiceStatus" class="jb-voice-status">Voice off.</div>
+      </div>
     </div>
 
     <div class="jb-chat">
@@ -4614,7 +4650,23 @@ const JB_FIREBASE={
 const jbApp=getApps().length?getApp():initializeApp(JB_FIREBASE);
 const jbAuth=getAuth(jbApp), jbDb=getFirestore(jbApp);
 let jbUser=null, jbRoomId=null, jbRoomUnsub=null, jbChatUnsub=null, jbTimer=null;
-let jbRoomData=null, jbAnsweredRound=0;
+let jbRoomData=null, jbAnsweredRound=0, jbAdvanceBusy=false, jbLastRoomStatus='';
+let jbVoiceStream=null, jbVoiceMuted=false;
+const jbVoicePeers=new Map();
+const jbVoiceCandidateSeen=new Map();
+const JB_AVATARS=[
+  {id:'stone',icon:'🗿',name:'Stone Sigma',cost:0},
+  {id:'shadow',icon:'🥷',name:'Shadow',cost:100},
+  {id:'cyber',icon:'🤖',name:'Cyber',cost:150},
+  {id:'alien',icon:'👽',name:'Alien',cost:200},
+  {id:'king',icon:'👑',name:'King',cost:300},
+  {id:'chaos',icon:'🤡',name:'Chaos',cost:250},
+  {id:'flame',icon:'🔥',name:'Flame',cost:350},
+  {id:'ghost',icon:'👻',name:'Ghost',cost:400}
+];
+function jbOwnedAvatars(){try{return JSON.parse(localStorage.getItem('jbOwnedAvatars')||'["stone"]')}catch(e){return ['stone']}}
+function jbSelectedAvatar(){return localStorage.getItem('jbSelectedAvatar')||'stone'}
+function jbAvatarObj(id){return JB_AVATARS.find(a=>a.id===id)||JB_AVATARS[0]}
 
 const JB_QUESTIONS=[
  {q:"Teacher: Homework kahan hai?",a:["Cloud mein backup hai.","Maine save nahi kiya.","Homework ne mujhe block kar diya."],c:2},
@@ -4631,12 +4683,36 @@ function jbCode(){return Math.random().toString(36).slice(2,8).toUpperCase();}
 function jbEsc(t){return String(t).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function jbName(){return (jbUser?.displayName||jbUser?.email?.split('@')[0]||'Player').slice(0,20);}
 function jbAvatarFor(uid){
+  if(uid===jbUser?.uid)return jbAvatarObj(jbSelectedAvatar()).icon;
   const icons=['🗿','🥷','🤖','👽','👑','🤡','🔥','👻'];
   let n=0; for(const ch of String(uid||'')) n=(n+ch.charCodeAt(0))%icons.length; return icons[n];
 }
 function jbPlayerList(data){return Object.values(data?.players||{});}
+function renderJBAvatars(){
+  const box=document.getElementById('jbAvatarGrid'); if(!box)return;
+  const owned=jbOwnedAvatars(), selected=jbSelectedAvatar();
+  box.innerHTML=JB_AVATARS.map(a=>{
+    const has=owned.includes(a.id);
+    return `<button class=\"jb-avatar-choice ${has?'owned':''} ${selected===a.id?'selected':''}\" type=\"button\" onclick=\"selectJBAvatar('${a.id}')\"><span class=\"icon\">${a.icon}</span><strong>${jbEsc(a.name)}</strong><div class=\"cost\">${has?'OWNED':a.cost+' 💎'}</div></button>`;
+  }).join('');
+}
+window.selectJBAvatar=async(id)=>{
+  const a=jbAvatarObj(id), owned=jbOwnedAvatars();
+  if(!owned.includes(id)){
+    const price=Number(a.cost||0);
+    const current=Number(localStorage.getItem(STORAGE.coins)||0);
+    if(current<price)return jbStatus(`💎 ${price} Diamonds chahiye.`);
+    coins=Math.max(0,current-price); localStorage.setItem(STORAGE.coins,String(coins));
+    if(typeof renderProfile==='function')renderProfile();
+    owned.push(id); localStorage.setItem('jbOwnedAvatars',JSON.stringify(owned));
+    if(window.funboxCloudSave)window.funboxCloudSave();
+  }
+  localStorage.setItem('jbSelectedAvatar',id); renderJBAvatars();
+  if(jbRoomId&&jbUser){try{await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{[`players.${jbUser.uid}.avatar`]:a.icon,updatedAt:serverTimestamp()});}catch(e){console.warn(e);}}
+  showJBReaction('✨ AVATAR READY!',a.icon);
+};
 
-window.openJockRoom=()=>{document.getElementById('jockRoomModal').classList.add('show');if(!jbUser)jbStatus('Pehle FunBox account se login karo.');else jbStatus('Online. Create ya Join Room karo.');};
+window.openJockRoom=()=>{document.getElementById('jockRoomModal').classList.add('show');renderJBAvatars();if(!jbUser)jbStatus('Pehle FunBox account se login karo.');else jbStatus('Online. Create ya Join Room karo.');};
 window.closeJockRoom=()=>document.getElementById('jockRoomModal').classList.remove('show');
 
 window.createJockRoom=async()=>{
@@ -4677,8 +4753,85 @@ async function jbWatchRoom(code){
   jbRoomUnsub=onSnapshot(ref,snap=>{if(!snap.exists()){jbStatus('Room closed.');return;}jbRoomData=snap.data();renderJBRoom();},e=>jbStatus('⚠️ Live room error: '+e.message));
 }
 
+function showJBReaction(text,emoji='✨'){
+  const layer=document.getElementById('jbReactionLayer'); if(!layer)return;
+  const el=document.createElement('div'); el.className='jb-reaction'; el.textContent=`${emoji} ${text}`; layer.appendChild(el);
+  setTimeout(()=>el.remove(),1300);
+}
+
+function jbVoiceKey(a,b){return [a,b].sort().join('__');}
+function jbVoiceStatus(t){const e=document.getElementById('jbVoiceStatus');if(e)e.textContent=t;}
+function jbVoiceCleanupPeer(uid){const p=jbVoicePeers.get(uid);if(p){try{p.pc.close()}catch(e){};jbVoicePeers.delete(uid)}jbVoiceCandidateSeen.delete(uid);}
+function stopJBVoice(){
+  for(const uid of [...jbVoicePeers.keys()])jbVoiceCleanupPeer(uid);
+  if(jbVoiceStream){jbVoiceStream.getTracks().forEach(t=>t.stop());jbVoiceStream=null;}
+  jbVoiceMuted=false; jbVoiceStatus('Voice off.');
+}
+window.stopJBVoice=stopJBVoice;
+window.toggleJBVoiceMute=()=>{
+  if(!jbVoiceStream)return jbVoiceStatus('Pehle Join Voice dabao.');
+  jbVoiceMuted=!jbVoiceMuted; jbVoiceStream.getAudioTracks().forEach(t=>t.enabled=!jbVoiceMuted);
+  jbVoiceStatus(jbVoiceMuted?'🔇 Mic muted.':'🎙️ Mic live.');
+};
+async function jbWriteVoice(path,value){if(!jbRoomId)return;try{await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{[path]:value,updatedAt:serverTimestamp()});}catch(e){console.warn('voice signal write',e);}}
+async function jbCreateVoicePeer(peerUid,initiator){
+  if(!jbVoiceStream||!jbRoomId||peerUid===jbUser.uid)return;
+  if(jbVoicePeers.has(peerUid))return;
+  const pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+  jbVoicePeers.set(peerUid,{pc,initiator});
+  jbVoiceCandidateSeen.set(peerUid,new Set());
+  jbVoiceStream.getTracks().forEach(t=>pc.addTrack(t,jbVoiceStream));
+  pc.ontrack=e=>{
+    let audio=document.getElementById('jb-audio-'+peerUid);
+    if(!audio){audio=document.createElement('audio');audio.id='jb-audio-'+peerUid;audio.autoplay=true;audio.playsInline=true;audio.style.display='none';document.body.appendChild(audio);}
+    audio.srcObject=e.streams[0];
+  };
+  const key=jbVoiceKey(jbUser.uid,peerUid);
+  pc.onicecandidate=e=>{if(e.candidate){const side=initiator?'callerCandidates':'calleeCandidates';jbWriteVoice(`voiceSignals.${key}.${side}`,arrayUnion(e.candidate.toJSON()));}};
+  pc.onconnectionstatechange=()=>{if(['failed','closed','disconnected'].includes(pc.connectionState))jbVoiceStatus('⚠️ Voice connection '+pc.connectionState+'.');};
+  if(initiator){
+    const offer=await pc.createOffer(); await pc.setLocalDescription(offer);
+    await jbWriteVoice(`voiceSignals.${key}.offer`,{type:offer.type,sdp:offer.sdp});
+  }
+}
+async function jbSyncVoice(d){
+  if(!jbVoiceStream||!jbUser)return;
+  const players=jbPlayerList(d).filter(p=>p.uid!==jbUser.uid);
+  const ids=new Set(players.map(p=>p.uid));
+  for(const uid of [...jbVoicePeers.keys()])if(!ids.has(uid))jbVoiceCleanupPeer(uid);
+  for(const p of players){
+    const caller=String(jbUser.uid)<String(p.uid);
+    if(!jbVoicePeers.has(p.uid))await jbCreateVoicePeer(p.uid,caller);
+    const entry=jbVoicePeers.get(p.uid); if(!entry)continue;
+    const key=jbVoiceKey(jbUser.uid,p.uid), sig=(d.voiceSignals||{})[key]||{}, pc=entry.pc;
+    try{
+      if(!caller && sig.offer && !pc.currentRemoteDescription){
+        await pc.setRemoteDescription(sig.offer);
+        const ans=await pc.createAnswer(); await pc.setLocalDescription(ans);
+        await jbWriteVoice(`voiceSignals.${key}.answer`,{type:ans.type,sdp:ans.sdp});
+      }
+      if(caller && sig.answer && !pc.currentRemoteDescription)await pc.setRemoteDescription(sig.answer);
+      const seen=jbVoiceCandidateSeen.get(p.uid)||new Set();
+      const list=[...(sig.callerCandidates||[]),...(sig.calleeCandidates||[])];
+      for(const c of list){const id=JSON.stringify(c);if(seen.has(id))continue;try{await pc.addIceCandidate(c);seen.add(id)}catch(e){}}
+      jbVoiceCandidateSeen.set(p.uid,seen);
+    }catch(e){console.warn('voice sync',e);}
+  }
+}
+window.startJBVoice=async()=>{
+  if(!jbRoomId||!jbUser)return jbVoiceStatus('Pehle room join karo.');
+  if(!navigator.mediaDevices?.getUserMedia)return jbVoiceStatus('❌ Browser mic support nahi karta.');
+  if(jbVoiceStream)return jbVoiceStatus('🎙️ Voice already live.');
+  try{
+    jbVoiceStream=await navigator.mediaDevices.getUserMedia({audio:true});
+    jbVoiceMuted=false; jbVoiceStatus('🎙️ Mic live — room voice connect ho raha hai.');
+    await jbSyncVoice(jbRoomData||{});
+  }catch(e){jbVoiceStream=null;jbVoiceStatus('❌ Mic permission nahi mili: '+e.message);}
+};
 function renderJBRoom(){
   const d=jbRoomData;if(!d)return;
+  renderJBAvatars();
+  if(jbVoiceStream)jbSyncVoice(d);
   document.getElementById('jbRoomCode').textContent='ROOM CODE: '+d.roomId;
   const players=jbPlayerList(d);
   document.getElementById('jbPlayerCount').textContent=players.length+'/4';
@@ -4686,6 +4839,11 @@ function renderJBRoom(){
   document.getElementById('jbPlayers').innerHTML=players.map(p=>`<div class="jb-player"><div class="jb-avatar">${p.avatar||'🙂'}</div><strong>${jbEsc(p.name)}</strong><div class="jb-status">${p.uid===d.hostUid?'👑 HOST':''} • ${p.uid===jbUser?.uid?'YOU':''}</div><div class="jb-player-score">⭐ ${Number(p.score||0)} XP</div></div>`).join('');
   document.getElementById('jbScoreList').innerHTML=[...players].sort((a,b)=>Number(b.score||0)-Number(a.score||0)).map((p,i)=>`<div class="jb-score-row"><span>#${i+1} ${jbEsc(p.name)}</span><strong>${Number(p.score||0)} XP</strong></div>`).join('');
   const q=JB_QUESTIONS[Number(d.questionIndex||0)%JB_QUESTIONS.length];
+  if(jbLastRoomStatus!==d.status){
+    if(d.status==='playing')showJBReaction('MATCH ON!','🔥');
+    if(d.status==='finished')showJBReaction('YAY! MATCH COMPLETE','🎉');
+    jbLastRoomStatus=d.status;
+  }
   if(d.status==='playing'){
     document.getElementById('jbQuestion').textContent=q.q;
     document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button onclick="answerJock(${i})" ${Number(d.round||0)<=jbAnsweredRound?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
@@ -4705,7 +4863,16 @@ function renderJBRoom(){
   const chat=document.getElementById('jbChat'); chat.innerHTML=(d.messages||[]).slice(-30).map(m=>`<div class="jb-msg"><strong>${jbEsc(m.name)}:</strong> ${jbEsc(m.text)}</div>`).join('')||'<div class="jb-msg">Room chat ready.</div>'; chat.scrollTop=chat.scrollHeight;
 }
 
-function startJBTimer(ts){clearInterval(jbTimer);const tick=()=>{const left=Math.max(0,10-Math.floor((Date.now()-Number(ts))/1000));document.getElementById('jbTimer').textContent=left+'s';if(left<=0)clearInterval(jbTimer);};tick();jbTimer=setInterval(tick,250);}
+function startJBTimer(ts){
+  clearInterval(jbTimer);
+  const roundStarted=Number(ts)||Date.now();
+  const tick=()=>{
+    const left=Math.max(0,10-Math.floor((Date.now()-roundStarted)/1000));
+    const el=document.getElementById('jbTimer');if(el)el.textContent=left+'s';
+    if(left<=0){clearInterval(jbTimer);jbAdvanceIfReady();}
+  };
+  tick(); jbTimer=setInterval(tick,250);
+}
 function stopJBTimer(){clearInterval(jbTimer);document.getElementById('jbTimer').textContent='--';}
 
 window.startJockMatch=async()=>{
@@ -4713,31 +4880,73 @@ window.startJockMatch=async()=>{
   if(Object.keys(jbRoomData.players||{}).length<2)return jbStatus('Friend ko join karao. 2+ players chahiye.');
   await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{status:'playing',round:1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'MATCH START! 10 seconds.',at:Date.now()})});
   jbAnsweredRound=0;
+  showJBReaction('GO!','🚀');
 };
 
 window.answerJock=async(index)=>{
   if(!jbRoomData||jbRoomData.status!=='playing'||!jbUser)return;
-  const round=Number(jbRoomData.round||0); if(jbAnsweredRound===round)return;
-  if(Date.now()-Number(jbRoomData.roundStartedAt||Date.now())>10000)return jbStatus('⏱️ Time up.');
-  const q=JB_QUESTIONS[Number(jbRoomData.questionIndex||0)%JB_QUESTIONS.length]; const correct=index===q.c;
-  jbAnsweredRound=round;
+  const round=Number(jbRoomData.round||0);
+  if(jbAnsweredRound===round)return;
+  if(Date.now()-Number(jbRoomData.roundStartedAt||Date.now())>10000)return jbStatus('⏱️ Time up — next question aa raha hai.');
+  const q=JB_QUESTIONS[Number(jbRoomData.questionIndex||0)%JB_QUESTIONS.length];
+  const correct=index===q.c;
+  const ref=doc(jbDb,'jockRooms',jbRoomId);
   try{
-    const ref=doc(jbDb,'jockRooms',jbRoomId);
+    let accepted=false;
     await runTransaction(jbDb,async tx=>{
-      const snap=await tx.get(ref);if(!snap.exists())throw new Error('Room closed.');const d=snap.data();const p={...(d.players||{})};const me={...(p[jbUser.uid]||{})};
-      if(Number(me.answeredRound||0)>=Number(d.round||0))return;
-      const speed=Math.max(0,10000-(Date.now()-Number(d.roundStartedAt||Date.now())));const pts=correct?(10+Math.floor(speed/2000)):0;
-      me.score=Number(me.score||0)+pts;me.answeredRound=Number(d.round||0);p[jbUser.uid]=me;
+      const snap=await tx.get(ref);
+      if(!snap.exists())throw new Error('Room closed.');
+      const d=snap.data();
+      if(d.status!=='playing' || Number(d.round||0)!==round)return;
+      const p={...(d.players||{})};
+      const me={...(p[jbUser.uid]||{})};
+      if(Number(me.answeredRound||0)>=round)return;
+      const speed=Math.max(0,10000-(Date.now()-Number(d.roundStartedAt||Date.now())));
+      const pts=correct?(10+Math.floor(speed/2000)):0;
+      me.score=Number(me.score||0)+pts;
+      me.answeredRound=round;
+      p[jbUser.uid]=me;
       tx.update(ref,{players:p,updatedAt:serverTimestamp()});
+      accepted=true;
     });
-    setTimeout(()=>jbAdvanceIfReady(),350);
-    jbStatus(correct?'✅ Correct!':'❌ Wrong!');
-  }catch(e){jbStatus('Answer error: '+e.message);}
+    if(!accepted)return;
+    jbAnsweredRound=round;
+    showJBReaction(correct?'YAY!':'OOPS!',correct?'🎉':'😵');
+    jbStatus(correct?'✅ Answer sent!':'❌ Answer sent.');
+    setTimeout(()=>jbAdvanceIfReady(),120);
+  }catch(e){
+    console.error(e);
+    jbStatus('❌ Answer send failed: '+e.message);
+  }
 };
 
 async function jbAdvanceIfReady(){
-  if(!jbRoomId)return; const ref=doc(jbDb,'jockRooms',jbRoomId);
-  try{await runTransaction(jbDb,async tx=>{const snap=await tx.get(ref);if(!snap.exists())return;const d=snap.data();if(d.status!=='playing')return;const players=Object.values(d.players||{});const round=Number(d.round||0);const everyone=players.length>0&&players.every(p=>Number(p.answeredRound||0)>=round);const timedOut=Date.now()-Number(d.roundStartedAt||0)>=10000;if(!everyone&&!timedOut)return;if(round>=5){tx.update(ref,{status:'finished',updatedAt:serverTimestamp()});return;}tx.update(ref,{round:round+1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp()});});}catch(e){console.warn(e);}
+  if(!jbRoomId||jbAdvanceBusy)return;
+  jbAdvanceBusy=true;
+  const ref=doc(jbDb,'jockRooms',jbRoomId);
+  try{
+    let advanced=false,finished=false;
+    await runTransaction(jbDb,async tx=>{
+      const snap=await tx.get(ref);
+      if(!snap.exists())return;
+      const d=snap.data();
+      if(d.status!=='playing')return;
+      const players=Object.values(d.players||{});
+      const round=Number(d.round||0);
+      const everyone=players.length>0&&players.every(p=>Number(p.answeredRound||0)>=round);
+      const timedOut=Date.now()-Number(d.roundStartedAt||0)>=10000;
+      if(!everyone&&!timedOut)return;
+      if(round>=5){
+        tx.update(ref,{status:'finished',updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'🎉 YAY! Match complete.',at:Date.now()})});
+        finished=true; return;
+      }
+      tx.update(ref,{round:round+1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp()});
+      advanced=true;
+    });
+    if(advanced)showJBReaction('NEXT ROUND!','⚡');
+    if(finished)showJBReaction('YAY!','🎉');
+  }catch(e){console.warn('advance round',e)}
+  finally{jbAdvanceBusy=false;}
 }
 
 window.sendJockChat=async()=>{
@@ -4746,7 +4955,7 @@ window.sendJockChat=async()=>{
   try{await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{messages:arrayUnion({name:jbName(),text:text.slice(0,120),at:Date.now()})});input.value='';}catch(e){jbStatus('Chat failed: '+e.message);}
 };
 
-window.leaveJockRoom=async()=>{if(!jbRoomId||!jbUser)return;try{const ref=doc(jbDb,'jockRooms',jbRoomId);await runTransaction(jbDb,async tx=>{const s=await tx.get(ref);if(!s.exists())return;const d=s.data();const players={...(d.players||{})};delete players[jbUser.uid];if(Object.keys(players).length===0){tx.delete(ref);}else{let hostUid=d.hostUid;if(hostUid===jbUser.uid)hostUid=Object.values(players)[0].uid;tx.update(ref,{players,hostUid,updatedAt:serverTimestamp()});}});}catch(e){console.warn(e);}if(jbRoomUnsub)jbRoomUnsub();jbRoomUnsub=null;jbRoomId=null;jbRoomData=null;stopJBTimer();document.getElementById('jbRoomCode').textContent='No room joined';jbStatus('Left room.');renderJBRoom();};
+window.leaveJockRoom=async()=>{if(!jbRoomId||!jbUser)return;try{const ref=doc(jbDb,'jockRooms',jbRoomId);await runTransaction(jbDb,async tx=>{const s=await tx.get(ref);if(!s.exists())return;const d=s.data();const players={...(d.players||{})};delete players[jbUser.uid];if(Object.keys(players).length===0){tx.delete(ref);}else{let hostUid=d.hostUid;if(hostUid===jbUser.uid)hostUid=Object.values(players)[0].uid;tx.update(ref,{players,hostUid,updatedAt:serverTimestamp()});}});}catch(e){console.warn(e);}if(jbRoomUnsub)jbRoomUnsub();jbRoomUnsub=null;jbRoomId=null;jbRoomData=null;stopJBTimer();stopJBVoice();jbLastRoomStatus='';document.getElementById('jbRoomCode').textContent='No room joined';jbStatus('Left room.');renderJBRoom();};
 
 onAuthStateChanged(jbAuth,u=>{jbUser=u;if(!u){jbStatus('Firebase login required.');return;}jbStatus('Logged in as '+jbName()+'. Create / Join Room.');});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeJockRoom();});
