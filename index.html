@@ -13,7 +13,16 @@
   <!-- =========================
        GOOGLE ANALYTICS 4
   ========================== -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07">
+  document.addEventListener("click", (e) => {
+    const modal = document.getElementById("shopModal");
+    if (modal && e.target === modal) closeShop();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeShop();
+  });
+
+</script>
   <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -641,6 +650,64 @@
     .theme-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
     .theme-tools input[type=file]{max-width:100%}
     .locked{opacity:.55}
+  
+    /* =========================
+       FUNBOX SHOP
+    ========================== */
+    .shop-launch-card{overflow:hidden;position:relative;border-color:rgba(168,85,247,.24)}
+    .shop-launch-inner{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+    .shop-kicker{font-size:10px;letter-spacing:2px;color:#a855f7;font-weight:800;margin-bottom:4px}
+    .shop-launch-btn{
+      border:1px solid rgba(168,85,247,.45);background:linear-gradient(135deg,#24113f,#7c3aed);
+      color:#fff;border-radius:17px;padding:13px 18px;display:flex;align-items:center;gap:9px;
+      font-weight:800;box-shadow:0 10px 30px rgba(124,58,237,.22);transition:.2s;
+    }
+    .shop-launch-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+    .shop-bag-icon{font-size:25px;filter:drop-shadow(0 0 8px rgba(255,255,255,.3))}
+    .shop-modal{z-index:1200}
+    .shop-modal-box{
+      width:min(850px,100%);max-height:88vh;overflow:auto;
+      background:linear-gradient(180deg,#14131d,#0e0e14);border:1px solid rgba(168,85,247,.35);
+      border-radius:24px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.65)
+    }
+    .shop-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+    .shop-balance{font-weight:800;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+    .shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .shop-item{
+      background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:18px;
+      padding:16px;display:flex;flex-direction:column;min-height:205px;transition:.2s
+    }
+    .shop-item:hover{transform:translateY(-3px);border-color:rgba(168,85,247,.42)}
+    .shop-item-icon{font-size:31px;margin-bottom:8px}
+    .shop-item h3{font-size:16px;margin-bottom:5px}
+    .shop-item p{color:#888;font-size:12px;line-height:1.45;flex:1}
+    .shop-price{font-weight:800;color:#d8a8ff;margin:11px 0 9px}
+    .shop-buy{width:100%;padding:10px 12px;border-radius:11px;border:1px solid rgba(168,85,247,.28);background:rgba(168,85,247,.12);color:#fff;font-weight:800;cursor:pointer}
+    .shop-buy:hover{background:rgba(168,85,247,.22)}
+    .shop-buy:disabled{opacity:.45;cursor:not-allowed}
+    .shop-owned{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25)}
+    .shop-status{margin-top:13px;min-height:42px}
+    .shop-close-row{display:flex;justify-content:flex-end;margin-top:14px}
+    @media(max-width:700px){.shop-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.shop-grid{grid-template-columns:1fr}.shop-modal-box{padding:16px}}
+
+    /* Floating XP / Diamond Coin rewards */
+    .floating-reward{
+      position:fixed;left:0;top:0;z-index:3000;pointer-events:none;
+      font-weight:900;font-size:17px;white-space:nowrap;
+      text-shadow:0 3px 14px rgba(0,0,0,.75);
+      transform:translate3d(0,0,0) scale(1);
+      opacity:1;transition:transform .78s cubic-bezier(.2,.8,.2,1),opacity .78s ease;
+    }
+    .floating-reward.xp{color:#f2c7ff}
+    .floating-reward.coin{color:#7dd3fc}
+    .currency-pop{animation:currencyPop .42s ease}
+    @keyframes currencyPop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+
+  
+    .shop-glow-active .stat{box-shadow:0 0 22px rgba(168,85,247,.16);border-color:rgba(168,85,247,.28)}
+    .shop-chaos-theme{background:radial-gradient(circle at 20% 10%,#3a164d 0%,transparent 32%),radial-gradient(circle at 80% 90%,#102d48 0%,transparent 35%),#07070b}
+
   </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3529745369901340"
      crossorigin="anonymous"></script>
@@ -694,7 +761,7 @@
 
       <div class="stat">
         <strong id="coins">0</strong>
-        <span>🪙 Coins</span>
+        <span>💎 Coins</span>
       </div>
 
       <div class="stat">
@@ -714,31 +781,22 @@
 
     </div>
 
-    <p class="muted" style="margin-top:12px;text-align:center;">⭐ XP = progress & levels • 🪙 Coins = spendable currency.</p>
+    <p class="muted" style="margin-top:12px;text-align:center;">⭐ XP = progress & levels • 💎 Coins = spendable currency.</p>
 
   </section>
 
-  <section class="card" id="coinShop">
-    <h2>🛒 Coin Shop</h2>
-    <p class="muted">Coins spend karke FunBox mein useful unlocks lo.</p>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px;">
-
-      <div class="stat" style="text-align:left;">
-        <strong style="font-size:1.05rem;">🎟️ +1 Extra Use</strong>
-        <span>50 🪙 • Daily access mein 1 extra use add hoga.</span>
-        <button id="buyExtraUseBtn" class="btn secondary" type="button" onclick="buyCoinItem('extraUse')" style="margin-top:10px;">Buy for 50 🪙</button>
+  <section class="card shop-launch-card">
+    <div class="shop-launch-inner">
+      <div>
+        <div class="shop-kicker">FUNBOX MARKET</div>
+        <h2>🛍️ Shop</h2>
+        <p class="muted">💎 Coins spend karo aur cosmetics, uses, titles aur special effects unlock karo.</p>
       </div>
-
-      <div class="stat" style="text-align:left;">
-        <strong style="font-size:1.05rem;">🎨 Theme Pass</strong>
-        <span>250 🪙 • Custom Theme ka XP lock unlock karega.</span>
-        <button id="buyThemePassBtn" class="btn secondary" type="button" onclick="buyCoinItem('themePass')" style="margin-top:10px;">Buy for 250 🪙</button>
-      </div>
-
+      <button class="shop-launch-btn" type="button" onclick="openShop()">
+        <span class="shop-bag-icon">🛍️</span>
+        <span>Open Shop</span>
+      </button>
     </div>
-
-    <div id="coinShopStatus" class="game-status" style="margin-top:12px;">Shop ready.</div>
   </section>
 
   <section class="card" id="themeCard">
@@ -1191,6 +1249,92 @@
 
 
 <!-- =========================
+     FUNBOX SHOP MODAL
+========================= -->
+<div id="shopModal" class="modal shop-modal">
+  <div class="shop-modal-box">
+    <div class="shop-head">
+      <div>
+        <div class="shop-kicker">FUNBOX MARKET</div>
+        <h2>🛍️ FunBox Shop</h2>
+        <p class="muted" style="margin-top:5px;">Spend your 💎 Coins. Unlock things that actually change your FunBox.</p>
+      </div>
+      <div class="shop-balance">💎 <span id="shopCoinBalance">0</span></div>
+    </div>
+
+    <div class="shop-grid">
+      <div class="shop-item">
+        <div class="shop-item-icon">🎟️</div><h3>Extra Use</h3>
+        <p>Add one extra use to today's daily access.</p>
+        <div class="shop-price">50 💎</div>
+        <button class="shop-buy" onclick="buyShopItem('extraUse')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">🎨</div><h3>Theme Pass</h3>
+        <p>Unlock the Custom Theme without waiting for the XP milestone.</p>
+        <div class="shop-price">250 💎</div>
+        <button id="shopThemePass" class="shop-buy" onclick="buyShopItem('themePass')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">✨</div><h3>Profile Glow</h3>
+        <p>Add a glowing effect around your XP, Coins and profile stats.</p>
+        <div class="shop-price">350 💎</div>
+        <button id="shopProfileGlow" class="shop-buy" onclick="buyShopItem('profileGlow')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">🏷️</div><h3>Chaos Dealer</h3>
+        <p>Unlock the Chaos Dealer title for your profile.</p>
+        <div class="shop-price">500 💎</div>
+        <button id="shopChaosTitle" class="shop-buy" onclick="buyShopItem('chaosTitle')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">💫</div><h3>Reward Burst</h3>
+        <p>Give your reward animations an extra burst when XP or Coins fly.</p>
+        <div class="shop-price">650 💎</div>
+        <button id="shopRewardBurst" class="shop-buy" onclick="buyShopItem('rewardBurst')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">🎁</div><h3>Mystery Box</h3>
+        <p>One random cosmetic reward. The box disappears after purchase.</p>
+        <div class="shop-price">400 💎</div>
+        <button id="shopMystery" class="shop-buy" onclick="buyShopItem('mystery')">Open for 400 💎</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">💎</div><h3>Coin Vault</h3>
+        <p>A permanent profile badge showing that you collect Diamonds.</p>
+        <div class="shop-price">800 💎</div>
+        <button id="shopVault" class="shop-buy" onclick="buyShopItem('vault')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">👑</div><h3>Legend Badge</h3>
+        <p>Unlock a special cosmetic badge. It does not change your XP.</p>
+        <div class="shop-price">1200 💎</div>
+        <button id="shopLegendBadge" class="shop-buy" onclick="buyShopItem('legendBadge')">Buy</button>
+      </div>
+
+      <div class="shop-item">
+        <div class="shop-item-icon">🎲</div><h3>Chaos Theme</h3>
+        <p>Unlock a dark purple chaos accent for the FunBox interface.</p>
+        <div class="shop-price">1500 💎</div>
+        <button id="shopChaosTheme" class="shop-buy" onclick="buyShopItem('chaosTheme')">Buy</button>
+      </div>
+    </div>
+
+    <div id="shopStatus" class="game-status shop-status">Shop ready.</div>
+    <div class="shop-close-row">
+      <button class="btn secondary" type="button" onclick="closeShop()">Close Shop</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================
      CODE MODAL
 ========================== -->
 
@@ -1299,7 +1443,14 @@
     recent: "funboxRecent",
     challenge: "funboxChallenge",
     rewards: "funboxRewards",
-    themePass: "funboxThemePass"
+    themePass: "funboxThemePass",
+    shopProfileGlow: "funboxShopProfileGlow",
+    shopChaosTitle: "funboxShopChaosTitle",
+    shopRewardBurst: "funboxShopRewardBurst",
+    shopMystery: "funboxShopMystery",
+    shopVault: "funboxShopVault",
+    shopLegendBadge: "funboxShopLegendBadge",
+    shopChaosTheme: "funboxShopChaosTheme"
 
   };
 
@@ -1331,7 +1482,219 @@
 
   let extraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
 
-  let unlimitedUntil =
+  let unlim
+  /* =========================================================
+     XP / COIN FLYING REWARDS
+  ========================================================== */
+
+  function flyCurrencyReward(type, amount) {
+    const target = document.getElementById(type === "xp" ? "points" : "coins");
+    if (!target || !amount) return;
+
+    const source = document.activeElement;
+    const targetRect = target.getBoundingClientRect();
+    let startX = window.innerWidth / 2;
+    let startY = window.innerHeight * 0.55;
+
+    if (source && source.getBoundingClientRect && source !== document.body) {
+      const r = source.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) {
+        startX = r.left + r.width / 2;
+        startY = r.top + r.height / 2;
+      }
+    }
+
+    const el = document.createElement("div");
+    el.className = "floating-reward " + (type === "xp" ? "xp" : "coin");
+    el.textContent = type === "xp" ? `+${amount} XP` : `+${amount} 💎`;
+    document.body.appendChild(el);
+
+    el.style.left = `${startX - el.offsetWidth / 2}px`;
+    el.style.top = `${startY - 10}px`;
+
+    requestAnimationFrame(() => {
+      const tr = target.getBoundingClientRect();
+      const tx = tr.left + tr.width / 2 - (startX);
+      const ty = tr.top + tr.height / 2 - (startY);
+      el.style.transform = `translate3d(${tx}px,${ty}px,0) scale(.72)`;
+      el.style.opacity = "0";
+    });
+
+    setTimeout(() => {
+      target.classList.remove("currency-pop");
+      void target.offsetWidth;
+      target.classList.add("currency-pop");
+      el.remove();
+      setTimeout(() => target.classList.remove("currency-pop"), 450);
+    }, 790);
+  }
+
+
+  function openShop() {
+    const modal = document.getElementById("shopModal");
+    if (!modal) return;
+    modal.classList.add("show");
+    updateShopUI();
+    trackEvent("funbox_shop_opened");
+  }
+
+  function closeShop() {
+    const modal = document.getElementById("shopModal");
+    if (modal) modal.classList.remove("show");
+  }
+
+  function shopOwned(key) {
+    return localStorage.getItem(STORAGE[key]) === "1";
+  }
+
+  function setShopOwned(key) {
+    localStorage.setItem(STORAGE[key], "1");
+  }
+
+  function updateShopUI() {
+    const balance = document.getElementById("shopCoinBalance");
+    if (balance) balance.textContent = coins;
+
+    const items = {
+      shopThemePass: ["themePass", "Owned ✓"],
+      shopProfileGlow: ["shopProfileGlow", "Owned ✓"],
+      shopChaosTitle: ["shopChaosTitle", "Owned ✓"],
+      shopRewardBurst: ["shopRewardBurst", "Owned ✓"],
+      shopVault: ["shopVault", "Owned ✓"],
+      shopLegendBadge: ["shopLegendBadge", "Owned ✓"],
+      shopChaosTheme: ["shopChaosTheme", "Owned ✓"]
+    };
+
+    Object.entries(items).forEach(([id, cfg]) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      const owned = shopOwned(cfg[0]);
+      btn.disabled = owned;
+      if (owned) {
+        btn.textContent = cfg[1];
+        btn.classList.add("shop-owned");
+      }
+    });
+
+    const mystery = document.getElementById("shopMystery");
+    if (mystery) {
+      const owned = shopOwned("shopMystery");
+      mystery.disabled = owned;
+      mystery.textContent = owned ? "Opened ✓" : "Open for 400 💎";
+      mystery.classList.toggle("shop-owned", owned);
+    }
+
+    const themePass = document.getElementById("shopThemePass");
+    if (themePass && shopOwned("themePass")) {
+      themePass.disabled = true;
+      themePass.textContent = "Owned ✓";
+      themePass.classList.add("shop-owned");
+    }
+  }
+
+  function buyShopItem(item) {
+    const prices = {
+      extraUse: 50,
+      themePass: 250,
+      profileGlow: 350,
+      chaosTitle: 500,
+      rewardBurst: 650,
+      mystery: 400,
+      vault: 800,
+      legendBadge: 1200,
+      chaosTheme: 1500
+    };
+
+    const price = prices[item];
+    if (!price) return;
+
+    const keyMap = {
+      themePass: "themePass",
+      profileGlow: "shopProfileGlow",
+      chaosTitle: "shopChaosTitle",
+      rewardBurst: "shopRewardBurst",
+      mystery: "shopMystery",
+      vault: "shopVault",
+      legendBadge: "shopLegendBadge",
+      chaosTheme: "shopChaosTheme"
+    };
+
+    if (item !== "extraUse" && shopOwned(keyMap[item])) return;
+
+    const status = document.getElementById("shopStatus");
+    if (coins < price) {
+      if (status) status.textContent = `💎 Coins kam hain. Need ${price} 💎.`;
+      return;
+    }
+
+    coins -= price;
+    localStorage.setItem(STORAGE.coins, String(coins));
+
+    if (item === "extraUse") {
+      extraUses += 1;
+      localStorage.setItem(STORAGE.extraUses, String(extraUses));
+      if (status) status.textContent = "🎟️ +1 Extra Use mil gaya!";
+    } else if (item === "mystery") {
+      setShopOwned("shopMystery");
+      const rewards = [
+        ["✨ Profile Glow", "shopProfileGlow"],
+        ["🏷️ Chaos Dealer", "shopChaosTitle"],
+        ["💫 Reward Burst", "shopRewardBurst"],
+        ["💎 Coin Vault", "shopVault"]
+      ];
+      const available = rewards.filter(x => !shopOwned(x[1]));
+      if (available.length) {
+        const pick = available[Math.floor(Math.random() * available.length)];
+        setShopOwned(pick[1]);
+        if (status) status.textContent = `🎁 Mystery Box opened: ${pick[0]} unlocked!`;
+      } else {
+        if (status) status.textContent = "🎁 Mystery Box opened. Sab cosmetic items already owned hain.";
+      }
+    } else {
+      setShopOwned(keyMap[item]);
+      const messages = {
+        themePass: "🎨 Theme Pass unlock ho gaya!",
+        profileGlow: "✨ Profile Glow unlocked!",
+        chaosTitle: "🏷️ Chaos Dealer title unlocked!",
+        rewardBurst: "💫 Reward Burst unlocked!",
+        vault: "💎 Coin Vault badge unlocked!",
+        legendBadge: "👑 Legend Badge unlocked!",
+        chaosTheme: "🎲 Chaos Theme unlocked!"
+      };
+      if (status) status.textContent = messages[item] || "Unlocked!";
+    }
+
+    renderProfile();
+    updateAccessStatus();
+    updateThemeLock();
+    applyShopCosmetics();
+    updateShopUI();
+
+    trackEvent("funbox_shop_purchase", {item:item, price_coins:price});
+
+    if (window.funboxCloudSave) window.funboxCloudSave();
+  }
+
+  function applyShopCosmetics() {
+    const profile = document.querySelector(".profile");
+    if (profile) profile.classList.toggle("shop-glow-active", shopOwned("shopProfileGlow"));
+
+    document.body.classList.toggle("shop-chaos-theme", shopOwned("shopChaosTheme"));
+
+    const titleEl = document.getElementById("title");
+    if (titleEl && shopOwned("shopChaosTitle")) {
+      titleEl.textContent = "Chaos Dealer";
+    }
+
+    const badge = document.getElementById("shopBadge");
+    if (badge) {
+      badge.textContent =
+        shopOwned("shopLegendBadge") ? "👑" :
+        shopOwned("shopVault") ? "💎" : "";
+    }
+  }
+
+itedUntil =
     Number(localStorage.getItem(STORAGE.unlimited) || 0);
 
   let guessNumberTarget =
@@ -1613,17 +1976,15 @@
   ========================================================= */
 
   function addCoins(amount, source = "unknown") {
-
     const value = Math.max(0, Math.floor(Number(amount) || 0));
-
     if (!value) return;
 
     coins += value;
-
     localStorage.setItem(STORAGE.coins, coins);
-
     renderProfile();
     updateCoinShop();
+    updateShopUI();
+    flyCurrencyReward("coin", value);
 
     trackEvent("earn_virtual_currency", {
       virtual_currency_name: "coins",
@@ -1632,7 +1993,6 @@
     });
 
     if (window.funboxCloudSave) window.funboxCloudSave();
-
   }
 
 
@@ -1644,14 +2004,14 @@
 
     if (extraBtn) {
       extraBtn.disabled = coins < 50;
-      extraBtn.textContent = coins >= 50 ? "Buy for 50 🪙" : "Need 50 🪙";
+      extraBtn.textContent = coins >= 50 ? "Buy for 50 💎" : "Need 50 💎";
     }
 
     const hasThemePass = localStorage.getItem(STORAGE.themePass) === "1";
 
     if (themeBtn) {
       themeBtn.disabled = hasThemePass || coins < 250;
-      themeBtn.textContent = hasThemePass ? "Owned ✓" : (coins >= 250 ? "Buy for 250 🪙" : "Need 250 🪙");
+      themeBtn.textContent = hasThemePass ? "Owned ✓" : (coins >= 250 ? "Buy for 250 💎" : "Need 250 💎");
     }
 
     if (status && hasThemePass) {
@@ -1677,7 +2037,7 @@
 
     if (coins < price) {
       const status = document.getElementById("coinShopStatus");
-      if (status) status.textContent = "🪙 Coins kam hain. Aur coins earn karo!";
+      if (status) status.textContent = "💎 Coins kam hain. Aur coins earn karo!";
       return;
     }
 
@@ -1711,17 +2071,14 @@
 
 
   function addPoints(amount, source = "unknown") {
-
-    // XP is progression only. It never automatically gives coins.
+    // XP is progression only. It never automatically gives Coins.
     const value = Math.max(0, Math.floor(Number(amount) || 0));
-
     if (!value) return;
 
     points += value;
-
     localStorage.setItem(STORAGE.points, points);
-
     renderProfile();
+    flyCurrencyReward("xp", value);
 
     trackEvent("earn_virtual_currency", {
       virtual_currency_name: "xp",
@@ -1730,7 +2087,6 @@
     });
 
     if (window.funboxCloudSave) window.funboxCloudSave();
-
   }
 
 
@@ -3913,6 +4269,8 @@
   };
 
   function init() {
+    updateShopUI();
+    applyShopCosmetics();
 
     updateStreak();
 
