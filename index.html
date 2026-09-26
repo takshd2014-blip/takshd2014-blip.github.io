@@ -719,6 +719,7 @@
 .jb-room-modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:5000;display:none;align-items:center;justify-content:center;padding:16px}.jb-room-modal.show{display:flex}.jb-room-box{width:min(900px,96vw);max-height:92vh;overflow:auto;background:#101018;border:1px solid rgba(255,255,255,.14);border-radius:26px;padding:22px;box-shadow:0 25px 90px rgba(0,0,0,.55)}
 .jb-room-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.jb-room-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.jb-player{padding:14px;border-radius:18px;background:rgba(255,255,255,.06);text-align:center;border:1px solid rgba(255,255,255,.08)}.jb-avatar{font-size:52px;line-height:1.1;filter:drop-shadow(0 7px 12px rgba(0,0,0,.35))}.jb-player strong{display:block;margin-top:7px}.jb-status{font-size:12px;opacity:.72}.jb-actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.jb-actions button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}.jb-draw{background:linear-gradient(135deg,#f59e0b,#ef4444);color:white}.jb-spin{min-height:130px;display:flex;align-items:center;justify-content:center;border-radius:20px;background:radial-gradient(circle,rgba(139,92,246,.25),rgba(255,255,255,.04));font-size:58px;margin:14px 0}.jb-result{text-align:center;font-size:18px;font-weight:900;min-height:30px}.jb-chat{display:grid;grid-template-columns:1fr 280px;gap:14px}.jb-chatbox{min-height:160px;padding:14px;border-radius:18px;background:#08080d;border:1px solid rgba(255,255,255,.08)}.jb-msg{margin:7px 0;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.06)}.jb-chat input{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#161620;color:white;margin-top:8px}.jb-close{background:transparent!important;color:#aaa}.jb-rarity{font-size:11px;letter-spacing:.08em;opacity:.7}.jb-collection{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}.jb-owned{padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.06)}
 @media(max-width:700px){.jb-room-grid{grid-template-columns:repeat(2,1fr)}.jb-chat{grid-template-columns:1fr}}
+.jb-room-create{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.jb-room-create input{flex:1;min-width:190px;padding:11px;border-radius:11px;border:1px solid #333;background:#090910;color:#fff;text-transform:uppercase}.jb-room-create button,.jb-match-controls button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer}.jb-room-code{text-align:center;font-size:20px;font-weight:900;letter-spacing:3px;padding:12px;border-radius:14px;background:rgba(168,85,247,.12);margin:8px 0 14px}.jb-scorebar{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05)}.jb-player-score{margin-top:8px;font-weight:900}.jb-match-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.jb-question-card{padding:18px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}.jb-question-card #jbQuestion{font-size:20px;font-weight:900;margin-bottom:14px}.jb-answer-grid{display:grid;grid-template-columns:1fr;gap:9px}.jb-answer-grid button{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#171722;color:#fff;text-align:left;cursor:pointer;font-weight:700}.jb-answer-grid button:disabled{opacity:.45;cursor:not-allowed}.jb-score-list{display:grid;gap:8px}.jb-score-row{display:flex;justify-content:space-between;padding:10px;border-radius:11px;background:rgba(255,255,255,.05)}
 </style>
 
 </head>
@@ -726,26 +727,61 @@
 <body>
 
 <section class="card jb-room-launch" id="jockBobloRoomSection">
-  <h3>🎮 JOCK BOBLO — Multiplayer Room</h3>
-  <p>Room mein players, avatars, reactions aur virtual avatar draw.</p>
-  <div class="jb-actions"><button class="jb-room-btn" onclick="openJockRoom()">🚪 Open Jock Room</button></div>
+  <h3>🎮 JOCK BOBLO — ONLINE ROOM</h3>
+  <p>Friend ke saath real-time room banao, code share karo, aur live score dekho.</p>
+  <div class="jb-actions">
+    <button class="jb-room-btn" onclick="openJockRoom()">🚪 Create / Join Room</button>
+  </div>
 </section>
 
 <div class="jb-room-modal" id="jockRoomModal">
   <div class="jb-room-box">
-    <div class="jb-room-head"><div><h2 style="margin:0">🎮 JOCK BOBLO ROOM</h2><div style="opacity:.7;font-size:13px">Room #BOBLO-7K • Virtual rewards only</div></div><button class="jb-actions jb-close" onclick="closeJockRoom()">✕</button></div>
-    <div class="jb-room-grid" id="jbPlayers"></div>
-    <div class="jb-spin" id="jbSpin">🎰</div>
-    <div class="jb-result" id="jbDrawResult">Match ke baad Avatar Draw chalega.</div>
-    <div class="jb-actions">
-      <button class="jb-draw" onclick="runJockAvatarDraw()">🎰 Avatar Draw</button>
-      <button onclick="jockWinPose()">🏆 Win Pose</button>
-      <button onclick="jockLosePose()">💀 Lose Reaction</button>
-      <button onclick="jockVoiceToggle()">🎙️ Voice: <span id="jbVoiceState">OFF</span></button>
+    <div class="jb-room-head">
+      <div>
+        <h2 style="margin:0">🎮 JOCK BOBLO ONLINE</h2>
+        <div id="jbRoomStatus" style="opacity:.75;font-size:13px">Firebase login required</div>
+      </div>
+      <button class="jb-actions jb-close" onclick="closeJockRoom()">✕</button>
     </div>
+
+    <div class="jb-room-create">
+      <input id="jbRoomCodeInput" maxlength="10" placeholder="Room code, e.g. ABC123" autocomplete="off">
+      <button onclick="createJockRoom()">➕ Create Room</button>
+      <button onclick="joinJockRoom()">🔗 Join Room</button>
+    </div>
+    <div id="jbRoomCode" class="jb-room-code">No room joined</div>
+
+    <div class="jb-scorebar">
+      <div>👥 Players: <strong id="jbPlayerCount">0</strong></div>
+      <div>🎯 Round: <strong id="jbRoundText">Waiting</strong></div>
+      <div>⏱️ <strong id="jbTimer">--</strong></div>
+    </div>
+
+    <div class="jb-room-grid" id="jbPlayers"></div>
+
+    <div class="jb-match-controls">
+      <button class="jb-draw" onclick="startJockMatch()">▶️ Start Match</button>
+      <button onclick="leaveJockRoom()">🚪 Leave Room</button>
+    </div>
+
+    <div class="jb-question-card">
+      <div id="jbQuestion">Create or join a room first.</div>
+      <div id="jbAnswers" class="jb-answer-grid"></div>
+      <div id="jbMatchResult" class="jb-result"></div>
+    </div>
+
     <div class="jb-chat">
-      <div><h3>💬 Room Chat</h3><div class="jb-chatbox" id="jbChat"><div class="jb-msg">🤖 Boblo: Match ready?</div><div class="jb-msg">😎 Sigma: Bring it.</div></div><input id="jbChatInput" maxlength="120" placeholder="Type message..." onkeydown="if(event.key==='Enter')sendJockChat()"><button class="jb-room-btn" style="margin-top:8px" onclick="sendJockChat()">Send</button></div>
-      <div><h3>🗿 Avatar Collection</h3><div class="jb-collection" id="jbCollection"></div><p style="font-size:12px;opacity:.65">Duplicates → shards. Real-money betting nahi hai.</p></div>
+      <div>
+        <h3>💬 Live Room Chat</h3>
+        <div class="jb-chatbox" id="jbChat"></div>
+        <input id="jbChatInput" maxlength="120" placeholder="Message..." onkeydown="if(event.key==='Enter')sendJockChat()">
+        <button class="jb-room-btn" style="margin-top:8px" onclick="sendJockChat()">Send</button>
+      </div>
+      <div>
+        <h3>📊 Live Score</h3>
+        <div id="jbScoreList" class="jb-score-list"></div>
+        <p style="font-size:12px;opacity:.65">⭐ XP progress aur 💎 Diamonds alag hain. Match coins ka wager/stake nahi rakha gaya.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -4562,37 +4598,157 @@ itedUntil =
   if(oldRender){window.renderProfile=function(){oldRender();updateThemeLock();updateCoinShop();};}
 </script>
 
-<script id="jock-avatar-system-js">
-const JB_AVATARS=[
- {id:'sigma',emoji:'🗿',name:'Sigma Boblo',rarity:'EPIC'},
- {id:'ninja',emoji:'🥷',name:'Ninja Boblo',rarity:'RARE'},
- {id:'cyber',emoji:'🤖',name:'Cyber Boblo',rarity:'EPIC'},
- {id:'alien',emoji:'👽',name:'Alien Boblo',rarity:'RARE'},
- {id:'king',emoji:'👑',name:'King Boblo',rarity:'LEGENDARY'},
- {id:'clown',emoji:'🤡',name:'Jock Boblo',rarity:'COMMON'},
- {id:'fire',emoji:'🔥',name:'Fire Boblo',rarity:'EPIC'},
- {id:'ghost',emoji:'👻',name:'Ghost Boblo',rarity:'RARE'}
+<script type="module" id="jock-online-module">
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, runTransaction, arrayUnion, serverTimestamp, deleteField } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const JB_FIREBASE={
+  apiKey:"AIzaSyAtnob7lOAb7RCOz5sqssgMNI9gvBUf4wM",
+  authDomain:"funbox-be794.firebaseapp.com",
+  projectId:"funbox-be794",
+  storageBucket:"funbox-be794.firebasestorage.app",
+  messagingSenderId:"706832047051",
+  appId:"1:706832047051:web:c7ac442a40dd26697eb44e"
+};
+const jbApp=getApps().length?getApp():initializeApp(JB_FIREBASE);
+const jbAuth=getAuth(jbApp), jbDb=getFirestore(jbApp);
+let jbUser=null, jbRoomId=null, jbRoomUnsub=null, jbChatUnsub=null, jbTimer=null;
+let jbRoomData=null, jbAnsweredRound=0;
+
+const JB_QUESTIONS=[
+ {q:"Teacher: Homework kahan hai?",a:["Cloud mein backup hai.","Maine save nahi kiya.","Homework ne mujhe block kar diya."],c:2},
+ {q:"Friend: Itna late kyun aaye?",a:["Traffic tha.","Time se mera personal issue hai.","Main jaldi nikla tha."],c:1},
+ {q:"Brain at 2 AM:",a:["Chalo so jaate hain.","Kal ka kaam yaad hai?","Ek random embarrassing memory yaad karte hain."],c:2},
+ {q:"Phone battery 1%:",a:["Main safe hoon.","Ab asli survival game start.","Charger ki zaroorat nahi."],c:1},
+ {q:"Exam ke ek din pehle:",a:["Preparation complete.","Syllabus dekh ke confidence uninstall.","Aaj holiday hai."],c:1},
+ {q:"Friend: Kal mil raha hai?",a:["Haan pakka.","Dekhte hain, calendar se poochta hoon.","Mujhe yaad hi nahi."],c:1},
+ {q:"Jock Boblo ka rule:",a:["Serious rehna.","Fast answer, smart answer.","Answer Google kare bina dena."],c:1}
 ];
-let jbOwned=JSON.parse(localStorage.getItem('jbOwnedAvatars')||'["clown"]');
-let jbPlayers=[['You','clown'],['SigmaKid','sigma'],['CyberX','cyber'],['NinjaPro','ninja']];
-let jbVoice=false;
-function saveJB(){localStorage.setItem('jbOwnedAvatars',JSON.stringify(jbOwned));}
-function avatarById(id){return JB_AVATARS.find(a=>a.id===id)||JB_AVATARS[0];}
-function renderJBPlayers(){const el=document.getElementById('jbPlayers');if(!el)return;el.innerHTML=jbPlayers.map((p,i)=>{const a=avatarById(p[1]);return `<div class="jb-player" id="jbP${i}"><div class="jb-avatar">${a.emoji}</div><strong>${p[0]}</strong><div class="jb-status">${i===0?'⭐ You • READY':'READY'}</div></div>`}).join('');}
-function renderJBCollection(){const el=document.getElementById('jbCollection');if(!el)return;el.innerHTML=jbOwned.map(id=>{const a=avatarById(id);return `<div class="jb-owned" title="${a.rarity}">${a.emoji} ${a.name}<div class="jb-rarity">${a.rarity}</div></div>`}).join('');}
-function openJockRoom(){document.getElementById('jockRoomModal').classList.add('show');renderJBPlayers();renderJBCollection();}
-function closeJockRoom(){document.getElementById('jockRoomModal').classList.remove('show');}
-function runJockAvatarDraw(){
- const spin=document.getElementById('jbSpin'),out=document.getElementById('jbDrawResult');
- const winner=Math.floor(Math.random()*jbPlayers.length);
- const reward=JB_AVATARS[Math.floor(Math.random()*JB_AVATARS.length)];
- spin.textContent='🎰';out.textContent='Drawing...';
- let n=0;const timer=setInterval(()=>{spin.textContent=JB_AVATARS[Math.floor(Math.random()*JB_AVATARS.length)].emoji;n++;if(n>=12){clearInterval(timer);spin.textContent=reward.emoji;const player=jbPlayers[winner];if(!jbOwned.includes(reward.id)){jbOwned.push(reward.id);saveJB();out.textContent=`🎉 ${player[0]} ko NEW AVATAR mila — ${reward.name} (${reward.rarity})!`;renderJBCollection();}else{out.textContent=`🔄 ${player[0]} ko ${reward.name} ka duplicate mila — Avatar Shard!`;}}},110);
+
+function jbStatus(t){const e=document.getElementById('jbRoomStatus');if(e)e.textContent=t;}
+function jbCode(){return Math.random().toString(36).slice(2,8).toUpperCase();}
+function jbEsc(t){return String(t).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+function jbName(){return (jbUser?.displayName||jbUser?.email?.split('@')[0]||'Player').slice(0,20);}
+function jbAvatarFor(uid){
+  const icons=['🗿','🥷','🤖','👽','👑','🤡','🔥','👻'];
+  let n=0; for(const ch of String(uid||'')) n=(n+ch.charCodeAt(0))%icons.length; return icons[n];
 }
-function jockWinPose(){const me=document.getElementById('jbP0');if(!me)return;me.animate([{transform:'translateY(0) rotate(0)'},{transform:'translateY(-12px) rotate(-4deg)'},{transform:'translateY(0) rotate(0)'}],{duration:700,iterations:2});document.getElementById('jbDrawResult').textContent='🏆 WIN POSE! Avatar full flex mode.';}
-function jockLosePose(){const me=document.getElementById('jbP0');if(!me)return;me.animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},{transform:'translateX(0)'}],{duration:600,iterations:2});document.getElementById('jbDrawResult').textContent='💀 Oof. Defeat reaction activated.';}
-function jockVoiceToggle(){jbVoice=!jbVoice;document.getElementById('jbVoiceState').textContent=jbVoice?'ON':'OFF';document.getElementById('jbDrawResult').textContent=jbVoice?'🎙️ Voice UI ON — live voice backend next phase.':'🎙️ Voice OFF';}
-function sendJockChat(){const input=document.getElementById('jbChatInput'),chat=document.getElementById('jbChat');const t=input.value.trim();if(!t)return;const d=document.createElement('div');d.className='jb-msg';d.textContent='⭐ You: '+t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;input.value='';}
+function jbPlayerList(data){return Object.values(data?.players||{});}
+
+window.openJockRoom=()=>{document.getElementById('jockRoomModal').classList.add('show');if(!jbUser)jbStatus('Pehle FunBox account se login karo.');else jbStatus('Online. Create ya Join Room karo.');};
+window.closeJockRoom=()=>document.getElementById('jockRoomModal').classList.remove('show');
+
+window.createJockRoom=async()=>{
+  if(!jbUser)return jbStatus('⚠️ Pehle account login karo.');
+  try{
+    const code=(document.getElementById('jbRoomCodeInput').value.trim().toUpperCase()||jbCode()).replace(/[^A-Z0-9]/g,'').slice(0,10);
+    if(code.length<4)return jbStatus('Room code kam se kam 4 characters ka rakho.');
+    const ref=doc(jbDb,'jockRooms',code);
+    const snap=await getDoc(ref);
+    if(snap.exists())return jbStatus('Ye room already hai. Join Room use karo.');
+    const me={uid:jbUser.uid,name:jbName(),avatar:jbAvatarFor(jbUser.uid),score:0,answeredRound:0,joinedAt:Date.now(),host:true};
+    await setDoc(ref,{roomId:code,hostUid:jbUser.uid,status:'waiting',round:0,questionIndex:0,players:{[jbUser.uid]:me},messages:[],createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    await jbWatchRoom(code); jbStatus('Room created. Friend ko code bhejo: '+code);
+  }catch(e){console.error(e);jbStatus('❌ Room create failed: '+e.message);}
+};
+
+window.joinJockRoom=async()=>{
+  if(!jbUser)return jbStatus('⚠️ Pehle account login karo.');
+  const code=document.getElementById('jbRoomCodeInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,10);
+  if(code.length<4)return jbStatus('Room code enter karo.');
+  try{
+    const ref=doc(jbDb,'jockRooms',code);
+    await runTransaction(jbDb,async tx=>{
+      const snap=await tx.get(ref); if(!snap.exists())throw new Error('Room nahi mila.');
+      const data=snap.data(); const players=data.players||{};
+      if(!players[jbUser.uid] && Object.keys(players).length>=4)throw new Error('Room full hai (max 4).');
+      players[jbUser.uid]={uid:jbUser.uid,name:jbName(),avatar:jbAvatarFor(jbUser.uid),score:Number(players[jbUser.uid]?.score||0),answeredRound:0,joinedAt:Date.now(),host:false};
+      tx.update(ref,{players,updatedAt:serverTimestamp()});
+    });
+    await jbWatchRoom(code); jbStatus('Joined room '+code+'. Match ka wait karo.');
+  }catch(e){console.error(e);jbStatus('❌ Join failed: '+e.message);}
+};
+
+async function jbWatchRoom(code){
+  if(jbRoomUnsub)jbRoomUnsub(); if(jbChatUnsub)jbChatUnsub();
+  jbRoomId=code;
+  const ref=doc(jbDb,'jockRooms',code);
+  jbRoomUnsub=onSnapshot(ref,snap=>{if(!snap.exists()){jbStatus('Room closed.');return;}jbRoomData=snap.data();renderJBRoom();},e=>jbStatus('⚠️ Live room error: '+e.message));
+}
+
+function renderJBRoom(){
+  const d=jbRoomData;if(!d)return;
+  document.getElementById('jbRoomCode').textContent='ROOM CODE: '+d.roomId;
+  const players=jbPlayerList(d);
+  document.getElementById('jbPlayerCount').textContent=players.length+'/4';
+  document.getElementById('jbRoundText').textContent=d.status==='playing'?`${d.round}/5`:(d.status==='finished'?'Finished':'Waiting');
+  document.getElementById('jbPlayers').innerHTML=players.map(p=>`<div class="jb-player"><div class="jb-avatar">${p.avatar||'🙂'}</div><strong>${jbEsc(p.name)}</strong><div class="jb-status">${p.uid===d.hostUid?'👑 HOST':''} • ${p.uid===jbUser?.uid?'YOU':''}</div><div class="jb-player-score">⭐ ${Number(p.score||0)} XP</div></div>`).join('');
+  document.getElementById('jbScoreList').innerHTML=[...players].sort((a,b)=>Number(b.score||0)-Number(a.score||0)).map((p,i)=>`<div class="jb-score-row"><span>#${i+1} ${jbEsc(p.name)}</span><strong>${Number(p.score||0)} XP</strong></div>`).join('');
+  const q=JB_QUESTIONS[Number(d.questionIndex||0)%JB_QUESTIONS.length];
+  if(d.status==='playing'){
+    document.getElementById('jbQuestion').textContent=q.q;
+    document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button onclick="answerJock(${i})" ${Number(d.round||0)<=jbAnsweredRound?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
+    document.getElementById('jbMatchResult').textContent=`Round ${d.round}/5 — answer fast.`;
+    startJBTimer(d.roundStartedAt||Date.now());
+  }else if(d.status==='finished'){
+    const winner=[...players].sort((a,b)=>Number(b.score||0)-Number(a.score||0))[0];
+    document.getElementById('jbQuestion').textContent='🏁 Match finished!';
+    document.getElementById('jbAnswers').innerHTML='';
+    document.getElementById('jbMatchResult').textContent=winner?`🏆 ${winner.name} leads with ${winner.score} XP.`:'';
+    stopJBTimer();
+  }else{
+    document.getElementById('jbQuestion').textContent=players.length<2?'Friend ko room code bhejo — at least 2 players needed.':'Players ready. Host can start match.';
+    document.getElementById('jbAnswers').innerHTML='';
+    document.getElementById('jbMatchResult').textContent=''; stopJBTimer();
+  }
+  const chat=document.getElementById('jbChat'); chat.innerHTML=(d.messages||[]).slice(-30).map(m=>`<div class="jb-msg"><strong>${jbEsc(m.name)}:</strong> ${jbEsc(m.text)}</div>`).join('')||'<div class="jb-msg">Room chat ready.</div>'; chat.scrollTop=chat.scrollHeight;
+}
+
+function startJBTimer(ts){clearInterval(jbTimer);const tick=()=>{const left=Math.max(0,10-Math.floor((Date.now()-Number(ts))/1000));document.getElementById('jbTimer').textContent=left+'s';if(left<=0)clearInterval(jbTimer);};tick();jbTimer=setInterval(tick,250);}
+function stopJBTimer(){clearInterval(jbTimer);document.getElementById('jbTimer').textContent='--';}
+
+window.startJockMatch=async()=>{
+  if(!jbRoomId||!jbRoomData||jbRoomData.hostUid!==jbUser?.uid)return jbStatus('Sirf room host match start kar sakta hai.');
+  if(Object.keys(jbRoomData.players||{}).length<2)return jbStatus('Friend ko join karao. 2+ players chahiye.');
+  await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{status:'playing',round:1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'MATCH START! 10 seconds.',at:Date.now()})});
+  jbAnsweredRound=0;
+};
+
+window.answerJock=async(index)=>{
+  if(!jbRoomData||jbRoomData.status!=='playing'||!jbUser)return;
+  const round=Number(jbRoomData.round||0); if(jbAnsweredRound===round)return;
+  if(Date.now()-Number(jbRoomData.roundStartedAt||Date.now())>10000)return jbStatus('⏱️ Time up.');
+  const q=JB_QUESTIONS[Number(jbRoomData.questionIndex||0)%JB_QUESTIONS.length]; const correct=index===q.c;
+  jbAnsweredRound=round;
+  try{
+    const ref=doc(jbDb,'jockRooms',jbRoomId);
+    await runTransaction(jbDb,async tx=>{
+      const snap=await tx.get(ref);if(!snap.exists())throw new Error('Room closed.');const d=snap.data();const p={...(d.players||{})};const me={...(p[jbUser.uid]||{})};
+      if(Number(me.answeredRound||0)>=Number(d.round||0))return;
+      const speed=Math.max(0,10000-(Date.now()-Number(d.roundStartedAt||Date.now())));const pts=correct?(10+Math.floor(speed/2000)):0;
+      me.score=Number(me.score||0)+pts;me.answeredRound=Number(d.round||0);p[jbUser.uid]=me;
+      tx.update(ref,{players:p,updatedAt:serverTimestamp()});
+    });
+    setTimeout(()=>jbAdvanceIfReady(),350);
+    jbStatus(correct?'✅ Correct!':'❌ Wrong!');
+  }catch(e){jbStatus('Answer error: '+e.message);}
+};
+
+async function jbAdvanceIfReady(){
+  if(!jbRoomId)return; const ref=doc(jbDb,'jockRooms',jbRoomId);
+  try{await runTransaction(jbDb,async tx=>{const snap=await tx.get(ref);if(!snap.exists())return;const d=snap.data();if(d.status!=='playing')return;const players=Object.values(d.players||{});const round=Number(d.round||0);const everyone=players.length>0&&players.every(p=>Number(p.answeredRound||0)>=round);const timedOut=Date.now()-Number(d.roundStartedAt||0)>=10000;if(!everyone&&!timedOut)return;if(round>=5){tx.update(ref,{status:'finished',updatedAt:serverTimestamp()});return;}tx.update(ref,{round:round+1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp()});});}catch(e){console.warn(e);}
+}
+
+window.sendJockChat=async()=>{
+  if(!jbRoomId||!jbUser)return jbStatus('Room join karo.');
+  const input=document.getElementById('jbChatInput');const text=input.value.trim();if(!text)return;
+  try{await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{messages:arrayUnion({name:jbName(),text:text.slice(0,120),at:Date.now()})});input.value='';}catch(e){jbStatus('Chat failed: '+e.message);}
+};
+
+window.leaveJockRoom=async()=>{if(!jbRoomId||!jbUser)return;try{const ref=doc(jbDb,'jockRooms',jbRoomId);await runTransaction(jbDb,async tx=>{const s=await tx.get(ref);if(!s.exists())return;const d=s.data();const players={...(d.players||{})};delete players[jbUser.uid];if(Object.keys(players).length===0){tx.delete(ref);}else{let hostUid=d.hostUid;if(hostUid===jbUser.uid)hostUid=Object.values(players)[0].uid;tx.update(ref,{players,hostUid,updatedAt:serverTimestamp()});}});}catch(e){console.warn(e);}if(jbRoomUnsub)jbRoomUnsub();jbRoomUnsub=null;jbRoomId=null;jbRoomData=null;stopJBTimer();document.getElementById('jbRoomCode').textContent='No room joined';jbStatus('Left room.');renderJBRoom();};
+
+onAuthStateChanged(jbAuth,u=>{jbUser=u;if(!u){jbStatus('Firebase login required.');return;}jbStatus('Logged in as '+jbName()+'. Create / Join Room.');});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeJockRoom();});
 </script>
 
