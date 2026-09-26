@@ -642,8 +642,6 @@
     .theme-tools input[type=file]{max-width:100%}
     .locked{opacity:.55}
   </style>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3529745369901340"
-     crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -688,7 +686,12 @@
 
       <div class="stat">
         <strong id="points">0</strong>
-        <span>Points</span>
+        <span>XP / Points</span>
+      </div>
+
+      <div class="stat">
+        <strong id="coins">0</strong>
+        <span>🪙 Coins</span>
       </div>
 
       <div class="stat">
@@ -708,6 +711,31 @@
 
     </div>
 
+    <p class="muted" style="margin-top:12px;text-align:center;">🪙 Coins are your spendable FunBox currency.</p>
+
+  </section>
+
+  <section class="card" id="coinShop">
+    <h2>🛒 Coin Shop</h2>
+    <p class="muted">Coins spend karke FunBox mein useful unlocks lo.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px;">
+
+      <div class="stat" style="text-align:left;">
+        <strong style="font-size:1.05rem;">🎟️ +1 Extra Use</strong>
+        <span>50 🪙 • Daily access mein 1 extra use add hoga.</span>
+        <button id="buyExtraUseBtn" class="btn secondary" type="button" onclick="buyCoinItem('extraUse')" style="margin-top:10px;">Buy for 50 🪙</button>
+      </div>
+
+      <div class="stat" style="text-align:left;">
+        <strong style="font-size:1.05rem;">🎨 Theme Pass</strong>
+        <span>250 🪙 • Custom Theme ka XP lock unlock karega.</span>
+        <button id="buyThemePassBtn" class="btn secondary" type="button" onclick="buyCoinItem('themePass')" style="margin-top:10px;">Buy for 250 🪙</button>
+      </div>
+
+    </div>
+
+    <div id="coinShopStatus" class="game-status" style="margin-top:12px;">Shop ready.</div>
   </section>
 
   <section class="card" id="themeCard">
@@ -966,7 +994,11 @@
 
       <div class="mini-game">
         <h3>⏱️ 10-Second Challenge</h3>
-        <p class="muted">Timer start karo. 10 seconds ke andar button hit karo.</p>
+        <p class="muted">Timer start karo. Target random hoga, lekin timer poore 10 sec chalega.</p>
+
+        <div id="tenSecTarget" class="game-status" style="font-size:1.05rem;font-weight:800;text-align:center;margin:10px 0 6px;">
+          🎯 Target: —
+        </div>
 
         <div id="tenSecTimer" class="ten-sec-timer">
           Ready
@@ -1253,6 +1285,7 @@
   const STORAGE = {
 
     points: "funboxPoints",
+    coins: "funboxCoins",
     streak: "funboxStreak",
     lastDay: "funboxLastDay",
     tone: "funboxTone",
@@ -1262,7 +1295,8 @@
     unlimited: "funboxUnlimitedUntil",
     recent: "funboxRecent",
     challenge: "funboxChallenge",
-    rewards: "funboxRewards"
+    rewards: "funboxRewards",
+    themePass: "funboxThemePass"
 
   };
 
@@ -1283,6 +1317,8 @@
   ========================================================= */
 
   let points = Number(localStorage.getItem(STORAGE.points) || 0);
+
+  let coins = Number(localStorage.getItem(STORAGE.coins) || 0);
 
   let streak = Number(localStorage.getItem(STORAGE.streak) || 0);
 
@@ -1553,6 +1589,8 @@
 
     document.getElementById("points").textContent = points;
 
+    document.getElementById("coins").textContent = coins;
+
     document.getElementById("profileLevel").textContent =
       getProfileLevel();
 
@@ -1568,8 +1606,129 @@
 
 
   /* =========================================================
-     POINTS
+     XP / POINTS + COINS
   ========================================================= */
+
+  function addCoins(amount, source = "unknown") {
+
+    const value = Math.max(0, Math.floor(Number(amount) || 0));
+
+    if (!value) return;
+
+    coins += value;
+
+    localStorage.setItem(STORAGE.coins, coins);
+
+    renderProfile();
+    updateCoinShop();
+
+    trackEvent("earn_virtual_currency", {
+      virtual_currency_name: "coins",
+      value: value,
+      source: source
+    });
+
+    if (window.funboxCloudSave) window.funboxCloudSave();
+
+  }
+
+
+  function updateCoinShop() {
+
+    const extraBtn = document.getElementById("buyExtraUseBtn");
+    const themeBtn = document.getElementById("buyThemePassBtn");
+    const status = document.getElementById("coinShopStatus");
+
+    if (extraBtn) {
+      extraBtn.disabled = coins < 50;
+      extraBtn.textContent = coins >= 50 ? "Buy for 50 🪙" : "Need 50 🪙";
+    }
+
+    const hasThemePass = localStorage.getItem(STORAGE.themePass) === "1";
+
+    if (themeBtn) {
+      themeBtn.disabled = hasThemePass || coins < 250;
+      themeBtn.textContent = hasThemePass ? "Owned ✓" : (coins >= 250 ? "Buy for 250 🪙" : "Need 250 🪙");
+    }
+
+    if (status && hasThemePass) {
+      status.textContent = "🎨 Theme Pass owned. Custom Theme unlocked.";
+    }
+
+  }
+
+
+  function buyCoinItem(item) {
+
+    const prices = {
+      extraUse: 50,
+      themePass: 250
+    };
+
+    const price = prices[item];
+    if (!price) return;
+
+    if (item === "themePass" && localStorage.getItem(STORAGE.themePass) === "1") {
+      return;
+    }
+
+    if (coins < price) {
+      const status = document.getElementById("coinShopStatus");
+      if (status) status.textContent = "🪙 Coins kam hain. Aur coins earn karo!";
+      return;
+    }
+
+    coins -= price;
+
+    if (item === "extraUse") {
+      extraUses += 1;
+      localStorage.setItem(STORAGE.extraUses, String(extraUses));
+      document.getElementById("coinShopStatus").textContent = "🎟️ +1 Extra Use mil gaya!";
+    }
+
+    if (item === "themePass") {
+      localStorage.setItem(STORAGE.themePass, "1");
+      document.getElementById("coinShopStatus").textContent = "🎨 Theme Pass unlock ho gaya!";
+    }
+
+    localStorage.setItem(STORAGE.coins, String(coins));
+    renderProfile();
+    updateAccessStatus();
+    updateCoinShop();
+    updateThemeLock();
+
+    trackEvent("funbox_coin_shop_purchase", {
+      item: item,
+      price_coins: price
+    });
+
+    if (window.funboxCloudSave) window.funboxCloudSave();
+
+  }
+
+
+  function getCoinReward(source, xpAmount) {
+
+    const rewards = {
+      generator: 2,
+      surprise: 2,
+      guess_win: 5,
+      riddle_win: 8,
+      who_am_i_win: 8,
+      joke_valid: 3,
+      joke_complete: 10,
+      code_redeemed: 10,
+      daily_challenge: 10
+    };
+
+    if (source === "ten_second_timing") {
+      return Math.min(10, Math.max(3, Number(xpAmount) || 1));
+    }
+
+    return rewards[source] || 0;
+
+  }
+
 
   function addPoints(amount, source = "unknown") {
 
@@ -1577,15 +1736,28 @@
 
     localStorage.setItem(STORAGE.points, points);
 
+    const coinReward = getCoinReward(source, amount);
+
+    if (coinReward > 0) {
+      coins += coinReward;
+      localStorage.setItem(STORAGE.coins, coins);
+    }
+
     renderProfile();
 
     trackEvent("earn_virtual_currency", {
-
       virtual_currency_name: "points",
       value: amount,
       source: source
-
     });
+
+    if (coinReward > 0) {
+      trackEvent("earn_virtual_currency", {
+        virtual_currency_name: "coins",
+        value: coinReward,
+        source: source
+      });
+    }
 
     if (window.funboxCloudSave) window.funboxCloudSave();
 
@@ -2205,7 +2377,279 @@
     },
     {
       q: "Main toot sakta hoon bina touch kiye. Main kya hoon?",
-      a: ["promise", "vaada", "promise"]
+      a: ["promise", "vaada"]
+    },
+    {
+      q: "Mere daant bahut hain, par main kha nahi sakta. Main kya hoon?",
+      a: ["comb", "kanghi"]
+    },
+    {
+      q: "Mere pair nahi, phir bhi main daudta hoon. Main kya hoon?",
+      a: ["water", "paani", "river", "nadi"]
+    },
+    {
+      q: "Mere haath hain, par main clap nahi kar sakta. Main kya hoon?",
+      a: ["clock", "ghadi", "watch"]
+    },
+    {
+      q: "Main jitna sukhta hoon, utna hi geela karta hoon. Main kya hoon?",
+      a: ["towel", "tauliya"]
+    },
+    {
+      q: "Mera muh hai par main bol nahi sakta. Main kya hoon?",
+      a: ["bottle", "botal"]
+    },
+    {
+      q: "Main ghar mein rehta hoon, par ghar nahi hoon; mujhe kholte hi duniya dikhti hai. Main kya hoon?",
+      a: ["window", "khidki"]
+    },
+    {
+      q: "Mere paas aankh hai, par main dekh nahi sakta. Main kya hoon?",
+      a: ["needle", "sui"]
+    },
+    {
+      q: "Main upar jaata hoon aur neeche bhi aata hoon, par apni jagah se nahi hilta. Main kya hoon?",
+      a: ["stairs", "staircase", "seedhi"]
+    },
+    {
+      q: "Main roshni deta hoon, par khud suraj nahi. Main kya hoon?",
+      a: ["lamp", "light", "bulb"]
+    },
+    {
+      q: "Main raat ko aata hoon, din mein chala jaata hoon. Main kya hoon?",
+      a: ["moon", "chaand"]
+    },
+    {
+      q: "Main din mein ek baar aata hoon aur raat mein bhi, par ghadi nahi hoon. Main kya hoon?",
+      a: ["letter", "akshar"]
+    },
+    {
+      q: "Main likhta hoon, par mere paas haath nahi. Main kya hoon?",
+      a: ["pen", "pencil"]
+    },
+    {
+      q: "Main udta hoon par mere pankh nahi. Main kya hoon?",
+      a: ["cloud", "badal"]
+    },
+    {
+      q: "Main garajta hoon par sher nahi. Main kya hoon?",
+      a: ["thunder", "badal", "cloud"]
+    },
+    {
+      q: "Main bina pair ke travel karta hoon aur bina muh ke awaaz karta hoon. Main kya hoon?",
+      a: ["sound", "awaaz"]
+    },
+    {
+      q: "Mujhe jitna bharo, main utna hi halka lag sakta hoon. Main kya hoon?",
+      a: ["balloon", "gubbara"]
+    },
+    {
+      q: "Main gol hoon, ghoomta hoon, aur gaadi ko chalne mein help karta hoon. Main kya hoon?",
+      a: ["wheel", "pahiya"]
+    },
+    {
+      q: "Main ghar ke bahar hota hoon aur andar aane ka raasta deta hoon. Main kya hoon?",
+      a: ["door", "darwaza"]
+    },
+    {
+      q: "Main khud nahi chalta, par logon ko chalata hoon. Main kya hoon?",
+      a: ["road", "sadak"]
+    },
+    {
+      q: "Main paani mein rehta hoon par machhli nahi hoon; main chal bhi sakta hoon. Main kya hoon?",
+      a: ["boat", "ship", "naav"]
+    },
+    {
+      q: "Mere paas pages hain par main book nahi; tum mujhe screen par padhte ho. Main kya hoon?",
+      a: ["website", "webpage", "page"]
+    },
+    {
+      q: "Main click se khulta hoon aur information dikhata hoon. Main kya hoon?",
+      a: ["link", "button"]
+    },
+    {
+      q: "Main password ke bina bhi kabhi-kabhi yaad aa jaata hoon. Main kya hoon?",
+      a: ["memory", "yaad"]
+    },
+    {
+      q: "Main jitna share karo, utna hi badhta hoon. Main kya hoon?",
+      a: ["knowledge", "knowledge"]
+    },
+    {
+      q: "Main sabko dikhta hoon, par khud ko nahi dekh sakta. Main kya hoon?",
+      a: ["mirror", "sheesha"]
+    },
+    {
+      q: "Main tumhara chehra dikhata hoon, par khud chehra nahi rakhta. Main kya hoon?",
+      a: ["mirror", "sheesha"]
+    },
+    {
+      q: "Main hawa mein hoon, par mujhe pakad nahi sakte. Main kya hoon?",
+      a: ["air", "hawa"]
+    },
+    {
+      q: "Main baarish ke baad aasman mein rang dikhata hoon. Main kya hoon?",
+      a: ["rainbow", "indradhanush"]
+    },
+    {
+      q: "Main andhere mein kaam aata hoon aur battery se chal sakta hoon. Main kya hoon?",
+      a: ["torch", "flashlight"]
+    },
+    {
+      q: "Main time batata hoon aur haath bhi rakhta hoon. Main kya hoon?",
+      a: ["clock", "watch", "ghadi"]
+    },
+    {
+      q: "Main ghar ko thanda karta hoon aur hawa ghumata hoon. Main kya hoon?",
+      a: ["fan", "pankha"]
+    },
+    {
+      q: "Main khana thanda rakhta hoon. Main kya hoon?",
+      a: ["fridge", "refrigerator"]
+    },
+    {
+      q: "Main garam khana banane mein help karta hoon aur kitchen mein milta hoon. Main kya hoon?",
+      a: ["oven", "stove", "chulha"]
+    },
+    {
+      q: "Main photo leta hoon, par photographer nahi hoon. Main kya hoon?",
+      a: ["camera", "phone"]
+    },
+    {
+      q: "Main awaaz record karta hoon, par singer nahi hoon. Main kya hoon?",
+      a: ["microphone", "mic"]
+    },
+    {
+      q: "Main message pahunchata hoon bina daakiya bane. Main kya hoon?",
+      a: ["email", "message"]
+    },
+    {
+      q: "Main chhota sa code hoon jo kisi cheez ko unlock kar sakta hoon. Main kya hoon?",
+      a: ["password", "pin"]
+    },
+    {
+      q: "Main internet par tumhara address hoon. Main kya hoon?",
+      a: ["url", "website address", "web address"]
+    },
+    {
+      q: "Main files ko online rakhne mein help karta hoon. Main kya hoon?",
+      a: ["cloud", "cloud storage"]
+    },
+    {
+      q: "Main screen par move karta hoon aur click karne mein help karta hoon. Main kya hoon?",
+      a: ["cursor", "mouse"]
+    },
+    {
+      q: "Mere andar bahut saare apps ho sakte hain, par main phone nahi hoon. Main kya hoon?",
+      a: ["tablet"]
+    },
+    {
+      q: "Main game mein tumhari progress save kar sakta hoon. Main kya hoon?",
+      a: ["save", "save file"]
+    },
+    {
+      q: "Main galat spelling ko pakadne mein help karta hoon. Main kya hoon?",
+      a: ["spell checker", "autocorrect"]
+    },
+    {
+      q: "Main tumhe ek jagah se doosri jagah virtually le ja sakta hoon. Main kya hoon?",
+      a: ["browser", "internet"]
+    },
+    {
+      q: "Main search karta hoon aur results dikhata hoon. Main kya hoon?",
+      a: ["search engine", "google"]
+    },
+    {
+      q: "Main video chalata hoon aur pause bhi ho sakta hoon. Main kya hoon?",
+      a: ["player", "video player"]
+    },
+    {
+      q: "Main gaane sunata hoon aur volume badha sakta hoon. Main kya hoon?",
+      a: ["speaker"]
+    },
+    {
+      q: "Main phone ko power deta hoon. Main kya hoon?",
+      a: ["charger"]
+    },
+    {
+      q: "Main power store karta hoon. Main kya hoon?",
+      a: ["battery"]
+    },
+    {
+      q: "Main text ko bada ya chhota kar sakta hoon. Main kya hoon?",
+      a: ["font size", "text size"]
+    },
+    {
+      q: "Main website ka front page hota hoon. Main kya hoon?",
+      a: ["homepage", "home page"]
+    },
+    {
+      q: "Main button dabane par kuch action karwata hoon. Main kya hoon?",
+      a: ["button"]
+    },
+    {
+      q: "Main internet par kisi page ka naam/address hota hoon. Main kya hoon?",
+      a: ["url", "web address"]
+    },
+    {
+      q: "Main data ko chhote packets mein bhejne wali digital duniya ka hissa hoon. Main kya hoon?",
+      a: ["internet"]
+    },
+    {
+      q: "Main numbers ka hisaab karta hoon, par calculator nahi hoon. Main kya hoon?",
+      a: ["computer"]
+    },
+    {
+      q: "Main bahut saari information yaad rakh sakta hoon, par insaan nahi hoon. Main kya hoon?",
+      a: ["computer", "memory"]
+    },
+    {
+      q: "Main ek click mein tumhe doosre page par le ja sakta hoon. Main kya hoon?",
+      a: ["link"]
+    },
+    {
+      q: "Main website ko online available banata hoon. Main kya hoon?",
+      a: ["server", "hosting"]
+    },
+    {
+      q: "Main website ka look badalta hoon. Main kya hoon?",
+      a: ["css"]
+    },
+    {
+      q: "Main website ko logic aur actions deta hoon. Main kya hoon?",
+      a: ["javascript", "js"]
+    },
+    {
+      q: "Main website ki basic structure banata hoon. Main kya hoon?",
+      a: ["html"]
+    },
+    {
+      q: "Main ek aisa box hoon jisme tum text type karte ho. Main kya hoon?",
+      a: ["input", "textbox", "text box"]
+    },
+    {
+      q: "Main screen par chhota sa message dikha sakta hoon. Main kya hoon?",
+      a: ["alert", "notification"]
+    },
+    {
+      q: "Main tumhari location nahi, par website ka exact page bata sakta hoon. Main kya hoon?",
+      a: ["url"]
+    },
+    {
+      q: "Main letters aur numbers ko ek secret combination mein rakh sakta hoon. Main kya hoon?",
+      a: ["password"]
+    },
+    {
+      q: "Main ek digital diary ki tarah hoon jisme notes save ho sakte hain. Main kya hoon?",
+      a: ["notes", "notepad"]
+    },
+    {
+      q: "Main picture ko chhota-bada kar sakta hoon. Main kya hoon?",
+      a: ["resize", "image editor"]
+    },
+    {
+      q: "Main screen par cheezon ko line mein arrange kar sakta hoon. Main kya hoon?",
+      a: ["layout", "grid"]
     }
   ];
 
@@ -2233,6 +2677,470 @@
         "Mere glasses round hain."
       ],
       a: ["harry potter", "harry"]
+    },
+    {
+      clues: [
+        "Main ek famous superhero hoon.",
+        "Meri shield round hai.",
+        "Mera naam Steve Rogers hai."
+      ],
+      a: ["captain america", "steve rogers"]
+    },
+    {
+      clues: [
+        "Main ek superhero hoon jo web shoot karta hai.",
+        "Main New York se associated hoon.",
+        "Meri identity Peter Parker hai."
+      ],
+      a: ["spiderman", "spider man", "peter parker"]
+    },
+    {
+      clues: [
+        "Main ek billionaire superhero hoon.",
+        "Mera suit technology se powered hai.",
+        "Mera naam Tony Stark hai."
+      ],
+      a: ["iron man", "tony stark"]
+    },
+    {
+      clues: [
+        "Main ek superhero hoon.",
+        "Main Gotham City mein crime fight karta hoon.",
+        "Mere paas superpowers nahi, technology aur training hai."
+      ],
+      a: ["batman", "bruce wayne"]
+    },
+    {
+      clues: [
+        "Main ek green superhero hoon.",
+        "Gusse mein mera size aur strength badh jaati hai.",
+        "Mera human naam Bruce Banner hai."
+      ],
+      a: ["hulk", "bruce banner"]
+    },
+    {
+      clues: [
+        "Main ek fictional mouse hoon.",
+        "Main Disney ka iconic character hoon.",
+        "Meri partner Minnie hai."
+      ],
+      a: ["mickey mouse", "mickey"]
+    },
+    {
+      clues: [
+        "Main ek fictional duck hoon.",
+        "Meri awaaz aur temper dono famous hain.",
+        "Main Disney character hoon."
+      ],
+      a: ["donald duck", "donald"]
+    },
+    {
+      clues: [
+        "Main ek blue hedgehog hoon.",
+        "Main bahut fast run karta hoon.",
+        "Mera rival Dr. Eggman hai."
+      ],
+      a: ["sonic", "sonic the hedgehog"]
+    },
+    {
+      clues: [
+        "Main ek video game plumber hoon.",
+        "Meri red cap famous hai.",
+        "Mera brother Luigi hai."
+      ],
+      a: ["mario", "super mario"]
+    },
+    {
+      clues: [
+        "Main Mario ka brother hoon.",
+        "Meri cap green hai.",
+        "Mera naam L se start hota hai."
+      ],
+      a: ["luigi"]
+    },
+    {
+      clues: [
+        "Main ek Pokémon hoon.",
+        "Mera body yellow hai.",
+        "Main electricity use karta hoon."
+      ],
+      a: ["pikachu"]
+    },
+    {
+      clues: [
+        "Main ek famous fictional pirate captain hoon.",
+        "Main straw hat pehenta hoon.",
+        "Mera dream Pirate King banna hai."
+      ],
+      a: ["luffy", "monkey d luffy"]
+    },
+    {
+      clues: [
+        "Main ek fictional ninja hoon.",
+        "Meri orange outfit famous hai.",
+        "Mera dream Hokage banna hai."
+      ],
+      a: ["naruto", "naruto uzumaki"]
+    },
+    {
+      clues: [
+        "Main ek anime swordsman hoon.",
+        "Main green-haired hoon.",
+        "Mere paas multiple swords ka fighting style hai."
+      ],
+      a: ["zoro", "roronoa zoro"]
+    },
+    {
+      clues: [
+        "Main ek young detective hoon.",
+        "Mera body bachche jaisa hai, par mind detective ka hai.",
+        "Mera famous gadget watch nahi, bowtie aur gadgets hain."
+      ],
+      a: ["conan", "detective conan", "shinichi kudo"]
+    },
+    {
+      clues: [
+        "Main ek blue-haired anime character hoon.",
+        "Main magical school setting se associated hoon.",
+        "Mera character Doraemon nahi hai."
+      ],
+      a: ["nobita", "doraemon"]
+    },
+    {
+      clues: [
+        "Main ek robotic cat hoon.",
+        "Main future se aaya hoon.",
+        "Meri pocket mein futuristic gadgets hote hain."
+      ],
+      a: ["doraemon"]
+    },
+    {
+      clues: [
+        "Main ek school-going cartoon character hoon.",
+        "Mera best friend ek yellow sponge nahi, balki ek blue robot cat hai.",
+        "Mera naam N se start hota hai."
+      ],
+      a: ["nobita", "nobita nobi"]
+    },
+    {
+      clues: [
+        "Main ek famous detective dog hoon.",
+        "Main mystery solve karne wali team ka part hoon.",
+        "Mere owner ka naam Shaggy hai."
+      ],
+      a: ["scooby doo", "scooby"]
+    },
+    {
+      clues: [
+        "Main ek famous fictional ogre hoon.",
+        "Main swamp mein rehta hoon.",
+        "Mera best friend Donkey hai."
+      ],
+      a: ["shrek"]
+    },
+    {
+      clues: [
+        "Main ek talking donkey hoon.",
+        "Main Shrek ke saath adventures karta hoon.",
+        "Mujhe bahut baat karna pasand hai."
+      ],
+      a: ["donkey"]
+    },
+    {
+      clues: [
+        "Main ek snowman character hoon.",
+        "Main Frozen universe se hoon.",
+        "Mujhe summer pasand hai."
+      ],
+      a: ["olaf"]
+    },
+    {
+      clues: [
+        "Main ek Disney princess hoon.",
+        "Mere long magical hair hain.",
+        "Meri story mein ek floating lantern festival famous hai."
+      ],
+      a: ["rapunzel"]
+    },
+    {
+      clues: [
+        "Main ek Disney character hoon.",
+        "Main ice powers use karti hoon.",
+        "Mera naam Frozen se associated hai."
+      ],
+      a: ["elsa"]
+    },
+    {
+      clues: [
+        "Main ek Disney character hoon.",
+        "Main Elsa ki sister hoon.",
+        "Mera naam Anna hai."
+      ],
+      a: ["anna"]
+    },
+    {
+      clues: [
+        "Main ek toy cowboy hoon.",
+        "Main Toy Story ka main character hoon.",
+        "Meri hat cowboy style ki hai."
+      ],
+      a: ["woody"]
+    },
+    {
+      clues: [
+        "Main ek toy astronaut hoon.",
+        "Main Toy Story ka character hoon.",
+        "Main kehta hoon ki main space ranger hoon."
+      ],
+      a: ["buzz lightyear", "buzz"]
+    },
+    {
+      clues: [
+        "Main ek famous wizard hoon.",
+        "Main Lord of the Rings universe se hoon.",
+        "Main Gandalf the Grey bhi kaha gaya hoon."
+      ],
+      a: ["gandalf"]
+    },
+    {
+      clues: [
+        "Main ek hobbit hoon.",
+        "Main ek famous ring carry karta hoon.",
+        "Mera naam Frodo hai."
+      ],
+      a: ["frodo", "frodo baggins"]
+    },
+    {
+      clues: [
+        "Main ek fictional dark lord hoon.",
+        "Mera naam ek famous fantasy saga se associated hai.",
+        "Mera goal Middle-earth par control paana hai."
+      ],
+      a: ["sauron"]
+    },
+    {
+      clues: [
+        "Main ek famous fantasy character hoon.",
+        "Mere paas hammer Mjolnir hai.",
+        "Main Asgard se associated hoon."
+      ],
+      a: ["thor"]
+    },
+    {
+      clues: [
+        "Main ek Norse-inspired superhero hoon.",
+        "Mera shield round hai aur main Avengers ka member hoon.",
+        "Mera naam Thor nahi hai."
+      ],
+      a: ["captain america"]
+    },
+    {
+      clues: [
+        "Main ek famous comic villain hoon.",
+        "Mera face clown-like makeup se associated hai.",
+        "Main Batman ka enemy hoon."
+      ],
+      a: ["joker"]
+    },
+    {
+      clues: [
+        "Main ek video game character hoon.",
+        "Main green tunic pehenta hoon.",
+        "Main Hyrule ki adventures mein jaana jaata hoon."
+      ],
+      a: ["link"]
+    },
+    {
+      clues: [
+        "Main ek video game princess hoon.",
+        "Main Hyrule kingdom se associated hoon.",
+        "Mera naam Zelda hai."
+      ],
+      a: ["zelda", "princess zelda"]
+    },
+    {
+      clues: [
+        "Main ek Pokémon trainer hoon.",
+        "Main Pokémon adventures ka iconic protagonist hoon.",
+        "Mera partner Pikachu hai."
+      ],
+      a: ["ash", "ash ketchum"]
+    },
+    {
+      clues: [
+        "Main ek famous detective duo ka aadha hoon.",
+        "Mera partner Watson hai.",
+        "Main Baker Street se associated hoon."
+      ],
+      a: ["sherlock holmes", "sherlock"]
+    },
+    {
+      clues: [
+        "Main ek famous scientist hoon.",
+        "Maine relativity theory di.",
+        "Mere naam ka first letter A hai."
+      ],
+      a: ["albert einstein", "einstein"]
+    },
+    {
+      clues: [
+        "Main ek famous inventor hoon.",
+        "Mera naam electricity ke experiments se associated hai.",
+        "Mera first name Nikola hai."
+      ],
+      a: ["nikola tesla", "tesla"]
+    },
+    {
+      clues: [
+        "Main ek famous basketball player hoon.",
+        "Mera jersey number 23 iconic raha hai.",
+        "Mera surname Jordan hai."
+      ],
+      a: ["michael jordan"]
+    },
+    {
+      clues: [
+        "Main ek famous footballer hoon.",
+        "Main Argentina se associated hoon.",
+        "Maine World Cup jeeta hai."
+      ],
+      a: ["lionel messi", "messi"]
+    },
+    {
+      clues: [
+        "Main ek famous cricketer hoon.",
+        "Main India se hoon.",
+        "Mera first name Virat hai."
+      ],
+      a: ["virat kohli"]
+    },
+    {
+      clues: [
+        "Main ek famous Indian scientist aur former president tha.",
+        "Main 'Missile Man of India' ke naam se jaana jaata hoon.",
+        "Mera first name A.P.J. tha."
+      ],
+      a: ["apj abdul kalam", "abdul kalam"]
+    },
+    {
+      clues: [
+        "Main ek famous freedom fighter hoon.",
+        "Mujhe India mein Mahatma kaha jaata hai.",
+        "Mera first name Mohandas tha."
+      ],
+      a: ["mahatma gandhi", "gandhi", "mohandas gandhi"]
+    },
+    {
+      clues: [
+        "Main ek fictional detective hoon.",
+        "Mera naam ek famous mystery novel character se associated hai.",
+        "Meri partner Miss Marple nahi hai."
+      ],
+      a: ["hercule poirot", "poirot"]
+    },
+    {
+      clues: [
+        "Main ek famous fictional detective hoon.",
+        "Meri creator Agatha Christie hain.",
+        "Main Belgian detective hoon."
+      ],
+      a: ["hercule poirot", "poirot"]
+    },
+    {
+      clues: [
+        "Main ek animated character hoon.",
+        "Main ek family sitcom se hoon.",
+        "Mera surname Simpson hai."
+      ],
+      a: ["homer simpson", "homer"]
+    },
+    {
+      clues: [
+        "Main ek animated character hoon.",
+        "Main Bart ki sister hoon.",
+        "Mera naam Lisa hai."
+      ],
+      a: ["lisa simpson", "lisa"]
+    },
+    {
+      clues: [
+        "Main ek animated character hoon.",
+        "Main Bart ka younger brother hoon.",
+        "Main usually blue outfit pehenta hoon."
+      ],
+      a: ["maggie simpson", "maggie"]
+    },
+    {
+      clues: [
+        "Main ek famous cat-and-mouse duo ka cat hoon.",
+        "Main Jerry ko pakadne ki koshish karta hoon.",
+        "Mera naam T se start hota hai."
+      ],
+      a: ["tom", "tom cat"]
+    },
+    {
+      clues: [
+        "Main ek famous cat-and-mouse duo ka mouse hoon.",
+        "Main Tom se bachkar nikalta hoon.",
+        "Mera naam Jerry hai."
+      ],
+      a: ["jerry"]
+    },
+    {
+      clues: [
+        "Main ek cartoon bear hoon.",
+        "Mujhe honey bahut pasand hai.",
+        "Mera naam Winnie-the-Pooh se associated hai."
+      ],
+      a: ["winnie the pooh", "pooh"]
+    },
+    {
+      clues: [
+        "Main ek fictional detective hoon.",
+        "Main 221B Baker Street se associated hoon.",
+        "Mera friend Dr. Watson hai."
+      ],
+      a: ["sherlock holmes", "sherlock"]
+    },
+    {
+      clues: [
+        "Main ek superhero family ka member hoon.",
+        "Mere paas super speed hai.",
+        "Main The Incredibles universe se hoon."
+      ],
+      a: ["dash", "dash parr"]
+    },
+    {
+      clues: [
+        "Main ek superhero family ki member hoon.",
+        "Main invisible ho sakti hoon aur force fields bana sakti hoon.",
+        "Main The Incredibles se hoon."
+      ],
+      a: ["violet parr", "violet"]
+    },
+    {
+      clues: [
+        "Main ek fictional robot hoon.",
+        "Main future technology ka character hoon.",
+        "Mera naam WALL-E hai."
+      ],
+      a: ["wall e", "walle"]
+    },
+    {
+      clues: [
+        "Main ek animated emotion hoon.",
+        "Main Inside Out universe ka character hoon.",
+        "Mera color usually yellow dikhaya jaata hai."
+      ],
+      a: ["joy"]
+    },
+    {
+      clues: [
+        "Main ek animated emotion hoon.",
+        "Main Inside Out universe ka character hoon.",
+        "Mera mood sadness se related hai."
+      ],
+      a: ["sadness"]
     }
   ];
 
@@ -2367,12 +3275,14 @@
     tenSecStartedAt = performance.now();
     tenSecActive = true;
 
+    document.getElementById("tenSecTarget").textContent =
+      "🎯 Target: " + targetSeconds.toFixed(1) + "s";
+
     document.getElementById("tenSecTimer").textContent =
-      "GO!";
+      "0.0s";
 
     document.getElementById("tenSecStatus").textContent =
-      "⏱️ Target: " + targetSeconds.toFixed(1) +
-      "s — I Did It dabao!";
+      "⏱️ Timer 10 sec tak chalega — jab chaaho I Did It dabao!";
 
     tenSecTimer = setInterval(() => {
       if (!tenSecActive) {
@@ -2383,18 +3293,23 @@
       const elapsed =
         (performance.now() - tenSecStartedAt) / 1000;
 
-      document.getElementById("tenSecTimer").textContent =
-        elapsed.toFixed(1) + "s";
+      // Timer target par STOP nahi hota. Target sirf scoring point hai.
+      const displayElapsed = Math.min(elapsed, 10);
 
-      if (elapsed >= targetSeconds) {
+      document.getElementById("tenSecTimer").textContent =
+        displayElapsed.toFixed(1) + "s";
+
+      // Full 10 seconds ka chance do. Exact 10.0s click ko miss na karne
+      // ke liye tiny 0.20s safety grace rakhi gayi hai.
+      if (elapsed >= 10.2) {
         tenSecActive = false;
         clearInterval(tenSecTimer);
 
         document.getElementById("tenSecTimer").textContent =
-          targetSeconds.toFixed(1) + "s";
+          "10.0s";
 
         document.getElementById("tenSecStatus").textContent =
-          "⌛ Time! Target miss ho gaya. Phir try karo.";
+          "⌛ 10 seconds complete! I Did It dabana reh gaya. Phir try karo.";
 
         trackEvent("funbox_mini_game_timeout", {
           game: "ten_second",
@@ -2419,7 +3334,8 @@
       return;
     }
 
-    const elapsed = (performance.now() - tenSecStartedAt) / 1000;
+    const rawElapsed = (performance.now() - tenSecStartedAt) / 1000;
+    const elapsed = Math.min(rawElapsed, 10);
 
     tenSecActive = false;
     clearInterval(tenSecTimer);
@@ -2894,50 +3810,64 @@
       localStorage.getItem(STORAGE.lastDay);
 
     if (last === today) {
-
       return;
-
     }
 
     if (!last) {
-
       streak = 1;
-
     } else {
-
-      const previous =
-        new Date(last);
-
-      const current =
-        new Date(today);
-
-      const diff =
-        Math.round(
-          (current - previous) /
-          (1000 * 60 * 60 * 24)
-        );
+      const previous = new Date(last);
+      const current = new Date(today);
+      const diff = Math.round(
+        (current - previous) /
+        (1000 * 60 * 60 * 24)
+      );
 
       if (diff === 1) {
-
         streak++;
-
       } else {
-
         streak = 1;
-
       }
-
     }
 
-    localStorage.setItem(
-      STORAGE.lastDay,
-      today
-    );
+    localStorage.setItem(STORAGE.lastDay, today);
+    localStorage.setItem(STORAGE.streak, streak);
 
-    localStorage.setItem(
-      STORAGE.streak,
-      streak
-    );
+    // Daily login reward + streak milestone bonuses.
+    coins += 5;
+
+    if (streak === 3) {
+      coins += 15;
+    }
+
+    if (streak === 7) {
+      coins += 30;
+    }
+
+    localStorage.setItem(STORAGE.coins, coins);
+    renderProfile();
+
+    trackEvent("earn_virtual_currency", {
+      virtual_currency_name: "coins",
+      value: 5,
+      source: "daily_login"
+    });
+
+    if (streak === 3) {
+      trackEvent("earn_virtual_currency", {
+        virtual_currency_name: "coins",
+        value: 15,
+        source: "streak_3_days"
+      });
+    }
+
+    if (streak === 7) {
+      trackEvent("earn_virtual_currency", {
+        virtual_currency_name: "coins",
+        value: 30,
+        source: "streak_7_days"
+      });
+    }
 
     if (window.funboxCloudSave) window.funboxCloudSave();
 
@@ -2955,6 +3885,7 @@
   window.getFunboxCloudState = function () {
     return {
       points: points,
+      coins: coins,
       streak: streak,
       lastDay: localStorage.getItem(STORAGE.lastDay) || "",
       tone: tone,
@@ -2972,6 +3903,7 @@
     if (!data) return;
 
     points = Number(data.points || 0);
+    coins = Number(data.coins || 0);
     streak = Number(data.streak || 0);
     tone = Math.max(0, Math.min(5, Number(data.tone || 0)));
     uses = Number(data.uses || 0);
@@ -2979,6 +3911,7 @@
     unlimitedUntil = Number(data.unlimitedUntil || 0);
 
     localStorage.setItem(STORAGE.points, String(points));
+    localStorage.setItem(STORAGE.coins, String(coins));
     localStorage.setItem(STORAGE.streak, String(streak));
     localStorage.setItem(STORAGE.tone, String(tone));
     localStorage.setItem(STORAGE.uses, String(uses));
@@ -3013,9 +3946,9 @@
 
     updateAccessStatus();
 
-    // If the user already used all free uses, show the popup on page load too.
-    if (!hasUnlimitedAccess() && uses >= 3 && extraUses <= 0) {
-      setTimeout(showAccessExpired, 500);
+    // Access exhaustion uses the Access Code section instead of a popup.
+    if (!hasUnlimitedAccess() && uses >= 5 && extraUses <= 0) {
+      setTimeout(scrollToAccessCode, 350);
     }
 
     newGuessGame();
@@ -3063,6 +3996,7 @@
 
   function mergeCloudStateWithLocal(data){
     const localPoints = Number(localStorage.getItem(STORAGE.points) || 0);
+    const localCoins = Number(localStorage.getItem(STORAGE.coins) || 0);
     const localStreak = Number(localStorage.getItem(STORAGE.streak) || 0);
     const localExtraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
     const localUnlimited = Number(localStorage.getItem(STORAGE.unlimited) || 0);
@@ -3074,6 +4008,7 @@
     return {
       ...data,
       points: Math.max(Number(data?.points || 0), localPoints),
+      coins: Math.max(Number(data?.coins || 0), localCoins),
       streak: Math.max(Number(data?.streak || 0), localStreak),
       extraUses: Math.max(Number(data?.extraUses || 0), localExtraUses),
       unlimitedUntil: Math.max(Number(data?.unlimitedUntil || 0), localUnlimited),
@@ -3185,13 +4120,14 @@
 
   const themeInput=document.getElementById('themeImage');
   const themeStatus=document.getElementById('themeStatus');
-  function updateThemeLock(){const ok=Number(localStorage.getItem('funboxPoints')||0)>=500; themeInput.disabled=!ok; themeStatus.textContent=ok?'Custom theme unlocked. Choose a photo from your device.':'Unlocks at 500 XP. Choose a photo from your device.';}
+  function updateThemeLock(){const xpUnlocked=Number(localStorage.getItem('funboxPoints')||0)>=500; const coinUnlocked=localStorage.getItem(STORAGE.themePass)==='1'; const ok=xpUnlocked||coinUnlocked; themeInput.disabled=!ok; themeStatus.textContent=ok?'Custom theme unlocked. Choose a photo from your device.':'Unlocks at 500 XP or 250 Coins. Choose a photo from your device.';}
   window.resetCustomTheme=()=>{localStorage.removeItem('funboxThemeImage');document.body.style.background='';location.reload();};
   themeInput.addEventListener('change',()=>{const f=themeInput.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem('funboxThemeImage',r.result);applyTheme();};r.readAsDataURL(f);});
   function applyTheme(){const img=localStorage.getItem('funboxThemeImage');if(img){document.body.style.backgroundImage=`linear-gradient(rgba(7,7,11,.78),rgba(7,7,11,.88)),url("${img}")`;document.body.style.backgroundSize='cover';document.body.style.backgroundAttachment='fixed';}}
   updateThemeLock(); applyTheme();
+  updateCoinShop();
   const oldRender=window.renderProfile;
-  if(oldRender){window.renderProfile=function(){oldRender();updateThemeLock();};}
+  if(oldRender){window.renderProfile=function(){oldRender();updateThemeLock();updateCoinShop();};}
 </script>
 </body>
 </html>
