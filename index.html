@@ -817,6 +817,28 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
 .shop-item-icon{filter:drop-shadow(0 4px 9px rgba(168,85,247,.16))}
 @media(max-width:700px){.jb-avatar{width:68px;height:68px;font-size:42px}.jb-question-card #jbQuestion{font-size:19px}}
 </style>
+
+<style id="funbox-friends-css">
+  .friend-radar-card{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(18,18,30,.96),rgba(10,10,18,.96));}
+  .friend-radar-card:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 5px);pointer-events:none}
+  .friend-search-row{display:flex;gap:10px;margin-top:14px}
+  .friend-search-input{flex:1;min-width:0;padding:13px 14px;border-radius:14px;border:1px solid rgba(168,85,247,.35);background:#09090f;color:#fff;outline:none}
+  .friend-search-input:focus{border-color:rgba(168,85,247,.85);box-shadow:0 0 0 3px rgba(168,85,247,.12)}
+  .friend-action{border:0;border-radius:13px;padding:12px 16px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#a855f7,#7c3aed);color:white}
+  .friend-panel{margin-top:12px;padding:13px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+  .friend-user{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .friend-name{font-weight:900}
+  .friend-meta{font-size:12px;opacity:.7;margin-top:3px}
+  .friend-buttons{display:flex;gap:7px;flex-wrap:wrap}
+  .friend-mini{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:800}
+  .friend-chat{margin-top:12px}
+  .friend-chat-box{height:190px;overflow:auto;padding:10px;border-radius:14px;background:#07070c;border:1px solid rgba(255,255,255,.08)}
+  .friend-msg{margin:7px 0;padding:8px 10px;border-radius:11px;background:rgba(168,85,247,.12);font-size:13px}
+  .friend-msg b{font-size:11px;opacity:.7}
+  .friend-request{border-left:3px solid #a855f7;padding-left:10px;margin:8px 0}
+  @media(max-width:620px){.friend-search-row{flex-direction:column}.friend-action{width:100%}.friend-user{align-items:flex-start;flex-direction:column}}
+</style>
+
 </head>
 
 <body>
@@ -1013,6 +1035,28 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
 
     <p class="muted" style="margin-top:12px;text-align:center;">⭐ XP = progress & levels • 💎 Coins = spendable currency.</p>
 
+  </section>
+
+
+  <section class="card friend-radar-card" id="friendRadarSection">
+    <h2>🛰️ Friend Radar</h2>
+    <p class="muted">Apne dost ka username search karo — profile dekho, progress check karo aur friend banne ke baad chat karo.</p>
+    <div class="friend-search-row">
+      <input id="friendSearchInput" class="friend-search-input" maxlength="24" placeholder="🔎 Who are you stalking? username..." onkeydown="if(event.key==='Enter') searchFriend()">
+      <button class="friend-action" type="button" onclick="searchFriend()">Find the Human 🔎</button>
+    </div>
+    <div id="friendSearchStatus" class="friend-meta" style="margin-top:9px">Exact username search. Random strangers ko DM nahi — pehle friend connection.</div>
+    <div id="friendSearchResult"></div>
+    <div id="friendRequestsPanel" class="friend-panel" style="display:none"></div>
+    <div id="friendListPanel" class="friend-panel" style="display:none"></div>
+    <div id="friendChatPanel" class="friend-panel friend-chat" style="display:none">
+      <div class="friend-user"><div><div id="friendChatTitle" class="friend-name">💬 Friend Chat</div><div id="friendChatMeta" class="friend-meta"></div></div><button class="friend-mini" onclick="closeFriendChat()">Close</button></div>
+      <div id="friendChatBox" class="friend-chat-box" style="margin-top:10px"></div>
+      <div class="friend-search-row" style="margin-top:10px">
+        <input id="friendChatInput" class="friend-search-input" maxlength="200" placeholder="Type something less boring..." onkeydown="if(event.key==='Enter') sendFriendMessage()">
+        <button class="friend-action" type="button" onclick="sendFriendMessage()">Send 💬</button>
+      </div>
+    </div>
   </section>
 
   <section class="card shop-launch-card">
@@ -1550,6 +1594,15 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       </div>
     </div>
 
+    <div class="shop-item" style="grid-column:1/-1;border-color:rgba(168,85,247,.45);">
+      <div class="shop-item-icon">💎</div><h3>Diamond Maker</h3>
+      <p>Apna Maker Name set karo aur 500 💎 mein special badge unlock karo.</p>
+      <input id="diamondMakerName" class="friend-search-input" maxlength="24" placeholder="Maker name..." style="margin:8px 0;width:100%;box-sizing:border-box;">
+      <div class="shop-price">500 💎</div>
+      <button id="shopDiamondMaker" class="shop-buy" onclick="buyShopItem('diamondMaker')">Unlock 💎 Diamond Maker</button>
+      <div id="diamondMakerStatus" class="friend-meta" style="margin-top:8px">Badge title: 💎 Diamond Maker</div>
+    </div>
+
     <div id="shopStatus" class="game-status shop-status">Shop ready.</div>
     <div class="shop-close-row">
       <button class="btn secondary" type="button" onclick="closeShop()">Close Shop</button>
@@ -1674,6 +1727,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     shopVault: "funboxShopVault",
     shopLegendBadge: "funboxShopLegendBadge",
     shopChaosTheme: "funboxShopChaosTheme",
+    diamondMaker: "funboxDiamondMaker",
+    diamondMakerName: "funboxDiamondMakerName",
     promoUsed: "funboxPromoUsed"
 
   };
@@ -1786,7 +1841,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       shopRewardBurst: ["shopRewardBurst", "Owned ✓"],
       shopVault: ["shopVault", "Owned ✓"],
       shopLegendBadge: ["shopLegendBadge", "Owned ✓"],
-      shopChaosTheme: ["shopChaosTheme", "Owned ✓"]
+      shopChaosTheme: ["shopChaosTheme", "Owned ✓"],
+      shopDiamondMaker: ["diamondMaker", "Owned ✓"]
     };
 
     Object.entries(items).forEach(([id, cfg]) => {
@@ -1826,7 +1882,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       mystery: 400,
       vault: 800,
       legendBadge: 1200,
-      chaosTheme: 1500
+      chaosTheme: 1500,
+      diamondMaker: 500
     };
 
     const price = prices[item];
@@ -1840,7 +1897,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       mystery: "shopMystery",
       vault: "shopVault",
       legendBadge: "shopLegendBadge",
-      chaosTheme: "shopChaosTheme"
+      chaosTheme: "shopChaosTheme",
+      diamondMaker: "diamondMaker"
     };
 
     if (item !== "extraUse" && shopOwned(keyMap[item])) return;
@@ -1854,7 +1912,21 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     coins -= price;
     localStorage.setItem(STORAGE.coins, String(coins));
 
-    if (item === "extraUse") {
+    if (item === "diamondMaker") {
+      const nameInput = document.getElementById("diamondMakerName");
+      const makerName = String(nameInput?.value || localStorage.getItem(STORAGE.diamondMakerName) || "").trim();
+      if (!makerName) {
+        coins += price;
+        localStorage.setItem(STORAGE.coins, String(coins));
+        if (status) status.textContent = "🛠️ Pehle Maker Name dalo.";
+        updateShopUI();
+        return;
+      }
+      localStorage.setItem(STORAGE.diamondMakerName, makerName.slice(0,24));
+      setShopOwned("diamondMaker");
+      if (status) status.textContent = `💎 Diamond Maker badge unlocked for ${makerName.slice(0,24)}!`;
+      if (nameInput) nameInput.value = makerName.slice(0,24);
+    } else if (item === "extraUse") {
       extraUses += 1;
       localStorage.setItem(STORAGE.extraUses, String(extraUses));
       if (status) status.textContent = "🎟️ +1 Extra Use mil gaya!";
@@ -1883,7 +1955,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
         rewardBurst: "💫 Reward Burst unlocked!",
         vault: "💎 Coin Vault badge unlocked!",
         legendBadge: "👑 Legend Badge unlocked!",
-        chaosTheme: "🎲 Chaos Theme unlocked!"
+        chaosTheme: "🎲 Chaos Theme unlocked!",
+        diamondMaker: "💎 Diamond Maker badge unlocked!"
       };
       if (status) status.textContent = messages[item] || "Unlocked!";
     }
@@ -1913,9 +1986,13 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     const badge = document.getElementById("shopBadge");
     if (badge) {
       badge.textContent =
+        shopOwned("diamondMaker") ? "💎" :
         shopOwned("shopLegendBadge") ? "👑" :
         shopOwned("shopVault") ? "💎" : "";
+      if (shopOwned("diamondMaker")) badge.title = "Diamond Maker • " + (localStorage.getItem(STORAGE.diamondMakerName) || "Maker");
     }
+    const makerStatus = document.getElementById("diamondMakerStatus");
+    if (makerStatus && shopOwned("diamondMaker")) makerStatus.textContent = "💎 Diamond Maker • " + (localStorage.getItem(STORAGE.diamondMakerName) || "Maker") + " • Special Badge unlocked";
   }
 
 itedUntil =
@@ -2191,6 +2268,8 @@ itedUntil =
     localStorage.setItem(STORAGE.points, points);
 
     localStorage.setItem(STORAGE.streak, streak);
+
+    if (window.funboxPublicProfileSave) window.funboxPublicProfileSave();
 
   }
 
@@ -4705,7 +4784,7 @@ itedUntil =
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, query, where, limit, getDocs, addDoc, updateDoc, arrayUnion, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtnob7lOAb7RCOz5sqssgMNI9gvBUf4wM",
@@ -4834,11 +4913,11 @@ itedUntil =
   window.signupAccount=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir signup chalega.';
     const email=authEmail.value.trim(), pass=authPassword.value, username=authUsername.value.trim()||'FunBox User';
-    try{const c=await createUserWithEmailAndPassword(auth,email,pass); await updateProfile(c.user,{displayName:username}); statusEl().textContent='Account created: '+username;}catch(e){statusEl().textContent=e.message;}
+    try{const c=await createUserWithEmailAndPassword(auth,email,pass); localStorage.setItem('funboxUsername',username); await updateProfile(c.user,{displayName:username}); await ensurePublicProfile(c.user); statusEl().textContent='Account created: '+username;}catch(e){statusEl().textContent=e.message;}
   };
   window.loginAccount=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir login chalega.';
-    try{const c=await signInWithEmailAndPassword(auth,authEmail.value.trim(),authPassword.value); statusEl().textContent='Logged in: '+(c.user.displayName||c.user.email);}catch(e){statusEl().textContent=e.message;}
+    try{const c=await signInWithEmailAndPassword(auth,authEmail.value.trim(),authPassword.value); if(authUsername.value.trim()) localStorage.setItem('funboxUsername',authUsername.value.trim()); await ensurePublicProfile(c.user); statusEl().textContent='Logged in: '+(c.user.displayName||c.user.email);}catch(e){statusEl().textContent=e.message;}
   };
   window.googleLogin=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir Google login chalega.';
@@ -4846,6 +4925,8 @@ itedUntil =
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({prompt:'select_account'});
       const c=await signInWithPopup(auth,provider);
+      if(!localStorage.getItem('funboxUsername')) localStorage.setItem('funboxUsername',c.user.displayName||((c.user.email||'').split('@')[0]));
+      await ensurePublicProfile(c.user);
       statusEl().textContent='Logged in: '+(c.user.displayName||c.user.email);
     }catch(e){
       statusEl().textContent='Google login failed: '+(e.code||e.message);
@@ -4863,6 +4944,165 @@ itedUntil =
       statusEl().textContent='Not signed in — data stays on this device';
     }
   });
+
+  /* =========================================================
+     FRIEND RADAR / FRIEND CHAT
+  ========================================================= */
+  let friendSearchTimer = null;
+  let friendRequestsUnsub = null;
+  let friendListUnsub = null;
+  let friendChatUnsub = null;
+  let activeFriendChatId = null;
+  let activeFriend = null;
+
+  function friendPairId(a,b){ return [a,b].sort().join('_'); }
+  function cleanUsername(v){ return String(v||'').trim().replace(/\s+/g,' ').slice(0,24); }
+  function usernameKey(v){ return cleanUsername(v).toLowerCase().replace(/[^a-z0-9._-]/g,''); }
+
+  async function ensurePublicProfile(user){
+    if(!db || !user) return;
+    const savedName = cleanUsername(localStorage.getItem('funboxUsername') || '');
+    const username = savedName || cleanUsername(user.displayName || (user.email||'').split('@')[0] || 'FunBoxUser');
+    if(!localStorage.getItem('funboxUsername')) localStorage.setItem('funboxUsername', username);
+    const ref = doc(db,'publicProfiles',user.uid);
+    try{
+      await setDoc(ref,{
+        uid:user.uid,
+        username,
+        usernameKey:usernameKey(username),
+        displayName:user.displayName || username,
+        xp:Number(localStorage.getItem(STORAGE.points)||0),
+        level:typeof getProfileLevel==='function'?getProfileLevel():1,
+        streak:Number(localStorage.getItem(STORAGE.streak)||0),
+        title:typeof getTitle==='function'?getTitle():'Newbie',
+        updatedAt:serverTimestamp()
+      },{merge:true});
+    }catch(e){ console.warn('Public profile sync failed',e); }
+  }
+
+  window.funboxPublicProfileSave=function(){
+    if(!auth?.currentUser || !db) return;
+    clearTimeout(friendSearchTimer);
+    friendSearchTimer=setTimeout(()=>ensurePublicProfile(auth.currentUser),900);
+  };
+
+  async function searchFriend(){
+    const status=document.getElementById('friendSearchStatus');
+    const out=document.getElementById('friendSearchResult');
+    const raw=cleanUsername(document.getElementById('friendSearchInput')?.value);
+    if(!auth?.currentUser){ if(status) status.textContent='🔐 Pehle login karo, detective.'; return; }
+    if(raw.length<2){ if(status) status.textContent='😂 Itna chhota username toh clue bhi nahi hai.'; return; }
+    if(status) status.textContent='🛰️ Radar scan kar raha hai...';
+    if(out) out.innerHTML='';
+    try{
+      const q=query(collection(db,'publicProfiles'),where('usernameKey','==',usernameKey(raw)),limit(5));
+      const snap=await getDocs(q);
+      if(snap.empty){ if(status) status.textContent='🫥 Human not found. Username spelling check karo.'; return; }
+      const d=snap.docs[0].data();
+      if(d.uid===auth.currentUser.uid){ if(status) status.textContent='🪞 Bhai, ye tum khud ho.'; return; }
+      if(status) status.textContent='🎯 Target found. Profile mil gaya.';
+      renderFriendSearchResult(d);
+    }catch(e){
+      console.error(e);
+      if(status) status.textContent='⚠️ Friend search failed: '+e.message;
+    }
+  }
+  window.searchFriend=searchFriend;
+
+  function renderFriendSearchResult(d){
+    const out=document.getElementById('friendSearchResult'); if(!out)return;
+    out.innerHTML=`<div class="friend-panel"><div class="friend-user"><div><div class="friend-name">👤 ${escapeHTML(d.username||d.displayName||'FunBox User')}</div><div class="friend-meta">⭐ ${Number(d.xp||0)} XP • Level ${Number(d.level||1)} • 🔥 ${Number(d.streak||0)} streak • ${escapeHTML(d.title||'Newbie')}</div></div><div class="friend-buttons"><button class="friend-mini" onclick="sendFriendRequest('${d.uid}')">➕ Add Friend</button></div></div></div>`;
+  }
+
+  async function sendFriendRequest(uid){
+    if(!auth?.currentUser || !db || uid===auth.currentUser.uid)return;
+    try{
+      const id=auth.currentUser.uid;
+      const meSnap=await getDoc(doc(db,'publicProfiles',id));
+      const me=meSnap.data()||{};
+      await setDoc(doc(db,'friendRequests',uid,'items',id),{
+        fromUid:id,fromUsername:me.username||auth.currentUser.displayName||'FunBox User',status:'pending',createdAt:serverTimestamp()
+      });
+      document.getElementById('friendSearchStatus').textContent='📨 Friend request sent. Ab dekhte hain saamne wala insaan accept karta hai ya ignore.';
+    }catch(e){document.getElementById('friendSearchStatus').textContent='⚠️ Request failed: '+e.message;}
+  }
+  window.sendFriendRequest=sendFriendRequest;
+
+  function watchFriendRequests(uid){
+    if(friendRequestsUnsub) friendRequestsUnsub();
+    if(!db||!uid)return;
+    const q=query(collection(db,'friendRequests',uid,'items'),where('status','==','pending'),limit(10));
+    friendRequestsUnsub=onSnapshot(q,snap=>{
+      const panel=document.getElementById('friendRequestsPanel'); if(!panel)return;
+      if(snap.empty){panel.style.display='none';return;}
+      panel.style.display='block';
+      panel.innerHTML='<b>📨 Friend Requests</b>'+snap.docs.map(x=>{const d=x.data();return `<div class="friend-request"><div><b>${escapeHTML(d.fromUsername||'FunBox User')}</b> wants to connect.</div><button class="friend-mini" style="margin-top:7px" onclick="acceptFriendRequest('${x.id}')">Accept 🤝</button></div>`}).join('');
+    },e=>console.warn('friend request listener',e));
+  }
+
+  async function acceptFriendRequest(fromUid){
+    const me=auth?.currentUser; if(!me||!db)return;
+    const pair=friendPairId(me.uid,fromUid);
+    try{
+      await setDoc(doc(db,'friendships',pair),{participants:[me.uid,fromUid],createdAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});
+      await updateDoc(doc(db,'friendRequests',me.uid,'items',fromUid),{status:'accepted',acceptedAt:serverTimestamp()});
+      document.getElementById('friendSearchStatus').textContent='🤝 Friend connected. Ab chat unlocked.';
+    }catch(e){document.getElementById('friendSearchStatus').textContent='⚠️ Accept failed: '+e.message;}
+  }
+  window.acceptFriendRequest=acceptFriendRequest;
+
+  function watchFriendships(uid){
+    if(friendListUnsub) friendListUnsub();
+    if(!db||!uid)return;
+    const q=query(collection(db,'friendships'),where('participants','array-contains',uid),limit(30));
+    friendListUnsub=onSnapshot(q,async snap=>{
+      const panel=document.getElementById('friendListPanel'); if(!panel)return;
+      if(snap.empty){panel.style.display='none';return;}
+      const others=snap.docs.map(x=>({id:x.id,uid:(x.data().participants||[]).find(v=>v!==uid)})).filter(x=>x.uid);
+      const profiles=await Promise.all(others.map(async x=>{try{const s=await getDoc(doc(db,'publicProfiles',x.uid));return {...x,data:s.data()||{}}}catch(e){return {...x,data:{}}}}));
+      panel.style.display='block';
+      panel.innerHTML='<b>👥 Your Friends</b>'+profiles.map(x=>`<div class="friend-request"><div class="friend-user"><div><div class="friend-name">${escapeHTML(x.data.username||'Friend')}</div><div class="friend-meta">⭐ ${Number(x.data.xp||0)} XP • Level ${Number(x.data.level||1)} • ${escapeHTML(x.data.title||'Newbie')}</div></div><div class="friend-buttons"><button class="friend-mini" onclick="openFriendChat('${x.uid}','${escapeHTML(x.data.username||'Friend')}')">💬 Chat</button></div></div></div>`).join('');
+    },e=>console.warn('friendship listener',e));
+  }
+
+  async function openFriendChat(uid,username){
+    if(!auth?.currentUser||!db)return;
+    activeFriend={uid,username}; activeFriendChatId=friendPairId(auth.currentUser.uid,uid);
+    const panel=document.getElementById('friendChatPanel'); if(panel)panel.style.display='block';
+    document.getElementById('friendChatTitle').textContent='💬 '+username;
+    document.getElementById('friendChatMeta').textContent='Friend chat • XP progress public to connected friends';
+    if(friendChatUnsub)friendChatUnsub();
+    const ref=doc(db,'friendChats',activeFriendChatId);
+    try{await setDoc(ref,{participants:[auth.currentUser.uid,uid],updatedAt:serverTimestamp()},{merge:true});}catch(e){console.warn(e)}
+    friendChatUnsub=onSnapshot(ref,snap=>{
+      const box=document.getElementById('friendChatBox'); if(!box)return;
+      const msgs=snap.exists()?(snap.data().messages||[]):[];
+      box.innerHTML=msgs.slice(-50).map(m=>`<div class="friend-msg"><b>${escapeHTML(m.username||'Friend')}</b><br>${escapeHTML(m.text||'')}</div>`).join('')||'<div style="opacity:.55">No messages yet. Say something less boring.</div>';
+      box.scrollTop=box.scrollHeight;
+    },e=>{const box=document.getElementById('friendChatBox');if(box)box.innerHTML='<div class="friend-msg">⚠️ Chat sync failed.</div>';console.warn(e)});
+  }
+  window.openFriendChat=openFriendChat;
+
+  function closeFriendChat(){if(friendChatUnsub){friendChatUnsub();friendChatUnsub=null;}activeFriendChatId=null;activeFriend=null;const p=document.getElementById('friendChatPanel');if(p)p.style.display='none';}
+  window.closeFriendChat=closeFriendChat;
+
+  async function sendFriendMessage(){
+    const input=document.getElementById('friendChatInput'); const text=String(input?.value||'').trim();
+    if(!text||!activeFriendChatId||!auth?.currentUser||!db)return;
+    const meSnap=await getDoc(doc(db,'publicProfiles',auth.currentUser.uid)); const me=meSnap.data()||{};
+    try{
+      await updateDoc(doc(db,'friendChats',activeFriendChatId),{messages:arrayUnion({uid:auth.currentUser.uid,username:me.username||auth.currentUser.displayName||'You',text:text.slice(0,200),createdAt:Date.now()}),updatedAt:serverTimestamp()});
+      input.value='';
+    }catch(e){console.warn(e);}
+  }
+  window.sendFriendMessage=sendFriendMessage;
+
+  function startFriendRadar(user){
+    if(!user)return;
+    ensurePublicProfile(user); watchFriendRequests(user.uid); watchFriendships(user.uid);
+  }
+
+  if(auth) onAuthStateChanged(auth, u=>{ if(u) startFriendRadar(u); else { if(friendRequestsUnsub)friendRequestsUnsub(); if(friendListUnsub)friendListUnsub(); if(friendChatUnsub)friendChatUnsub(); } });
 
   const themeInput=document.getElementById('themeImage');
   const themeStatus=document.getElementById('themeStatus');
