@@ -2420,6 +2420,25 @@ itedUntil =
   }
 
 
+  let accessAutoScrollQueued = false;
+
+  function requestAccessCodeScroll() {
+
+    if (accessAutoScrollQueued) return;
+
+    accessAutoScrollQueued = true;
+
+    setTimeout(() => {
+      scrollToAccessCode();
+
+      setTimeout(() => {
+        accessAutoScrollQueued = false;
+      }, 1400);
+    }, 80);
+
+  }
+
+
   function scrollToAccessCode() {
 
     const section =
@@ -2525,10 +2544,8 @@ itedUntil =
 
     updateAccessStatus();
 
-    // No popup: take the user directly to the Access Code section.
-    setTimeout(() => {
-      scrollToAccessCode();
-    }, 50);
+    // No popup: automatically take the user directly to the Access Code section.
+    requestAccessCodeScroll();
 
     return false;
 
@@ -2573,6 +2590,9 @@ itedUntil =
 
       box.innerHTML =
         '🔒 Access khatam. <button type="button" class="btn secondary" style="margin-left:8px;" onclick="scrollToAccessCode()">🔑 Get the Code</button>';
+
+      // If access has just run out, move the page to the Access Code section.
+      requestAccessCodeScroll();
 
       return;
 
