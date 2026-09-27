@@ -707,7 +707,7 @@
     @keyframes currencyPop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
 
   
-    .shop-glow-active .stat{box-shadow:0 0 22px rgba(168,85,247,.16);border-color:rgba(168,85,247,.28)}
+    .shop-glow-active .stat{box-shadow:0 0 calc(12px + var(--shop-glow-strength,1) * 10px) rgba(168,85,247,.16);border-color:rgba(168,85,247,.28);filter:saturate(calc(1 + var(--shop-glow-strength,1) * .08))}
     .shop-chaos-theme{background:radial-gradient(circle at 20% 10%,#3a164d 0%,transparent 32%),radial-gradient(circle at 80% 90%,#102d48 0%,transparent 35%),#07070b}
 
   </style>
@@ -1732,6 +1732,10 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     shopChaosTheme: "funboxShopChaosTheme",
     diamondMaker: "funboxDiamondMaker",
     diamondMakerName: "funboxDiamondMakerName",
+    dailyDiamondDate: "funboxDailyDiamondDate",
+    dailyDiamondEarned: "funboxDailyDiamondEarned",
+    glowLevel: "funboxGlowLevel",
+    themePassUsed: "funboxThemePassUsed",
     promoUsed: "funboxPromoUsed"
 
   };
@@ -1838,8 +1842,6 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     if (balance) balance.textContent = coins;
 
     const items = {
-      shopThemePass: ["themePass", "Owned ✓"],
-      shopProfileGlow: ["shopProfileGlow", "Owned ✓"],
       shopChaosTitle: ["shopChaosTitle", "Owned ✓"],
       shopRewardBurst: ["shopRewardBurst", "Owned ✓"],
       shopVault: ["shopVault", "Owned ✓"],
@@ -1853,11 +1855,24 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       if (!btn) return;
       const owned = shopOwned(cfg[0]);
       btn.disabled = owned;
-      if (owned) {
-        btn.textContent = cfg[1];
-        btn.classList.add("shop-owned");
-      }
+      if (owned) { btn.textContent = cfg[1]; btn.classList.add("shop-owned"); }
     });
+
+    const glow = document.getElementById("shopProfileGlow");
+    if (glow) {
+      const owned = shopOwned("shopProfileGlow");
+      glow.disabled = false;
+      glow.textContent = owned ? `Boost Glow ✨ (${Number(localStorage.getItem(STORAGE.glowLevel)||1)}/5)` : "Buy for 350 💎";
+      glow.classList.toggle("shop-owned", owned);
+    }
+
+    const themePass = document.getElementById("shopThemePass");
+    if (themePass) {
+      const owned = shopOwned("themePass");
+      themePass.disabled = owned;
+      themePass.textContent = owned ? "Owned ✓" : "Buy for 250 💎";
+      themePass.classList.toggle("shop-owned", owned);
+    }
 
     const mystery = document.getElementById("shopMystery");
     if (mystery) {
@@ -1866,14 +1881,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       mystery.textContent = owned ? "Opened ✓" : "Open for 400 💎";
       mystery.classList.toggle("shop-owned", owned);
     }
-
-    const themePass = document.getElementById("shopThemePass");
-    if (themePass && shopOwned("themePass")) {
-      themePass.disabled = true;
-      themePass.textContent = "Owned ✓";
-      themePass.classList.add("shop-owned");
-    }
   }
+
 
   function buyShopItem(item) {
     const prices = {
@@ -1904,7 +1913,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       diamondMaker: "diamondMaker"
     };
 
-    if (item !== "extraUse" && shopOwned(keyMap[item])) return;
+    if (item !== "extraUse" && item !== "profileGlow" && shopOwned(keyMap[item])) return;
 
     const status = document.getElementById("shopStatus");
 
@@ -1916,12 +1925,15 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
         if (status) status.textContent = "🛠️ Pehle Maker Name dalo.";
         return;
       }
-      localStorage.setItem(STORAGE.diamondMakerName, makerName.slice(0,24));
+      if (makerName.toLowerCase() !== "taksh") {
+        if (status) status.textContent = "🔒 Diamond Maker reward sirf Taksh ke liye hai.";
+        return;
+      }
+      localStorage.setItem(STORAGE.diamondMakerName, "Taksh");
       setShopOwned("diamondMaker");
-      coins += 500;
-      localStorage.setItem(STORAGE.coins, String(coins));
-      if (status) status.textContent = `💎 +500 Diamonds! ${makerName.slice(0,24)} ko Diamond Maker badge mil gaya.`;
-      if (nameInput) nameInput.value = makerName.slice(0,24);
+      addCoins(500, "diamond_maker");
+      if (status) status.textContent = "💎 +500 Diamonds! Taksh ko Diamond Maker badge mil gaya.";
+      if (nameInput) nameInput.value = "Taksh";
       renderProfile();
       updateShopUI();
       applyShopCosmetics();
@@ -1958,6 +1970,12 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
       } else {
         if (status) status.textContent = "🎁 Mystery Box opened. Sab cosmetic items already owned hain.";
       }
+    } else if (item === "profileGlow") {
+      setShopOwned("shopProfileGlow");
+      const current = Math.max(1, Number(localStorage.getItem(STORAGE.glowLevel) || 1));
+      const next = Math.min(5, current + 1);
+      localStorage.setItem(STORAGE.glowLevel, String(next));
+      if (status) status.textContent = next >= 5 ? "✨ Glow MAX ho gaya." : `✨ Profile Glow boosted to ${next}/5.`;
     } else {
       setShopOwned(keyMap[item]);
       const messages = {
@@ -1986,7 +2004,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
 
   function applyShopCosmetics() {
     const profile = document.querySelector(".profile");
-    if (profile) profile.classList.toggle("shop-glow-active", shopOwned("shopProfileGlow"));
+    if (profile) { profile.classList.toggle("shop-glow-active", shopOwned("shopProfileGlow")); profile.style.setProperty("--shop-glow-strength", String(Math.max(1, Number(localStorage.getItem(STORAGE.glowLevel) || 1)))); }
 
     document.body.classList.toggle("shop-chaos-theme", shopOwned("shopChaosTheme"));
 
@@ -2290,24 +2308,51 @@ itedUntil =
      XP / POINTS + COINS
   ========================================================= */
 
+  function getDailyDiamondState() {
+    const today = getToday();
+    const savedDate = localStorage.getItem(STORAGE.dailyDiamondDate) || "";
+    if (savedDate !== today) {
+      localStorage.setItem(STORAGE.dailyDiamondDate, today);
+      localStorage.setItem(STORAGE.dailyDiamondEarned, "0");
+      return { date: today, earned: 0 };
+    }
+    return { date: today, earned: Math.max(0, Number(localStorage.getItem(STORAGE.dailyDiamondEarned) || 0)) };
+  }
+
   function addCoins(amount, source = "unknown") {
     const value = Math.max(0, Math.floor(Number(amount) || 0));
-    if (!value) return;
+    if (!value) return 0;
 
-    coins += value;
+    // Normal Diamond earning has a strict 100 💎 daily cap.
+    // Diamond Maker's one-time +500 reward bypasses this cap.
+    const special = source === "diamond_maker";
+    let allowed = value;
+    if (!special) {
+      const state = getDailyDiamondState();
+      allowed = Math.max(0, Math.min(value, 100 - state.earned));
+      if (allowed <= 0) {
+        const status = document.getElementById("shopStatus");
+        if (status) status.textContent = "💎 Aaj ka 100 💎 normal earning limit complete hai.";
+        return 0;
+      }
+      localStorage.setItem(STORAGE.dailyDiamondEarned, String(state.earned + allowed));
+    }
+
+    coins += allowed;
     localStorage.setItem(STORAGE.coins, coins);
     renderProfile();
     updateCoinShop();
     updateShopUI();
-    flyCurrencyReward("coin", value);
+    flyCurrencyReward("coin", allowed);
 
     trackEvent("earn_virtual_currency", {
       virtual_currency_name: "coins",
-      value: value,
+      value: allowed,
       source: source
     });
 
     if (window.funboxCloudSave) window.funboxCloudSave();
+    return allowed;
   }
 
 
@@ -4598,18 +4643,10 @@ itedUntil =
     localStorage.setItem(STORAGE.lastDay, today);
     localStorage.setItem(STORAGE.streak, streak);
 
-    // Daily login reward + streak milestone bonuses.
-    coins += 5;
-
-    if (streak === 3) {
-      coins += 15;
-    }
-
-    if (streak === 7) {
-      coins += 30;
-    }
-
-    localStorage.setItem(STORAGE.coins, coins);
+    // Daily login + streak rewards also count toward the normal 100 💎 daily cap.
+    addCoins(5, "daily_login");
+    if (streak === 3) addCoins(15, "streak_3_days");
+    if (streak === 7) addCoins(30, "streak_7_days");
     renderProfile();
 
     trackEvent("earn_virtual_currency", {
@@ -4661,7 +4698,12 @@ itedUntil =
       recent: JSON.parse(localStorage.getItem(STORAGE.recent) || "[]"),
       challenge: localStorage.getItem(STORAGE.challenge) || "",
       rewards: JSON.parse(localStorage.getItem(STORAGE.rewards) || "{}"),
-      themePass: localStorage.getItem(STORAGE.themePass) === "1"
+      themePass: localStorage.getItem(STORAGE.themePass) === "1",
+      themePassUsed: localStorage.getItem(STORAGE.themePassUsed) === "1",
+      dailyDiamondDate: localStorage.getItem(STORAGE.dailyDiamondDate) || getToday(),
+      dailyDiamondEarned: Number(localStorage.getItem(STORAGE.dailyDiamondEarned) || 0),
+      glowLevel: Number(localStorage.getItem(STORAGE.glowLevel) || 1),
+      diamondMakerName: localStorage.getItem(STORAGE.diamondMakerName) || ""
     };
   };
 
@@ -4689,6 +4731,11 @@ itedUntil =
     localStorage.setItem(STORAGE.challenge, data.challenge || "");
     localStorage.setItem(STORAGE.rewards, JSON.stringify(data.rewards || {}));
     if (data.themePass) localStorage.setItem(STORAGE.themePass, "1");
+    if (data.themePassUsed) localStorage.setItem(STORAGE.themePassUsed, "1");
+    if (data.dailyDiamondDate) localStorage.setItem(STORAGE.dailyDiamondDate, data.dailyDiamondDate);
+    localStorage.setItem(STORAGE.dailyDiamondEarned, String(Number(data.dailyDiamondEarned || 0)));
+    localStorage.setItem(STORAGE.glowLevel, String(Math.max(1, Math.min(5, Number(data.glowLevel || 1)) )));
+    if (data.diamondMakerName) localStorage.setItem(STORAGE.diamondMakerName, data.diamondMakerName);
 
     renderProfile();
     renderRecent();
@@ -4831,6 +4878,9 @@ itedUntil =
     const localExtraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
     const localUnlimited = Number(localStorage.getItem(STORAGE.unlimited) || 0);
     const localThemePass = localStorage.getItem(STORAGE.themePass) === "1";
+    const localDailyDate = localStorage.getItem(STORAGE.dailyDiamondDate) || getToday();
+    const localDailyEarned = Number(localStorage.getItem(STORAGE.dailyDiamondEarned) || 0);
+    const localGlowLevel = Number(localStorage.getItem(STORAGE.glowLevel) || 1);
 
     const cloudRewards = (data && data.rewards && typeof data.rewards === 'object') ? data.rewards : {};
     const localRewards = JSON.parse(localStorage.getItem(STORAGE.rewards) || '{}');
@@ -4844,6 +4894,11 @@ itedUntil =
       extraUses: Math.max(Number(data?.extraUses || 0), localExtraUses),
       unlimitedUntil: Math.max(Number(data?.unlimitedUntil || 0), localUnlimited),
       themePass: Boolean(data?.themePass) || localThemePass,
+      themePassUsed: Boolean(data?.themePassUsed),
+      dailyDiamondDate: data?.dailyDiamondDate || localDailyDate,
+      dailyDiamondEarned: Math.max(Number(data?.dailyDiamondEarned || 0), localDailyEarned),
+      glowLevel: Math.max(Number(data?.glowLevel || 1), localGlowLevel),
+      diamondMakerName: data?.diamondMakerName || localStorage.getItem(STORAGE.diamondMakerName) || "",
       rewards
     };
   }
@@ -5199,9 +5254,9 @@ itedUntil =
 
   const themeInput=document.getElementById('themeImage');
   const themeStatus=document.getElementById('themeStatus');
-  function updateThemeLock(){const xpUnlocked=Number(localStorage.getItem('funboxPoints')||0)>=500; const coinUnlocked=localStorage.getItem(STORAGE.themePass)==='1'; const ok=xpUnlocked||coinUnlocked; themeInput.disabled=!ok; themeStatus.textContent=ok?'Custom theme unlocked. Choose a photo from your device.':'Unlocks at 500 XP or 250 Coins. Choose a photo from your device.';}
+  function updateThemeLock(){const xpUnlocked=Number(localStorage.getItem('funboxPoints')||0)>=500; const passReady=localStorage.getItem(STORAGE.themePass)==='1' && localStorage.getItem(STORAGE.themePassUsed)!=='1'; const ok=xpUnlocked||passReady; themeInput.disabled=!ok; themeStatus.textContent=ok?(passReady&&!xpUnlocked?'🎨 Theme Pass ready — 1 custom theme change.':'🎨 Custom theme unlocked. Choose a photo.'):(localStorage.getItem(STORAGE.themePassUsed)==='1'?'🎨 Theme Pass used. 500 XP unlocks reusable custom themes.':'Unlocks at 500 XP or 250 Coins. Choose a photo from your device.');}
   window.resetCustomTheme=()=>{localStorage.removeItem('funboxThemeImage');document.body.style.background='';location.reload();};
-  themeInput.addEventListener('change',()=>{const f=themeInput.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem('funboxThemeImage',r.result);applyTheme();};r.readAsDataURL(f);});
+  themeInput.addEventListener('change',()=>{const f=themeInput.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem('funboxThemeImage',r.result);const xpUnlocked=Number(localStorage.getItem('funboxPoints')||0)>=500;if(!xpUnlocked && localStorage.getItem(STORAGE.themePass)==='1'){localStorage.setItem(STORAGE.themePassUsed,'1');localStorage.removeItem(STORAGE.themePass);}applyTheme();updateThemeLock();updateShopUI();if(window.funboxCloudSave)window.funboxCloudSave();};r.readAsDataURL(f);});
   function applyTheme(){const img=localStorage.getItem('funboxThemeImage');if(img){document.body.style.backgroundImage=`linear-gradient(rgba(7,7,11,.78),rgba(7,7,11,.88)),url("${img}")`;document.body.style.backgroundSize='cover';document.body.style.backgroundAttachment='fixed';}}
   updateThemeLock(); applyTheme();
   updateCoinShop();
