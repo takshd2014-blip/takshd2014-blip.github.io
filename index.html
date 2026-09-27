@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
 
   <title>FunBox — Boredom? Not Today.</title>
   <meta name="description" content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer and more.">
@@ -4690,7 +4692,12 @@ itedUntil =
   }
 
 
-  init();
+  // Render the page first, then initialize secondary game widgets.
+  // This prevents a large FunBox build from feeling frozen on first paint.
+  const runAfterPaint = window.requestAnimationFrame || ((fn)=>setTimeout(fn, 0));
+  runAfterPaint(() => {
+    init();
+  });
 
 </script>
 
@@ -4724,6 +4731,7 @@ itedUntil =
   const statusEl=()=>document.getElementById('authStatus');
 
   let cloudUnsubscribe = null;
+  let lastCloudStateSignature = "";
 
   function mergeCloudStateWithLocal(data){
     const localPoints = Number(localStorage.getItem(STORAGE.points) || 0);
@@ -4797,11 +4805,17 @@ itedUntil =
   async function saveFunboxCloudData(uid = cloudUid){
     if(!db || !uid || cloudApplying) return;
     const data = window.getFunboxCloudState();
+    const signature = JSON.stringify(data);
+    if(signature === lastCloudStateSignature) return;
+    lastCloudStateSignature = signature;
     data.updatedAt = serverTimestamp();
     try {
       await setDoc(doc(db, 'users', uid), data, { merge: true });
-      statusEl().textContent = '☁️ Synced: ' + (auth?.currentUser?.displayName || auth?.currentUser?.email || 'Account');
+      const el = statusEl();
+      if(el) el.textContent = '☁️ Synced: ' + (auth?.currentUser?.displayName || auth?.currentUser?.email || 'Account');
     } catch(e) {
+      // Allow a retry if the network request failed.
+      lastCloudStateSignature = "";
       console.error('Firestore save error', e);
       const el = statusEl();
       if(el) el.textContent = '⚠️ Cloud save failed: ' + e.message;
@@ -4814,15 +4828,9 @@ itedUntil =
     cloudSaveTimer = setTimeout(() => saveFunboxCloudData(), 350);
   };
 
-  // Safety net: every FunBox local state write also schedules a cloud save.
-  // This keeps XP, streaks, uses, rewards, tone, challenge and recent data synced.
-  const originalSetItem = localStorage.setItem.bind(localStorage);
-  localStorage.setItem = function(key, value){
-    originalSetItem(key, value);
-    if(!cloudApplying && cloudUid && String(key).startsWith('funbox')) {
-      window.funboxCloudSave();
-    }
-  };
+  // Performance: do not monkey-patch localStorage.
+  // FunBox already calls funboxCloudSave() after meaningful state changes,
+  // so every tiny localStorage write no longer schedules a Firestore request.
   window.signupAccount=async()=>{
     if(!firebaseReady) return statusEl().textContent='Firebase config paste karo, phir signup chalega.';
     const email=authEmail.value.trim(), pass=authPassword.value, username=authUsername.value.trim()||'FunBox User';
