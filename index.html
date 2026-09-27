@@ -1768,7 +1768,8 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
 
   let extraUses = Number(localStorage.getItem(STORAGE.extraUses) || 0);
 
-  let unlim
+  let unlimitedUntil = Number(localStorage.getItem(STORAGE.unlimited) || 0);
+
   /* =========================================================
      XP / COIN FLYING REWARDS
   ========================================================== */
@@ -2025,8 +2026,6 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     if (makerStatus && shopOwned("diamondMaker")) makerStatus.textContent = "💎 Diamond Maker • " + (localStorage.getItem(STORAGE.diamondMakerName) || "Maker") + " • Special Badge unlocked";
   }
 
-itedUntil =
-    Number(localStorage.getItem(STORAGE.unlimited) || 0);
 
   let guessNumberTarget =
     Math.floor(Math.random() * 50) + 1;
