@@ -836,6 +836,9 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
   .friend-msg{margin:7px 0;padding:8px 10px;border-radius:11px;background:rgba(168,85,247,.12);font-size:13px}
   .friend-msg b{font-size:11px;opacity:.7}
   .friend-request{border-left:3px solid #a855f7;padding-left:10px;margin:8px 0}
+  .presence-line{font-size:12px;margin-top:4px;font-weight:800}
+  .presence-online{color:#4ade80}
+  .presence-offline{color:#f59e0b}
   @media(max-width:620px){.friend-search-row{flex-direction:column}.friend-action{width:100%}.friend-user{align-items:flex-start;flex-direction:column}}
 </style>
 
@@ -1511,7 +1514,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
 
 
 <footer>
-  FunBox © 2026 • Made by <strong><em>Taksh 🤪😛 • Boredom? Not Today.
+  FunBox © 2026 • Boredom? Not Today.
 </footer>
 
 
@@ -1596,10 +1599,10 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
 
     <div class="shop-item" style="grid-column:1/-1;border-color:rgba(168,85,247,.45);">
       <div class="shop-item-icon">💎</div><h3>Diamond Maker</h3>
-      <p>Apna Maker Name set karo aur 500 💎 mein special badge unlock karo.</p>
+      <p>Maker Name dalo aur +500 💎 reward ke saath special badge unlock karo.</p>
       <input id="diamondMakerName" class="friend-search-input" maxlength="24" placeholder="Maker name..." style="margin:8px 0;width:100%;box-sizing:border-box;">
-      <div class="shop-price">500 💎</div>
-      <button id="shopDiamondMaker" class="shop-buy" onclick="buyShopItem('diamondMaker')">Unlock 💎 Diamond Maker</button>
+      <div class="shop-price">🎁 Reward: +500 💎</div>
+      <button id="shopDiamondMaker" class="shop-buy" onclick="buyShopItem('diamondMaker')">Claim +500 💎 + Badge</button>
       <div id="diamondMakerStatus" class="friend-meta" style="margin-top:8px">Badge title: 💎 Diamond Maker</div>
     </div>
 
@@ -1904,6 +1907,29 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     if (item !== "extraUse" && shopOwned(keyMap[item])) return;
 
     const status = document.getElementById("shopStatus");
+
+    // Diamond Maker is a one-time reward: enter a Maker Name and receive +500 💎.
+    if (item === "diamondMaker") {
+      const nameInput = document.getElementById("diamondMakerName");
+      const makerName = String(nameInput?.value || localStorage.getItem(STORAGE.diamondMakerName) || "").trim();
+      if (!makerName) {
+        if (status) status.textContent = "🛠️ Pehle Maker Name dalo.";
+        return;
+      }
+      localStorage.setItem(STORAGE.diamondMakerName, makerName.slice(0,24));
+      setShopOwned("diamondMaker");
+      coins += 500;
+      localStorage.setItem(STORAGE.coins, String(coins));
+      if (status) status.textContent = `💎 +500 Diamonds! ${makerName.slice(0,24)} ko Diamond Maker badge mil gaya.`;
+      if (nameInput) nameInput.value = makerName.slice(0,24);
+      renderProfile();
+      updateShopUI();
+      applyShopCosmetics();
+      if (window.funboxCloudSave) window.funboxCloudSave();
+      trackEvent("funbox_diamond_maker_claim", {reward_coins:500});
+      return;
+    }
+
     if (coins < price) {
       if (status) status.textContent = `💎 Coins kam hain. Need ${price} 💎.`;
       return;
@@ -1912,21 +1938,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     coins -= price;
     localStorage.setItem(STORAGE.coins, String(coins));
 
-    if (item === "diamondMaker") {
-      const nameInput = document.getElementById("diamondMakerName");
-      const makerName = String(nameInput?.value || localStorage.getItem(STORAGE.diamondMakerName) || "").trim();
-      if (!makerName) {
-        coins += price;
-        localStorage.setItem(STORAGE.coins, String(coins));
-        if (status) status.textContent = "🛠️ Pehle Maker Name dalo.";
-        updateShopUI();
-        return;
-      }
-      localStorage.setItem(STORAGE.diamondMakerName, makerName.slice(0,24));
-      setShopOwned("diamondMaker");
-      if (status) status.textContent = `💎 Diamond Maker badge unlocked for ${makerName.slice(0,24)}!`;
-      if (nameInput) nameInput.value = makerName.slice(0,24);
-    } else if (item === "extraUse") {
+    if (item === "extraUse") {
       extraUses += 1;
       localStorage.setItem(STORAGE.extraUses, String(extraUses));
       if (status) status.textContent = "🎟️ +1 Extra Use mil gaya!";
@@ -4975,6 +4987,8 @@ itedUntil =
         level:typeof getProfileLevel==='function'?getProfileLevel():1,
         streak:Number(localStorage.getItem(STORAGE.streak)||0),
         title:typeof getTitle==='function'?getTitle():'Newbie',
+        online:true,
+        presenceAt:serverTimestamp(),
         updatedAt:serverTimestamp()
       },{merge:true});
     }catch(e){ console.warn('Public profile sync failed',e); }
@@ -5009,9 +5023,34 @@ itedUntil =
   }
   window.searchFriend=searchFriend;
 
+  function presenceInfo(d){
+    const now=Date.now();
+    const ts=d?.presenceAt;
+    const ms=ts?.toMillis ? ts.toMillis() : (typeof ts?.seconds==='number' ? ts.seconds*1000 : 0);
+    const isOnline=Boolean(d?.online) && ms>0 && (now-ms)<70000;
+    if(isOnline) return '<span class="presence-line presence-online">🟢 Online now</span>';
+    const last=d?.lastSeenAt;
+    const lastMs=last?.toMillis ? last.toMillis() : (typeof last?.seconds==='number' ? last.seconds*1000 : 0);
+    if(!lastMs) return '<span class="presence-line presence-offline">⚪ Offline • Last seen unknown</span>';
+    return '<span class="presence-line presence-offline">🟠 Offline • Last seen '+escapeHTML(formatLastSeen(lastMs))+'</span>';
+  }
+
+  function formatLastSeen(ms){
+    const diff=Math.max(0,Date.now()-ms);
+    const sec=Math.floor(diff/1000);
+    if(sec<60) return sec+' sec ago';
+    const min=Math.floor(sec/60);
+    if(min<60) return min+' min ago';
+    const hr=Math.floor(min/60);
+    if(hr<24) return hr+' hr ago';
+    const day=Math.floor(hr/24);
+    if(day<7) return day+' day'+(day===1?'':'s')+' ago';
+    return new Date(ms).toLocaleString();
+  }
+
   function renderFriendSearchResult(d){
     const out=document.getElementById('friendSearchResult'); if(!out)return;
-    out.innerHTML=`<div class="friend-panel"><div class="friend-user"><div><div class="friend-name">👤 ${escapeHTML(d.username||d.displayName||'FunBox User')}</div><div class="friend-meta">⭐ ${Number(d.xp||0)} XP • Level ${Number(d.level||1)} • 🔥 ${Number(d.streak||0)} streak • ${escapeHTML(d.title||'Newbie')}</div></div><div class="friend-buttons"><button class="friend-mini" onclick="sendFriendRequest('${d.uid}')">➕ Add Friend</button></div></div></div>`;
+    out.innerHTML=`<div class="friend-panel"><div class="friend-user"><div><div class="friend-name">👤 ${escapeHTML(d.username||d.displayName||'FunBox User')}</div><div class="friend-meta">⭐ ${Number(d.xp||0)} XP • Level ${Number(d.level||1)} • 🔥 ${Number(d.streak||0)} streak • ${escapeHTML(d.title||'Newbie')}</div>${presenceInfo(d)}</div><div class="friend-buttons"><button class="friend-mini" onclick="sendFriendRequest('${d.uid}')">➕ Add Friend</button></div></div></div>`;
   }
 
   async function sendFriendRequest(uid){
@@ -5051,19 +5090,70 @@ itedUntil =
   }
   window.acceptFriendRequest=acceptFriendRequest;
 
+  const friendProfileUnsubs = new Map();
+  const friendProfileCache = new Map();
+
+  function clearFriendProfileListeners(){
+    friendProfileUnsubs.forEach(fn=>{try{fn()}catch(e){}});
+    friendProfileUnsubs.clear();
+    friendProfileCache.clear();
+  }
+
+  function renderFriendListPanel(){
+    const panel=document.getElementById('friendListPanel'); if(!panel)return;
+    const profiles=[...friendProfileCache.values()];
+    if(!profiles.length){panel.style.display='none';return;}
+    panel.style.display='block';
+    panel.innerHTML='<b>👥 Your Friends</b>'+profiles.map(x=>`<div class="friend-request"><div class="friend-user"><div><div class="friend-name">${escapeHTML(x.data.username||'Friend')}</div><div class="friend-meta">⭐ ${Number(x.data.xp||0)} XP • Level ${Number(x.data.level||1)} • ${escapeHTML(x.data.title||'Newbie')}</div>${presenceInfo(x.data)}</div><div class="friend-buttons"><button class="friend-mini" onclick="openFriendChat('${x.uid}','${escapeHTML(x.data.username||'Friend')}')">💬 Chat</button></div></div></div>`).join('');
+  }
+
   function watchFriendships(uid){
     if(friendListUnsub) friendListUnsub();
+    clearFriendProfileListeners();
     if(!db||!uid)return;
     const q=query(collection(db,'friendships'),where('participants','array-contains',uid),limit(30));
-    friendListUnsub=onSnapshot(q,async snap=>{
-      const panel=document.getElementById('friendListPanel'); if(!panel)return;
-      if(snap.empty){panel.style.display='none';return;}
+    friendListUnsub=onSnapshot(q,snap=>{
+      clearFriendProfileListeners();
       const others=snap.docs.map(x=>({id:x.id,uid:(x.data().participants||[]).find(v=>v!==uid)})).filter(x=>x.uid);
-      const profiles=await Promise.all(others.map(async x=>{try{const s=await getDoc(doc(db,'publicProfiles',x.uid));return {...x,data:s.data()||{}}}catch(e){return {...x,data:{}}}}));
-      panel.style.display='block';
-      panel.innerHTML='<b>👥 Your Friends</b>'+profiles.map(x=>`<div class="friend-request"><div class="friend-user"><div><div class="friend-name">${escapeHTML(x.data.username||'Friend')}</div><div class="friend-meta">⭐ ${Number(x.data.xp||0)} XP • Level ${Number(x.data.level||1)} • ${escapeHTML(x.data.title||'Newbie')}</div></div><div class="friend-buttons"><button class="friend-mini" onclick="openFriendChat('${x.uid}','${escapeHTML(x.data.username||'Friend')}')">💬 Chat</button></div></div></div>`).join('');
+      others.forEach(x=>{
+        const unsub=onSnapshot(doc(db,'publicProfiles',x.uid),ps=>{
+          friendProfileCache.set(x.uid,{...x,data:ps.data()||{}});
+          renderFriendListPanel();
+        },e=>console.warn('friend profile listener',e));
+        friendProfileUnsubs.set(x.uid,unsub);
+      });
+      renderFriendListPanel();
     },e=>console.warn('friendship listener',e));
   }
+
+  async function setFriendPresence(online){
+    const me=auth?.currentUser; if(!me||!db)return;
+    try{
+      const data=online ? {online:true,presenceAt:serverTimestamp(),updatedAt:serverTimestamp()} : {online:false,lastSeenAt:serverTimestamp(),updatedAt:serverTimestamp()};
+      await setDoc(doc(db,'publicProfiles',me.uid),data,{merge:true});
+    }catch(e){console.warn('presence update failed',e);}
+  }
+
+  let presenceTimer=null;
+  function startFriendPresence(user){
+    if(!user)return;
+    setFriendPresence(true);
+    if(presenceTimer)clearInterval(presenceTimer);
+    presenceTimer=setInterval(()=>{
+      if(document.visibilityState==='visible') setFriendPresence(true);
+    },20000);
+  }
+
+  document.addEventListener('visibilitychange',()=>{
+    if(!auth?.currentUser)return;
+    setFriendPresence(document.visibilityState==='visible');
+  });
+
+  window.addEventListener('beforeunload',()=>{
+    if(auth?.currentUser && db){
+      setDoc(doc(db,'publicProfiles',auth.currentUser.uid),{online:false,lastSeenAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true}).catch(()=>{});
+    }
+  });
 
   async function openFriendChat(uid,username){
     if(!auth?.currentUser||!db)return;
@@ -5099,10 +5189,13 @@ itedUntil =
 
   function startFriendRadar(user){
     if(!user)return;
-    ensurePublicProfile(user); watchFriendRequests(user.uid); watchFriendships(user.uid);
+    ensurePublicProfile(user);
+    startFriendPresence(user);
+    watchFriendRequests(user.uid);
+    watchFriendships(user.uid);
   }
 
-  if(auth) onAuthStateChanged(auth, u=>{ if(u) startFriendRadar(u); else { if(friendRequestsUnsub)friendRequestsUnsub(); if(friendListUnsub)friendListUnsub(); if(friendChatUnsub)friendChatUnsub(); } });
+  if(auth) onAuthStateChanged(auth, u=>{ if(u) startFriendRadar(u); else { if(friendRequestsUnsub)friendRequestsUnsub(); if(friendListUnsub)friendListUnsub(); if(friendChatUnsub)friendChatUnsub(); clearFriendProfileListeners(); if(presenceTimer)clearInterval(presenceTimer); presenceTimer=null; } });
 
   const themeInput=document.getElementById('themeImage');
   const themeStatus=document.getElementById('themeStatus');
