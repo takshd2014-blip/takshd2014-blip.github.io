@@ -777,6 +777,18 @@ body:before,body:after{display:none!important}
   .friend-chat-box{height:190px;overflow:auto;padding:10px;border-radius:14px;background:#07070c;border:1px solid rgba(255,255,255,.08)}
   .friend-msg{margin:7px 0;padding:8px 10px;border-radius:11px;background:rgba(168,85,247,.12);font-size:13px}
   .friend-msg b{font-size:11px;opacity:.7}
+  .friend-msg-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;opacity:.6}
+  .friend-msg-delete{border:0;background:transparent;color:#ff8b8b;cursor:pointer;font-size:11px;padding:2px 4px}
+  .friend-notice-card{display:none;margin:12px 0 0;padding:13px 15px;border:1px solid rgba(168,85,247,.35);background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,255,255,.035));border-radius:16px}
+  .friend-notice-card.show{display:block}
+  .friend-notice-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+  .friend-notice-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;margin-top:7px;border-radius:12px;background:rgba(0,0,0,.22)}
+  .friend-notice-item .friend-mini{flex:0 0 auto}
+  .friend-friends-panel{margin-top:10px;padding:10px;border-radius:14px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.07)}
+  .friend-friend-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .friend-friend-row:last-child{border-bottom:0}
+  .friend-time{font-size:10px;opacity:.58;margin-top:3px}
+  .notify-permission{font-size:11px;opacity:.7;margin-top:7px}
   .friend-request{border-left:3px solid #a855f7;padding-left:10px;margin:8px 0}
   .presence-line{font-size:12px;margin-top:4px;font-weight:800}
   .presence-online{color:#4ade80}
@@ -916,6 +928,15 @@ body:before,body:after{display:none!important}
     <div class="tagline">Boredom? Not Today.</div>
   </header>
 
+  <section class="friend-notice-card" id="friendNewMessagesBar">
+    <div class="friend-notice-head">
+      <strong>📨 New messages from</strong>
+      <button class="friend-mini" type="button" onclick="enableFriendNotifications()">🔔 Notifications</button>
+    </div>
+    <div id="friendNewMessagesList"></div>
+    <div class="notify-permission" id="friendNotifyStatus">New messages yahan appear honge.</div>
+  </section>
+
   <section class="card jb-room-launch" id="jockBobloRoomSection">
     <h3>🎮 JOCK BOBLO — ONLINE ROOM</h3>
     <p>Friend ke saath real-time room banao, code share karo, aur live score dekho.</p>
@@ -994,6 +1015,7 @@ body:before,body:after{display:none!important}
     <div id="friendSearchResult"></div>
     <div id="friendRequestsPanel" class="friend-panel" style="display:none"></div>
     <div id="friendListPanel" class="friend-panel" style="display:none"></div>
+    <div id="friendFriendsPanel" class="friend-panel" style="display:none"></div>
     <div id="friendChatPanel" class="friend-panel friend-chat" style="display:none">
       <div class="friend-user"><div><div id="friendChatTitle" class="friend-name">💬 Friend Chat</div><div id="friendChatMeta" class="friend-meta"></div></div><button class="friend-mini" onclick="closeFriendChat()">Close</button></div>
       <div id="friendChatBox" class="friend-chat-box" style="margin-top:10px"></div>
@@ -4521,7 +4543,7 @@ body:before,body:after{display:none!important}
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, query, where, limit, getDocs, addDoc, updateDoc, arrayUnion, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, query, where, limit, getDocs, addDoc, updateDoc, arrayUnion, orderBy, deleteDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtnob7lOAb7RCOz5sqssgMNI9gvBUf4wM",
@@ -4825,6 +4847,67 @@ body:before,body:after{display:none!important}
 
   const friendProfileUnsubs = new Map();
   const friendProfileCache = new Map();
+  const friendNotificationUnsubs = new Map();
+  const friendNotifyInitialized = new Map();
+  const friendNotificationCache = new Map();
+  const friendFriendsProfileUnsubs = new Map();
+
+  function chatReadKey(chatId){ return 'funboxChatReadAt_'+chatId; }
+  function getChatReadAt(chatId){ return Number(localStorage.getItem(chatReadKey(chatId))||0); }
+  function setChatReadAt(chatId,ms=Date.now()){ localStorage.setItem(chatReadKey(chatId),String(ms)); renderFriendNotifications(); }
+  function msgTime(ms){
+    const n=Number(ms||0); if(!n)return '';
+    const d=new Date(n), now=new Date();
+    if(d.toDateString()===now.toDateString()) return d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    return d.toLocaleString([], {day:'2-digit',month:'short',hour:'numeric',minute:'2-digit'});
+  }
+  function clearFriendNotificationListeners(){
+    friendNotificationUnsubs.forEach(fn=>{try{fn()}catch(e){}});
+    friendNotificationUnsubs.clear();
+    friendNotifyInitialized.clear();
+    friendNotificationCache.clear();
+    renderFriendNotifications();
+  }
+  function renderFriendNotifications(){
+    const bar=document.getElementById('friendNewMessagesBar');
+    const list=document.getElementById('friendNewMessagesList');
+    if(!bar||!list)return;
+    const items=[...friendNotificationCache.values()].filter(x=>x.messages?.length).sort((a,b)=>Number(b.latest?.createdAt||0)-Number(a.latest?.createdAt||0));
+    if(!items.length){bar.classList.remove('show');list.innerHTML='';return;}
+    bar.classList.add('show');
+    list.innerHTML=items.map(x=>{const m=x.latest||{};return `<div class="friend-notice-item"><div><strong>👤 ${escapeHTML(x.username||'Friend')}</strong><div class="friend-time">${escapeHTML(m.text||'')} • ${escapeHTML(msgTime(m.createdAt))}</div></div><button class="friend-mini" onclick="openFriendChat('${x.uid}','${escapeHTML(x.username||'Friend')}')">Open 💬</button></div>`;}).join('');
+    const st=document.getElementById('friendNotifyStatus');
+    if(st) st.textContent=typeof Notification!=='undefined' ? (Notification.permission==='granted'?'🔔 Browser notifications ON.':'🔕 Browser notifications OFF — button dabao.') : 'In-page notifications active.';
+  }
+  window.enableFriendNotifications=async function(){
+    if(typeof Notification==='undefined'){const st=document.getElementById('friendNotifyStatus');if(st)st.textContent='Browser notifications is browser mein supported nahi hain.';return;}
+    try{const p=await Notification.requestPermission();const st=document.getElementById('friendNotifyStatus');if(st)st.textContent=p==='granted'?'🔔 Browser notifications ON.':'🔕 Permission nahi mila.';}catch(e){console.warn(e)}
+  };
+
+  function startFriendNotificationListeners(profiles){
+    if(!db||!auth?.currentUser)return;
+    const wanted=new Set(profiles.map(x=>x.uid));
+    for(const [uid,fn] of friendNotificationUnsubs){ if(!wanted.has(uid)){try{fn()}catch(e){} friendNotificationUnsubs.delete(uid); friendNotifyInitialized.delete(uid); friendNotificationCache.delete(uid);} }
+    profiles.forEach(x=>{
+      if(friendNotificationUnsubs.has(x.uid))return;
+      const chatId=friendPairId(auth.currentUser.uid,x.uid);
+      const ref=doc(db,'friendChats',chatId);
+      const unsub=onSnapshot(ref,snap=>{
+        const msgs=snap.exists()?(snap.data().messages||[]):[];
+        const readAt=getChatReadAt(chatId);
+        const unread=msgs.filter(m=>m.uid!==auth.currentUser.uid && Number(m.createdAt||0)>readAt);
+        const latest=unread[unread.length-1]||null;
+        friendNotificationCache.set(x.uid,{uid:x.uid,username:x.data?.username||x.data?.displayName||'Friend',messages:unread,latest});
+        renderFriendNotifications();
+        const wasReady=friendNotifyInitialized.get(x.uid);
+        friendNotifyInitialized.set(x.uid,true);
+        if(wasReady && latest && document.visibilityState!=='visible' && typeof Notification!=='undefined' && Notification.permission==='granted'){
+          try{new Notification('New message from '+(x.data?.username||'Friend'),{body:String(latest.text||'New message').slice(0,100),tag:'funbox-'+chatId});}catch(e){}
+        }
+      },e=>console.warn('chat notification listener',e));
+      friendNotificationUnsubs.set(x.uid,unsub);
+    });
+  }
 
   function clearFriendProfileListeners(){
     friendProfileUnsubs.forEach(fn=>{try{fn()}catch(e){}});
@@ -4837,17 +4920,39 @@ body:before,body:after{display:none!important}
     const profiles=[...friendProfileCache.values()];
     if(!profiles.length){panel.style.display='none';return;}
     panel.style.display='block';
-    panel.innerHTML='<b>👥 Your Friends</b>'+profiles.map(x=>`<div class="friend-request"><div class="friend-user"><div><div class="friend-name">${escapeHTML(x.data.username||'Friend')}</div><div class="friend-meta">⭐ ${Number(x.data.xp||0)} XP • Level ${Number(x.data.level||1)} • ${escapeHTML(x.data.title||'Newbie')}</div>${presenceInfo(x.data)}</div><div class="friend-buttons"><button class="friend-mini" onclick="openFriendChat('${x.uid}','${escapeHTML(x.data.username||'Friend')}')">💬 Chat</button></div></div></div>`).join('');
+    panel.innerHTML='<b>👥 Your Friends</b>'+profiles.map(x=>`<div class="friend-request"><div class="friend-user"><div><div class="friend-name">${escapeHTML(x.data.username||'Friend')}</div><div class="friend-meta">⭐ ${Number(x.data.xp||0)} XP • Level ${Number(x.data.level||1)} • ${escapeHTML(x.data.title||'Newbie')}</div>${presenceInfo(x.data)}</div><div class="friend-buttons"><button class="friend-mini" onclick="openFriendChat('${x.uid}','${escapeHTML(x.data.username||'Friend')}')">💬 Chat</button><button class="friend-mini" onclick="viewFriendFriends('${x.uid}','${escapeHTML(x.data.username||'Friend')}')">👥 Friends</button></div></div></div>`).join('');
+    startFriendNotificationListeners(profiles);
   }
+
+  async function viewFriendFriends(uid,username){
+    const panel=document.getElementById('friendFriendsPanel'); if(!panel||!db)return;
+    panel.style.display='block';
+    panel.innerHTML=`<b>👥 ${escapeHTML(username)} ke Friends</b><div class="friend-meta" style="margin-top:8px">Loading...</div>`;
+    try{
+      const ps=await getDoc(doc(db,'publicProfiles',uid));
+      const data=ps.exists()?ps.data():{};
+      const ids=Array.isArray(data.friendUids)?data.friendUids.filter(x=>x&&x!==auth.currentUser?.uid):[];
+      if(!ids.length){panel.innerHTML=`<b>👥 ${escapeHTML(username)} ke Friends</b><div class="friend-meta" style="margin-top:8px">Is friend ka public friends list abhi empty hai.</div>`;return;}
+      const rows=[];
+      for(const fid of ids.slice(0,30)){
+        try{const snap=await getDoc(doc(db,'publicProfiles',fid)); if(snap.exists()){const d=snap.data();rows.push(`<div class="friend-friend-row"><div><strong>${escapeHTML(d.username||d.displayName||'FunBox User')}</strong>${presenceInfo(d)}</div><div class="friend-time">⭐ ${Number(d.xp||0)} XP</div></div>`);}}catch(e){console.warn(e)}
+      }
+      panel.innerHTML=`<div class="friend-user"><b>👥 ${escapeHTML(username)} ke Friends (${rows.length})</b><button class="friend-mini" onclick="document.getElementById('friendFriendsPanel').style.display='none'">Close</button></div>${rows.join('')||'<div class="friend-meta" style="margin-top:8px">Public profiles nahi mile.</div>'}`;
+    }catch(e){panel.innerHTML='<div class="friend-msg">⚠️ Friends list load failed: '+escapeHTML(e.message)+'</div>';}
+  }
+  window.viewFriendFriends=viewFriendFriends;
 
   function watchFriendships(uid){
     if(friendListUnsub) friendListUnsub();
     clearFriendProfileListeners();
+    clearFriendNotificationListeners();
     if(!db||!uid)return;
     const q=query(collection(db,'friendships'),where('participants','array-contains',uid),limit(30));
-    friendListUnsub=onSnapshot(q,snap=>{
+    friendListUnsub=onSnapshot(q,async snap=>{
       clearFriendProfileListeners();
       const others=snap.docs.map(x=>({id:x.id,uid:(x.data().participants||[]).find(v=>v!==uid)})).filter(x=>x.uid);
+      const friendIds=others.map(x=>x.uid);
+      try{await setDoc(doc(db,'publicProfiles',uid),{friendUids:friendIds,updatedAt:serverTimestamp()},{merge:true});}catch(e){console.warn('friend ids sync failed',e)}
       others.forEach(x=>{
         const unsub=onSnapshot(doc(db,'publicProfiles',x.uid),ps=>{
           friendProfileCache.set(x.uid,{...x,data:ps.data()||{}});
@@ -4891,34 +4996,51 @@ body:before,body:after{display:none!important}
   async function openFriendChat(uid,username){
     if(!auth?.currentUser||!db)return;
     activeFriend={uid,username}; activeFriendChatId=friendPairId(auth.currentUser.uid,uid);
-    const panel=document.getElementById('friendChatPanel'); if(panel)panel.style.display='block';
+    const panel=document.getElementById('friendChatPanel');if(panel)panel.style.display='block';
     document.getElementById('friendChatTitle').textContent='💬 '+username;
-    document.getElementById('friendChatMeta').textContent='Friend chat • XP progress public to connected friends';
+    document.getElementById('friendChatMeta').textContent='Friend chat • messages show time • apna message delete kar sakte ho';
     if(friendChatUnsub)friendChatUnsub();
     const ref=doc(db,'friendChats',activeFriendChatId);
     try{await setDoc(ref,{participants:[auth.currentUser.uid,uid],updatedAt:serverTimestamp()},{merge:true});}catch(e){console.warn(e)}
+    const currentUid=auth.currentUser.uid;
     friendChatUnsub=onSnapshot(ref,snap=>{
-      const box=document.getElementById('friendChatBox'); if(!box)return;
+      const box=document.getElementById('friendChatBox');if(!box)return;
       const msgs=snap.exists()?(snap.data().messages||[]):[];
-      box.innerHTML=msgs.slice(-50).map(m=>`<div class="friend-msg"><b>${escapeHTML(m.username||'Friend')}</b><br>${escapeHTML(m.text||'')}</div>`).join('')||'<div style="opacity:.55">No messages yet. Say something less boring.</div>';
+      const latest=msgs.length?Number(msgs[msgs.length-1].createdAt||Date.now()):Date.now();
+      setChatReadAt(activeFriendChatId,latest);
+      box.innerHTML=msgs.slice(-50).map((m,i)=>{const own=m.uid===currentUid;const mid=m.id||('legacy_'+i+'_'+String(m.createdAt||0));return `<div class="friend-msg"><b>${escapeHTML(m.username||'Friend')}</b><br>${escapeHTML(m.text||'')}<div class="friend-msg-meta"><span>${escapeHTML(msgTime(m.createdAt))}</span>${own?`<button class="friend-msg-delete" onclick="deleteFriendMessage('${mid}')">Delete</button>`:''}</div></div>`;}).join('')||'<div style="opacity:.55">No messages yet. Say something less boring.</div>';
       box.scrollTop=box.scrollHeight;
     },e=>{const box=document.getElementById('friendChatBox');if(box)box.innerHTML='<div class="friend-msg">⚠️ Chat sync failed.</div>';console.warn(e)});
   }
   window.openFriendChat=openFriendChat;
 
-  function closeFriendChat(){if(friendChatUnsub){friendChatUnsub();friendChatUnsub=null;}activeFriendChatId=null;activeFriend=null;const p=document.getElementById('friendChatPanel');if(p)p.style.display='none';}
+  function closeFriendChat(){if(friendChatUnsub){friendChatUnsub();friendChatUnsub=null;}activeFriendChatId=null;activeFriend=null;const p=document.getElementById('friendChatPanel');if(p)p.style.display='none';renderFriendNotifications();}
   window.closeFriendChat=closeFriendChat;
 
   async function sendFriendMessage(){
-    const input=document.getElementById('friendChatInput'); const text=String(input?.value||'').trim();
+    const input=document.getElementById('friendChatInput');const text=String(input?.value||'').trim();
     if(!text||!activeFriendChatId||!auth?.currentUser||!db)return;
-    const meSnap=await getDoc(doc(db,'publicProfiles',auth.currentUser.uid)); const me=meSnap.data()||{};
+    const meSnap=await getDoc(doc(db,'publicProfiles',auth.currentUser.uid));const me=meSnap.data()||{};
     try{
-      await updateDoc(doc(db,'friendChats',activeFriendChatId),{messages:arrayUnion({uid:auth.currentUser.uid,username:me.username||auth.currentUser.displayName||'You',text:text.slice(0,200),createdAt:Date.now()}),updatedAt:serverTimestamp()});
-      input.value='';
+      const msg={id:auth.currentUser.uid+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),uid:auth.currentUser.uid,username:me.username||auth.currentUser.displayName||'You',text:text.slice(0,200),createdAt:Date.now()};
+      await updateDoc(doc(db,'friendChats',activeFriendChatId),{messages:arrayUnion(msg),updatedAt:serverTimestamp()});
+      setChatReadAt(activeFriendChatId,msg.createdAt); input.value='';
     }catch(e){console.warn(e);}
   }
   window.sendFriendMessage=sendFriendMessage;
+
+  window.deleteFriendMessage=async function(messageId){
+    if(!activeFriendChatId||!auth?.currentUser||!db)return;
+    const ref=doc(db,'friendChats',activeFriendChatId);
+    try{
+      await runTransaction(db,async tx=>{
+        const snap=await tx.get(ref);if(!snap.exists())return;
+        const data=snap.data();const msgs=Array.isArray(data.messages)?data.messages:[];
+        const filtered=msgs.filter((m,i)=>{const mid=m.id||('legacy_'+i+'_'+String(m.createdAt||0));if(mid!==messageId)return true;return m.uid!==auth.currentUser.uid;});
+        if(filtered.length!==msgs.length)tx.update(ref,{messages:filtered,updatedAt:serverTimestamp()});
+      });
+    }catch(e){console.warn('delete message failed',e);}
+  };
 
   function startFriendRadar(user){
     if(!user)return;
@@ -4928,7 +5050,7 @@ body:before,body:after{display:none!important}
     watchFriendships(user.uid);
   }
 
-  if(auth) onAuthStateChanged(auth, u=>{ if(u) startFriendRadar(u); else { if(friendRequestsUnsub)friendRequestsUnsub(); if(friendListUnsub)friendListUnsub(); if(friendChatUnsub)friendChatUnsub(); clearFriendProfileListeners(); if(presenceTimer)clearInterval(presenceTimer); presenceTimer=null; } });
+  if(auth) onAuthStateChanged(auth, u=>{ if(u) startFriendRadar(u); else { if(friendRequestsUnsub)friendRequestsUnsub(); if(friendListUnsub)friendListUnsub(); if(friendChatUnsub)friendChatUnsub(); clearFriendNotificationListeners(); clearFriendProfileListeners(); if(presenceTimer)clearInterval(presenceTimer); presenceTimer=null; } });
 
   const themeInput=document.getElementById('themeImage');
   const themeStatus=document.getElementById('themeStatus');
@@ -5229,7 +5351,7 @@ function renderJBRoom(){
   renderJBFinalResult(d);
   if(d.status==='playing'){
     document.getElementById('jbQuestion').textContent=q.q;
-    document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button onclick="answerJock(${i})" ${Number(d.round||0)<=jbAnsweredRound?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
+    document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button onclick="answerJock(${i})" ${Number(d.players?.[jbUser?.uid]?.answeredRound||0)>=Number(d.round||0)?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
     document.getElementById('jbMatchResult').textContent=`Round ${d.round}/5 — answer fast.`;
     startJBTimer(d.roundStartedAt||Date.now());
   }else if(d.status==='finished'){
@@ -5272,7 +5394,7 @@ window.startJockMatch=async()=>{
 window.answerJock=async(index)=>{
   if(!jbRoomData||jbRoomData.status!=='playing'||!jbUser)return;
   const round=Number(jbRoomData.round||0);
-  if(jbAnsweredRound===round)return;
+  if(Number(jbRoomData.players?.[jbUser.uid]?.answeredRound||0)>=round)return;
   if(Date.now()-Number(jbRoomData.roundStartedAt||Date.now())>10000)return jbStatus('⏱️ Time up — next question aa raha hai.');
   const q=JB_QUESTIONS[Number(jbRoomData.questionIndex||0)%JB_QUESTIONS.length];
   const correct=index===q.c;
