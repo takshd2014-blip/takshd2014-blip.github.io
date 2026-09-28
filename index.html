@@ -15,16 +15,7 @@
   <!-- =========================
        GOOGLE ANALYTICS 4
   ========================== -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07">
-  document.addEventListener("click", (e) => {
-    const modal = document.getElementById("shopModal");
-    if (modal && e.target === modal) closeShop();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeShop();
-  });
-
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JB6ZCD4C07"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -35,6 +26,13 @@
     gtag("js", new Date());
 
     gtag("config", "G-JB6ZCD4C07");
+    document.addEventListener("click", (e) => {
+      const modal = document.getElementById("shopModal");
+      if (modal && e.target === modal && typeof closeShop === "function") closeShop();
+    }, {passive:true});
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && typeof closeShop === "function") closeShop();
+    });
   </script>
 
   <style>
@@ -104,7 +102,7 @@
       border-radius: 22px;
       padding: 22px;
       margin: 18px 0;
-      backdrop-filter: blur(15px);
+      backdrop-filter:none;
       box-shadow: 0 20px 50px rgba(0,0,0,.20);
     }
 
@@ -752,70 +750,14 @@
 @media(max-width:700px){.jb-tools{grid-template-columns:1fr}.jb-avatar-grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 
-<style id="funbox-pixel-graphics-upgrade">
-/* =========================
-   FUNBOX PIXEL / GRAPHICS UPGRADE
-========================= */
-:root{--px-purple:#a855f7;--px-pink:#ec4899;--px-cyan:#22d3ee;--px-blue:#60a5fa;--px-dark:#08080e;--px-panel:#11111a}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(to bottom,black,transparent 92%)}
-body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(255,255,255,.012) 4px);mix-blend-mode:screen}
-.logo-img{filter:drop-shadow(0 0 10px rgba(168,85,247,.28)) drop-shadow(0 0 28px rgba(34,211,238,.12));animation:pxLogoFloat 4s ease-in-out infinite}
-@keyframes pxLogoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.card{position:relative;overflow:hidden;border-color:rgba(168,85,247,.12);box-shadow:0 18px 55px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.035)}
-.card:before{content:"";position:absolute;left:0;top:0;width:58px;height:2px;background:linear-gradient(90deg,var(--px-purple),var(--px-cyan));opacity:.7}
-.btn,.jb-room-btn,.jb-flow-big,.shop-launch-btn{position:relative;overflow:hidden}
-.btn:after,.jb-room-btn:after,.jb-flow-big:after,.shop-launch-btn:after{content:"";position:absolute;top:-40%;left:-70%;width:45%;height:180%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:skewX(-18deg);transition:left .55s ease}
-.btn:hover:after,.jb-room-btn:hover:after,.jb-flow-big:hover:after,.shop-launch-btn:hover:after{left:125%}
-.profile .stat{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));transition:transform .2s,border-color .2s,box-shadow .2s}
-.profile .stat:hover{transform:translateY(-3px);border-color:rgba(168,85,247,.35);box-shadow:0 10px 28px rgba(0,0,0,.25)}
-.profile .stat strong{font-variant-numeric:tabular-nums;text-shadow:0 0 16px rgba(168,85,247,.18)}
-.jb-room-launch{background:radial-gradient(circle at 15% 0,rgba(168,85,247,.18),transparent 35%),radial-gradient(circle at 90% 100%,rgba(34,211,238,.1),transparent 30%),linear-gradient(145deg,#12111b,#09090f);border-color:rgba(168,85,247,.28)}
-.jb-room-launch h3{font-size:23px;letter-spacing:.02em;text-shadow:0 0 18px rgba(168,85,247,.35)}
-.jb-room-launch p{margin-top:5px;color:#aaa}
-.jb-room-box{background:radial-gradient(circle at 10% 0,rgba(168,85,247,.14),transparent 28%),radial-gradient(circle at 90% 100%,rgba(34,211,238,.08),transparent 30%),#0c0c13!important;border-color:rgba(168,85,247,.3)!important}
-.jb-room-head h2{letter-spacing:.02em;text-shadow:0 0 18px rgba(168,85,247,.3)}
-.jb-room-head #jbRoomStatus{display:inline-block;margin-top:5px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)}
-.jb-flow-screen{background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:inset 0 1px rgba(255,255,255,.04),0 12px 35px rgba(0,0,0,.2)}
-.jb-flow-screen h3{font-size:22px}
-.jb-flow-big{background:linear-gradient(145deg,#171722,#101017);transition:transform .18s,box-shadow .18s,border-color .18s}
-.jb-flow-big:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.25);border-color:rgba(168,85,247,.35)}
-.jb-flow-big.primary{box-shadow:0 10px 28px rgba(168,85,247,.2)}
-.jb-room-code{font-family:monospace;font-size:23px;background:linear-gradient(90deg,rgba(168,85,247,.12),rgba(34,211,238,.08));border:1px solid rgba(168,85,247,.25);box-shadow:inset 0 0 25px rgba(168,85,247,.06),0 0 25px rgba(168,85,247,.06)}
-.jb-scorebar{border:1px solid rgba(255,255,255,.07);background:linear-gradient(90deg,rgba(168,85,247,.08),rgba(34,211,238,.045));box-shadow:inset 0 1px rgba(255,255,255,.04)}
-.jb-player{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border-color:rgba(255,255,255,.08);box-shadow:0 10px 25px rgba(0,0,0,.16);transition:transform .2s,border-color .2s,box-shadow .2s}
-.jb-player:hover{transform:translateY(-4px);border-color:rgba(168,85,247,.38);box-shadow:0 16px 32px rgba(0,0,0,.26),0 0 22px rgba(168,85,247,.08)}
-.jb-player:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.05) 50%,transparent 65%);transform:translateX(-120%);transition:transform .6s ease}
-.jb-player:hover:before{transform:translateX(120%)}
-.jb-avatar{display:inline-flex;align-items:center;justify-content:center;width:78px;height:78px;margin:auto;border-radius:22px;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.15),rgba(168,85,247,.08) 45%,rgba(0,0,0,.12));border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px rgba(255,255,255,.08),0 10px 22px rgba(0,0,0,.24);font-size:48px}
-.jb-player strong{font-size:15px}.jb-player-score{color:#e9d5ff;text-shadow:0 0 10px rgba(168,85,247,.22)}
-.jb-match-controls button{transition:.18s;box-shadow:0 7px 18px rgba(0,0,0,.18)}
-.jb-match-controls button:hover{transform:translateY(-2px)}
-.jb-question-card{background:linear-gradient(145deg,rgba(168,85,247,.08),rgba(255,255,255,.025));border-color:rgba(168,85,247,.16);box-shadow:inset 0 1px rgba(255,255,255,.04)}
-.jb-question-card #jbQuestion{font-size:22px;line-height:1.35;text-shadow:0 0 14px rgba(255,255,255,.06)}
-.jb-answer-grid button{position:relative;overflow:hidden;background:linear-gradient(145deg,#191923,#111119);transition:transform .16s,border-color .16s,background .16s;box-shadow:0 6px 16px rgba(0,0,0,.16)}
-.jb-answer-grid button:hover{transform:translateX(3px);border-color:rgba(168,85,247,.45);background:linear-gradient(145deg,#211b2c,#15131d)}
-.jb-score-row{border:1px solid rgba(255,255,255,.05);background:linear-gradient(90deg,rgba(255,255,255,.055),rgba(255,255,255,.025));transition:.18s}
-.jb-score-row:hover{transform:translateX(2px);border-color:rgba(168,85,247,.25)}
-.jb-final-result{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 0,rgba(168,85,247,.18),transparent 42%),linear-gradient(145deg,rgba(139,92,246,.12),rgba(236,72,153,.06))!important}
-.jb-final-result:before{content:"✦  ✦  ✦";position:absolute;top:7px;left:0;right:0;text-align:center;color:rgba(255,255,255,.12);letter-spacing:18px}
-.jb-final-headline{text-shadow:0 0 18px rgba(168,85,247,.25)}
-.jb-final-row{transition:transform .18s,border-color .18s}.jb-final-row:hover{transform:translateX(3px);border-color:rgba(168,85,247,.3)}
-.jb-final-row.me{box-shadow:0 0 22px rgba(168,85,247,.08)}
-.jb-tools .jb-tool-card{background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border-color:rgba(255,255,255,.07);box-shadow:0 10px 28px rgba(0,0,0,.15)}
-.jb-avatar-choice{transition:transform .16s,border-color .16s,box-shadow .16s;background:linear-gradient(145deg,#191923,#111119)}
-.jb-avatar-choice:hover{transform:translateY(-3px);border-color:rgba(168,85,247,.4);box-shadow:0 8px 18px rgba(0,0,0,.2)}
-.jb-avatar-choice.selected{box-shadow:0 0 22px rgba(168,85,247,.18)}
-.jb-avatar-choice .icon{filter:drop-shadow(0 4px 7px rgba(0,0,0,.35))}
-.jb-chatbox{background:linear-gradient(180deg,#09090f,#06060a);box-shadow:inset 0 0 30px rgba(168,85,247,.035)}
-.jb-msg{border-left:2px solid rgba(168,85,247,.35);background:linear-gradient(90deg,rgba(168,85,247,.08),rgba(255,255,255,.035));animation:pxMessageIn .25s ease}
-@keyframes pxMessageIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-.daily-code-card{background:radial-gradient(circle at 50% 0,rgba(168,85,247,.1),transparent 42%),rgba(255,255,255,.055)}
-.daily-code-display{font-family:monospace;text-shadow:0 0 16px rgba(168,85,247,.25);box-shadow:inset 0 0 30px rgba(168,85,247,.05)}
-.floating-reward{font-family:monospace;font-size:18px;filter:drop-shadow(0 0 7px rgba(168,85,247,.35))}
-.shop-item{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:0 10px 25px rgba(0,0,0,.14)}
-.shop-item:after{content:"";position:absolute;top:-50%;right:-25%;width:90px;height:180px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.08),transparent);transform:rotate(24deg);pointer-events:none}
-.shop-item-icon{filter:drop-shadow(0 4px 9px rgba(168,85,247,.16))}
-@media(max-width:700px){.jb-avatar{width:68px;height:68px;font-size:42px}.jb-question-card #jbQuestion{font-size:19px}}
+<style id="funbox-performance-css">
+.card{backdrop-filter:none!important;box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.logo-img{animation:none!important;filter:drop-shadow(0 0 8px rgba(168,85,247,.18))!important}
+.btn,.jb-room-btn,.jb-flow-big,.shop-launch-btn{box-shadow:none!important}
+.btn:after,.jb-room-btn:after,.jb-flow-big:after,.shop-launch-btn:after{display:none!important}
+.profile .stat:hover,.generator:hover,.mini-game:hover,.shop-item:hover,.jb-player:hover,.jb-flow-big:hover,.jb-answer-grid button:hover,.jb-score-row:hover,.jb-final-row:hover{transform:none!important}
+.friend-radar-card:before{display:none!important}
+body:before,body:after{display:none!important}
 </style>
 
 <style id="funbox-friends-css">
@@ -4026,7 +3968,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
           target_seconds: targetSeconds
         });
       }
-    }, 50);
+    }, 100);
 
     // Current round ka target memory mein rakho.
     window.funboxTenSecTarget = targetSeconds;
@@ -4115,268 +4057,6 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
     });
   }
 
-
-
-  /* =========================================================
-     ACCESS CODE / JOKE CHECK GAME
-  ========================================================== */
-
-  const jokeMakers = [
-    "TAKSH",
-    "DHRUVI",
-    "RUPAL",
-    "CHERRY"
-  ];
-
-  let selectedMakerName = randomItem(jokeMakers);
-  let revealedLetters = [];
-  let jokeFinished = false;
-  let codeSpeed = "normal";
-  let codeTimeLeft = 30;
-  let codeTimerInterval = null;
-
-  const codeSpeedSettings = {
-    slow: 60,
-    normal: 30,
-    fast: 15
-  };
-
-  function renderCodeSecret() {
-    const display = selectedMakerName
-      .split("")
-      .map((letter, index) =>
-        revealedLetters.includes(index) ? letter : "?"
-      )
-      .join(" ");
-
-    const secret = document.getElementById("secretDisplay");
-    if (secret) secret.textContent = display;
-  }
-
-  function updateCodeTimerText() {
-    const el = document.getElementById("codeTimer");
-    if (!el) return;
-
-    const speedName =
-      codeSpeed === "slow" ? "Slow" :
-      codeSpeed === "fast" ? "Fast" : "Normal";
-
-    el.textContent =
-      "⏱️ Speed: " + speedName +
-      " • Time: " + codeTimeLeft + "s";
-  }
-
-  function stopCodeTimer() {
-    if (codeTimerInterval) {
-      clearInterval(codeTimerInterval);
-      codeTimerInterval = null;
-    }
-  }
-
-  function startCodeTimer() {
-    stopCodeTimer();
-
-    codeTimeLeft = codeSpeedSettings[codeSpeed];
-    updateCodeTimerText();
-
-    codeTimerInterval = setInterval(() => {
-      codeTimeLeft--;
-      updateCodeTimerText();
-
-      if (codeTimeLeft <= 0) {
-        stopCodeTimer();
-
-        if (!jokeFinished) {
-          document.getElementById("codeStatus").textContent =
-            "⏰ Time up! New code challenge started.";
-          newCodeGame();
-        }
-      }
-    }, 1000);
-  }
-
-  function setCodeSpeed(speed) {
-    codeSpeed = speed;
-
-    document.querySelectorAll(".speed-btn")
-      .forEach(btn => btn.classList.remove("active"));
-
-    const button =
-      document.getElementById(
-        speed === "slow" ? "speedSlow" :
-        speed === "fast" ? "speedFast" :
-        "speedNormal"
-      );
-
-    if (button) button.classList.add("active");
-
-    startCodeTimer();
-
-    trackEvent("funbox_code_speed_changed", {
-      speed: speed
-    });
-  }
-
-  function newCodeGame() {
-    selectedMakerName = randomItem(jokeMakers);
-    revealedLetters = [];
-    jokeFinished = false;
-
-    renderCodeSecret();
-
-    const input = document.getElementById("jokeInput");
-    if (input) input.value = "";
-
-    const status = document.getElementById("codeStatus");
-    if (status) {
-      status.textContent =
-        "😂 Joke likho. Valid joke par ek hidden letter reveal hoga.";
-    }
-
-    startCodeTimer();
-
-    trackEvent("funbox_code_new_game");
-  }
-
-  function isLikelyJoke(text) {
-    const lower = String(text).toLowerCase().trim();
-
-    if (!lower || lower.length < 8) return false;
-
-    const jokeWords = [
-      "why", "what", "how", "knock", "joke",
-      "funny", "because", "who", "did", "went",
-      "school", "teacher", "lol", "haha",
-      "kyun", "kaise", "joke", "hasna", "mazak"
-    ];
-
-    return jokeWords.some(word => lower.includes(word))
-      || /[?!]/.test(lower);
-  }
-
-  function checkJokeForCode() {
-    if (jokeFinished) {
-      document.getElementById("codeStatus").textContent =
-        "🏆 Code already revealed. New Code dabao.";
-      return;
-    }
-
-    const input = document.getElementById("jokeInput");
-    const text = input.value.trim();
-
-    if (!text) {
-      document.getElementById("codeStatus").textContent =
-        "Pehle joke likho.";
-      return;
-    }
-
-    if (!isLikelyJoke(text)) {
-      document.getElementById("codeStatus").textContent =
-        "❌ Ye joke jaisa nahi lag raha. Ek proper joke try karo.";
-      trackEvent("funbox_joke_invalid");
-      return;
-    }
-
-    const hidden = selectedMakerName
-      .split("")
-      .map((_, index) => index)
-      .filter(index => !revealedLetters.includes(index));
-
-    if (!hidden.length) {
-      jokeFinished = true;
-      return;
-    }
-
-    const reveal = randomItem(hidden);
-    revealedLetters.push(reveal);
-
-    renderCodeSecret();
-
-    addPoints(10, "joke_valid");
-      addCoins(3, "joke_valid");
-
-    document.getElementById("codeStatus").textContent =
-      "😂 Joke accepted! Ek letter reveal ho gaya.";
-
-    trackEvent("funbox_joke_valid", {
-      tone_level: toneModes[tone]
-    });
-
-    if (revealedLetters.length === selectedMakerName.length) {
-      jokeFinished = true;
-      stopCodeTimer();
-
-      addPoints(15, "joke_complete");
-      addCoins(10, "joke_complete");
-
-      document.getElementById("codeStatus").textContent =
-        "🏆 Full access code revealed! Ab direct Enter Access Code mein use karo.";
-
-      document.getElementById("codeQuickStatus").textContent =
-        "✅ Code mil gaya — ab Enter Access Code se unlock karo.";
-    }
-
-    input.value = "";
-  }
-
-
-  /* =========================================================
-     VOICE JOKE CHECK
-  ========================================================== */
-
-  function startVoiceJoke() {
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    const status = document.getElementById("voiceStatus");
-
-    if (!SpeechRecognition) {
-      status.textContent =
-        "🎤 Voice recognition browser mein supported nahi hai. Chrome try karo.";
-      return;
-    }
-
-    status.textContent = "🎤 Listening... joke bolo.";
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = "en-IN";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = function(event) {
-      const spoken = event.results[0][0].transcript;
-
-      document.getElementById("jokeInput").value = spoken;
-      status.textContent = "✅ Joke suna: checking...";
-
-      checkJokeForCode();
-
-      setTimeout(() => {
-        if (document.getElementById("voiceStatus")) {
-          document.getElementById("voiceStatus").textContent =
-            "🎤 Voice check complete.";
-        }
-      }, 700);
-    };
-
-    recognition.onerror = function() {
-      status.textContent =
-        "❌ Voice clear nahi mili. Dobara 🎤 Bolke ke batao dabao.";
-    };
-
-    recognition.onend = function() {
-      if (status.textContent === "🎤 Listening... joke bolo.") {
-        status.textContent = "🎤 Listening stopped.";
-      }
-    };
-
-    try {
-      recognition.start();
-    } catch (e) {
-      status.textContent = "🎤 Voice start nahi ho payi. Dobara try karo.";
-    }
-  }
 
 
   /* =========================================================
@@ -4746,8 +4426,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;ba
   /* =========================================================
      DAILY ACCESS CODE DECODER — 30 DIAMONDS / LETTER
   ========================================================== */
-  // DAILY CODE DECODER NOW USES THE SAME 20 PROMO CODES BELOW.
-  // Old TAKSH / DHRUVI / RUPAL / CHERRY maker system removed.
+  // Daily decoder uses the same 20 promo codes below.
   function getDailyCodeDate(){
     return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
   }
@@ -5578,7 +5257,7 @@ function startJBTimer(ts){
     const el=document.getElementById('jbTimer');if(el)el.textContent=left+'s';
     if(left<=0){clearInterval(jbTimer);jbAdvanceIfReady();}
   };
-  tick(); jbTimer=setInterval(tick,250);
+  tick(); jbTimer=setInterval(tick,500);
 }
 function stopJBTimer(){clearInterval(jbTimer);document.getElementById('jbTimer').textContent='--';}
 
@@ -5680,42 +5359,7 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape')closeJockRoom();});
 </script>
 
 
-<script>
-/* FunBox pixel/graphics micro-effects — visual only, no gameplay data changes */
-(function(){
-  function burst(x,y,emoji){
-    const layer=document.getElementById('jbReactionLayer');
-    if(!layer) return;
-    for(let i=0;i<7;i++){
-      const p=document.createElement('span'); p.textContent=emoji;
-      p.style.position='absolute'; p.style.left=x+'px'; p.style.top=y+'px';
-      p.style.fontSize=(10+Math.random()*9)+'px'; p.style.opacity='.85'; p.style.pointerEvents='none';
-      p.style.transition='transform .75s cubic-bezier(.2,.8,.2,1),opacity .75s ease';
-      layer.appendChild(p);
-      requestAnimationFrame(()=>{
-        const a=(Math.PI*2*i/7)+(Math.random()-.5)*.35, d=35+Math.random()*55;
-        p.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) rotate(${Math.random()*160-80}deg) scale(.65)`;
-        p.style.opacity='0';
-      });
-      setTimeout(()=>p.remove(),800);
-    }
-  }
-  window.funboxPixelBurst=function(emoji='✦'){
-    const layer=document.getElementById('jbReactionLayer'); if(!layer) return;
-    burst(layer.clientWidth/2,layer.clientHeight/2,emoji);
-  };
-  const oldOpen=window.openJockRoom;
-  if(typeof oldOpen==='function') window.openJockRoom=function(){ oldOpen.apply(this,arguments); setTimeout(()=>funboxPixelBurst('✦'),180); };
-  document.addEventListener('click',e=>{
-    const b=e.target.closest('.jb-answer-grid button,.shop-buy,.jb-flow-big,.jb-room-btn,.btn');
-    if(!b) return;
-    const r=b.getBoundingClientRect();
-    const el=document.createElement('span'); el.textContent='✦';
-    el.style.cssText=`position:fixed;left:${r.left+r.width/2}px;top:${r.top+r.height/2}px;z-index:9999;pointer-events:none;font-weight:900;color:#d8a8ff;font-size:15px;transition:transform .55s ease,opacity .55s ease;`;
-    document.body.appendChild(el); requestAnimationFrame(()=>{el.style.transform='translateY(-18px) scale(1.4)';el.style.opacity='0'}); setTimeout(()=>el.remove(),600);
-  });
-})();
-</script>
+
 
 </body>
 </html>
