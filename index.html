@@ -6,7 +6,8 @@
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
 
-  <title>FunBox — Boredom? Not Today.</title>
+  <!-- FunBox v3: Sigma language selector + friend share + photo chat + video call -->
+<title>FunBox — Boredom? Not Today.</title>
   <meta name="description" content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer and more.">
   <meta name="theme-color" content="#09090f">
 
@@ -108,22 +109,15 @@ async function fbShareDaily(){
   const url=new URL(window.location.href);
   url.searchParams.set('fbchallenge',String(fbDailyIndex()+1));
   const text=`🔥 FUNBOX CHALLENGE\n\n${item.q}\n\nTum bhi try karo: ${url.toString()}\n\n#FunBox #DailyChallenge`;
-  try{
-    if(navigator.share){
-      await navigator.share({title:'FunBox Daily Drop',text});
-      trackEvent('funbox_daily_shared',{method:'native_share',drop:fbDailyIndex()});
-    }else if(navigator.clipboard){
-      await navigator.clipboard.writeText(text);
-      fbToast('📋 Daily challenge copy ho gaya!');
-      trackEvent('funbox_daily_shared',{method:'clipboard',drop:fbDailyIndex()});
-    }else{
-      const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
-      document.execCommand('copy');ta.remove();fbToast('📋 Challenge copy ho gaya!');
-      trackEvent('funbox_daily_shared',{method:'fallback_copy',drop:fbDailyIndex()});
-    }
-  }catch(e){
-    if(e?.name!=='AbortError') fbToast('Share nahi hua — dobara try karo.');
+  if(typeof window.openFunboxShare==='function'){
+    window.openFunboxShare(text,'FunBox Daily Drop');
+    trackEvent('funbox_daily_shared',{method:'friend_picker',drop:fbDailyIndex()});
+    return;
   }
+  try{
+    if(navigator.share) await navigator.share({title:'FunBox Daily Drop',text});
+    else if(navigator.clipboard) await navigator.clipboard.writeText(text);
+  }catch(e){}
 }
 function fbHandleIncomingChallenge(){
   const p=new URLSearchParams(location.search).get('fbchallenge');
@@ -966,6 +960,67 @@ body:before,body:after{display:none!important}
   .friend-reply-preview{margin:5px 0 7px;padding:5px 7px;border-left:3px solid rgba(168,85,247,.7);background:rgba(0,0,0,.12);border-radius:5px;font-size:11px;opacity:.75}
   .friend-reply-bar{display:none;margin-top:8px;padding:7px 9px;border-radius:8px;background:rgba(168,85,247,.12);font-size:11px;align-items:center;justify-content:space-between}
   .friend-reply-bar.show{display:flex}
+
+  /* =========================
+     LANGUAGE + SOCIAL LAYER
+  ========================== */
+  .fb-language-bar{
+    position:sticky;top:0;z-index:9998;display:flex;justify-content:center;
+    padding:8px 12px;background:rgba(7,7,11,.88);backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.08)
+  }
+  .fb-language-inner{width:min(1100px,92%);display:flex;justify-content:flex-end;align-items:center;gap:8px}
+  .fb-language-select{
+    border:1px solid rgba(168,85,247,.35);background:#101018;color:#fff;border-radius:12px;
+    padding:8px 11px;font-weight:900;outline:none;cursor:pointer
+  }
+  .fb-language-select option{background:#101018;color:#fff}
+  .goog-te-banner-frame,.skiptranslate iframe{display:none!important}
+  body{top:0!important}
+  #google_translate_element{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}
+  .fb-share-modal,.fb-video-modal{
+    position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.72);padding:18px
+  }
+  .fb-share-modal.show,.fb-video-modal.show{display:flex}
+  .fb-share-box,.fb-video-box{
+    width:min(560px,96vw);max-height:90vh;overflow:auto;border-radius:22px;
+    background:linear-gradient(145deg,#17131f,#0b0b11);border:1px solid rgba(168,85,247,.28);
+    box-shadow:0 25px 80px rgba(0,0,0,.55);padding:18px
+  }
+  .fb-share-head,.fb-video-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .fb-share-preview{
+    margin:12px 0;padding:12px;border-radius:14px;background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);white-space:pre-wrap;word-break:break-word;font-size:13px
+  }
+  .fb-share-friends{display:grid;gap:8px;margin-top:10px}
+  .fb-share-friend{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;
+    border-radius:13px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)
+  }
+  .fb-share-friend-name{font-weight:900}
+  .fb-share-friend-meta{font-size:11px;opacity:.65;margin-top:2px}
+  .fb-share-empty{padding:14px;text-align:center;opacity:.7;border:1px dashed rgba(255,255,255,.12);border-radius:13px}
+  .fb-video-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .fb-video-grid video{width:100%;aspect-ratio:16/10;object-fit:cover;background:#000;border-radius:15px;border:1px solid rgba(255,255,255,.1)}
+  .fb-video-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .fb-video-status{font-size:12px;opacity:.72;margin-top:8px}
+  .friend-chat-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .friend-chat-tool{
+    border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;
+    border-radius:10px;padding:8px 10px;font-weight:900;cursor:pointer
+  }
+  .friend-image{display:block;max-width:220px;max-height:220px;border-radius:12px;margin-top:6px;object-fit:cover}
+  .friend-shared-card{
+    margin-top:6px;padding:9px;border-radius:12px;background:rgba(168,85,247,.1);
+    border:1px solid rgba(168,85,247,.18);white-space:pre-wrap;word-break:break-word
+  }
+  @media(max-width:680px){
+    .fb-language-inner{justify-content:stretch}
+    .fb-language-select{width:100%}
+    .fb-video-grid{grid-template-columns:1fr}
+  }
+
   .friend-reply-cancel{border:0;background:transparent;cursor:pointer;font-size:12px}
   .friend-msg-menu{position:absolute;right:8px;bottom:30px;display:none;z-index:5;min-width:150px;padding:6px;border-radius:9px;background:rgba(20,18,28,.98);border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 20px rgba(0,0,0,.3)}
   .friend-msg-menu.show{display:block}
@@ -1019,9 +1074,76 @@ body:before,body:after{display:none!important}
   }
   </script>
 
+
+<script>
+  window.googleTranslateElementInit = function(){
+    try{
+      new google.translate.TranslateElement({
+        pageLanguage:'en',
+        includedLanguages:'en,hi,bn,ta,te,mr,gu,pa,es,fr,de,ar,pt,id,ja,ko',
+        autoDisplay:false
+      },'google_translate_element');
+    }catch(e){}
+  };
+  window.fbSetLanguage = function(lang){
+    const select=document.getElementById('fbLanguageSelect');
+    if(lang==='xh'){
+      try{
+        document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain='+location.hostname+';';
+      }catch(e){}
+      localStorage.setItem('funboxLanguage','xh');
+      location.reload();
+      return;
+    }
+    localStorage.setItem('funboxLanguage',lang);
+    const combo=document.querySelector('.goog-te-combo');
+    if(combo){
+      combo.value=lang;
+      combo.dispatchEvent(new Event('change'));
+    }else{
+      document.cookie='googtrans=/en/'+lang+'; path=/;';
+      location.reload();
+    }
+  };
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </head>
 
 <body>
+<div class="fb-language-bar">
+  <div class="fb-language-inner">
+    <select id="fbLanguageSelect" class="fb-language-select" aria-label="FunBox language" onchange="fbSetLanguage(this.value)">
+      <option value="xh">Σ Hinglish — Default</option>
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="bn">বাংলা</option>
+      <option value="ta">தமிழ்</option>
+      <option value="te">తెలుగు</option>
+      <option value="mr">मराठी</option>
+      <option value="gu">ગુજરાતી</option>
+      <option value="pa">ਪੰਜਾਬੀ</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="ar">العربية</option>
+      <option value="pt">Português</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="ja">日本語</option>
+      <option value="ko">한국어</option>
+    </select>
+  </div>
+</div>
+<div id="google_translate_element"></div>
+<script>
+(function(){
+  const lang=localStorage.getItem('funboxLanguage')||'xh';
+  const sel=document.getElementById('fbLanguageSelect');
+  if(sel) sel.value=lang;
+})();
+</script>
+
 
 <div class="jb-room-modal" id="jockRoomModal">
   <div class="jb-room-box">
@@ -1139,6 +1261,49 @@ body:before,body:after{display:none!important}
   </div>
 </div>
 
+
+
+<div class="fb-share-modal" id="fbShareModal" onclick="if(event.target===this)closeFunboxShare()">
+  <div class="fb-share-box">
+    <div class="fb-share-head">
+      <div>
+        <h3 style="margin:0">📤 Share with FunBox Friends</h3>
+        <div class="friend-meta">Result yahin se friend ke chat mein bhejo.</div>
+      </div>
+      <button class="friend-mini" type="button" onclick="closeFunboxShare()">✕</button>
+    </div>
+    <div id="fbSharePreview" class="fb-share-preview"></div>
+    <div id="fbShareFriends" class="fb-share-friends"></div>
+  </div>
+</div>
+
+<div class="fb-video-modal" id="fbVideoModal" onclick="if(event.target===this)endFunboxVideoCall()">
+  <div class="fb-video-box">
+    <div class="fb-video-head">
+      <div>
+        <h3 id="fbVideoTitle" style="margin:0">📹 Video Call</h3>
+        <div id="fbVideoStatus" class="fb-video-status">Connecting...</div>
+      </div>
+      <button class="friend-mini" type="button" onclick="endFunboxVideoCall()">✕</button>
+    </div>
+    <div class="fb-video-grid">
+      <div>
+        <div class="friend-meta" style="margin-bottom:5px">You</div>
+        <video id="fbLocalVideo" autoplay muted playsinline></video>
+      </div>
+      <div>
+        <div class="friend-meta" style="margin-bottom:5px">Friend</div>
+        <video id="fbRemoteVideo" autoplay playsinline></video>
+      </div>
+    </div>
+    <div class="fb-video-actions">
+      <button class="friend-chat-tool" type="button" onclick="toggleFunboxVideoMute()">🎙️ Mute</button>
+      <button class="friend-chat-tool" type="button" onclick="toggleFunboxCamera()">📷 Camera</button>
+      <button class="friend-chat-tool" type="button" onclick="endFunboxVideoCall()">⛔ End Call</button>
+    </div>
+    <div class="friend-meta" style="margin-top:10px">Video call browser ke camera/mic permission par chalega. Call recording feature nahi hai.</div>
+  </div>
+</div>
 
 <div class="container">
 
@@ -1317,9 +1482,14 @@ body:before,body:after{display:none!important}
     <div id="friendListPanel" class="friend-panel" style="display:none"></div>
     <div id="friendFriendsPanel" class="friend-panel" style="display:none"></div>
     <div id="friendChatPanel" class="friend-panel friend-chat" style="display:none">
-      <div class="friend-user"><div><div id="friendChatTitle" class="friend-name">💬 Friend Chat</div><div id="friendChatMeta" class="friend-meta"></div></div><button class="friend-mini" onclick="closeFriendChat()">Close</button></div>
+      <div class="friend-user"><div><div id="friendChatTitle" class="friend-name">💬 Friend Chat</div><div id="friendChatMeta" class="friend-meta"></div></div><div class="friend-buttons"><button class="friend-mini" type="button" onclick="startFunboxVideoCall()">📹 Video</button><button class="friend-mini" onclick="closeFriendChat()">Close</button></div></div>
       <div id="friendChatBox" class="friend-chat-box" style="margin-top:10px"></div>
       <div id="friendReplyBar" class="friend-reply-bar"><span id="friendReplyText"></span><button class="friend-reply-cancel" type="button" onclick="cancelFriendReply()">✕</button></div>
+      <div class="friend-chat-tools">
+        <button class="friend-chat-tool" type="button" onclick="document.getElementById('friendPhotoInput').click()">🖼️ Photo</button>
+        <input id="friendPhotoInput" type="file" accept="image/*" style="display:none" onchange="sendFriendPhoto(this)">
+        <button class="friend-chat-tool" type="button" onclick="startFunboxVideoCall()">📹 Video Call</button>
+      </div>
       <div class="friend-search-row" style="margin-top:10px">
         <input id="friendChatInput" class="friend-search-input" maxlength="200" placeholder="Type something less boring..." onkeydown="if(event.key==='Enter') sendFriendMessage()">
         <button class="friend-action" type="button" onclick="sendFriendMessage()">Send 💬</button>
@@ -3135,84 +3305,26 @@ body:before,body:after{display:none!important}
   ========================================================== */
 
   async function shareResult() {
-
     const resultBox = document.getElementById("result");
-
     if (!resultBox || resultBox.classList.contains("empty")) {
       alert("Pehle koi FunBox result generate karo.");
       return;
     }
-
     const resultText = resultBox.textContent.trim();
-
     if (!resultText) {
       alert("Pehle koi FunBox result generate karo.");
       return;
     }
-
-    const shareText =
-      "😂 FunBox Result:\n\n" +
-      resultText +
-      "\n\nTry FunBox: " +
-      window.location.href;
-
-    try {
-
-      if (navigator.share) {
-
-        await navigator.share({
-          title: "FunBox Result",
-          text: shareText
-        });
-
-        trackEvent("funbox_result_shared", {
-          method: "native_share"
-        });
-
-        return;
-      }
-
-      if (navigator.clipboard && window.isSecureContext) {
-
-        await navigator.clipboard.writeText(shareText);
-
-        trackEvent("funbox_result_shared", {
-          method: "clipboard"
-        });
-
-        alert("📋 Result copy ho gaya! Ab jahan chaho paste/share karo.");
-        return;
-      }
-
-      const textarea = document.createElement("textarea");
-
-      textarea.value = shareText;
-      textarea.style.position = "fixed";
-      textarea.style.left = "-9999px";
-
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
-
-      document.execCommand("copy");
-      textarea.remove();
-
-      trackEvent("funbox_result_shared", {
-        method: "fallback_copy"
-      });
-
-      alert("📋 Result copy ho gaya!");
-
-    } catch (error) {
-
-      if (error && error.name === "AbortError") {
-        return;
-      }
-
-      console.error("Share/copy failed:", error);
-
-      alert("Share nahi ho paya. Result manually copy kar lo.");
+    const shareText = "😂 FunBox Result:\n\n" + resultText + "\n\nTry FunBox: " + window.location.href;
+    if(typeof window.openFunboxShare==='function'){
+      window.openFunboxShare(shareText,'FunBox Result');
+      trackEvent("funbox_result_shared",{method:"friend_picker"});
+      return;
     }
+    try{
+      if(navigator.share) await navigator.share({title:"FunBox Result",text:shareText});
+      else if(navigator.clipboard) await navigator.clipboard.writeText(shareText);
+    }catch(error){ console.warn("Share failed:",error); }
   }
 
 
@@ -5222,6 +5334,27 @@ body:before,body:after{display:none!important}
         if(wasReady && latest && document.visibilityState!=='visible' && typeof Notification!=='undefined' && Notification.permission==='granted'){
           try{new Notification('New message from '+(x.data?.username||'Friend'),{body:String(latest.text||'New message').slice(0,100),tag:'funbox-'+chatId});}catch(e){}
         }
+        const incomingCall=snap.data()?.videoCall;
+        if(incomingCall?.status==='ringing' && incomingCall.calleeUid===auth.currentUser.uid && incomingCall.callerUid===x.uid){
+          const callKey=chatId+'_'+String(incomingCall.startedAt||'');
+          if(window.__funboxSeenCalls?.has(callKey)===false || !window.__funboxSeenCalls){
+            window.__funboxSeenCalls=window.__funboxSeenCalls||new Set();
+            if(!window.__funboxSeenCalls.has(callKey)){
+              window.__funboxSeenCalls.add(callKey);
+              setTimeout(()=>{
+                const accept=confirm((x.data?.username||'Friend')+' tumhe FunBox video call kar raha hai. Accept?');
+                if(accept && typeof window.acceptFunboxVideoCall==='function'){
+                  activeFriend={uid:x.uid,username:x.data?.username||'Friend'};
+                  activeFriendChatId=chatId;
+                  window.acceptFunboxVideoCall();
+                }else if(typeof window.rejectFunboxVideoCall==='function'){
+                  fbVideoChatId=chatId;
+                  window.rejectFunboxVideoCall();
+                }
+              },120);
+            }
+          }
+        }
       },e=>console.warn('chat notification listener',e));
       friendNotificationUnsubs.set(x.uid,unsub);
     });
@@ -5339,6 +5472,319 @@ body:before,body:after{display:none!important}
   };
   window.cancelFriendReply=function(){window.__friendReply=null;const bar=document.getElementById('friendReplyBar');if(bar)bar.classList.remove('show');};
 
+
+  /* =========================================================
+     FUNBOX FRIEND SHARE / PHOTO CHAT / VIDEO CALL
+  ========================================================== */
+
+  let fbSharePayload = null;
+  let fbVideoPC = null;
+  let fbVideoUnsub = null;
+  let fbVideoChatId = null;
+  let fbVideoRole = null;
+  let fbVideoRemoteCandidates = new Set();
+  let fbVideoLocalStream = null;
+
+  function fbCurrentFriendProfiles(){
+    return [...friendProfileCache.values()].map(x=>({
+      uid:x.uid,
+      username:x.data?.username||x.data?.displayName||'Friend',
+      xp:Number(x.data?.xp||0),
+      online:Boolean(x.data?.online)
+    }));
+  }
+
+  async function fbLoadShareFriends(){
+    const me=auth?.currentUser;
+    if(!me||!db)return [];
+    let profiles=fbCurrentFriendProfiles();
+    if(profiles.length)return profiles;
+    try{
+      const q=query(collection(db,'friendships'),where('participants','array-contains',me.uid),limit(30));
+      const snap=await getDocs(q);
+      const ids=snap.docs.map(d=>(d.data().participants||[]).find(x=>x!==me.uid)).filter(Boolean);
+      const rows=[];
+      for(const uid of ids){
+        try{
+          const ps=await getDoc(doc(db,'publicProfiles',uid));
+          if(ps.exists()){
+            const d=ps.data()||{};
+            rows.push({uid,username:d.username||d.displayName||'Friend',xp:Number(d.xp||0),online:Boolean(d.online)});
+          }
+        }catch(e){}
+      }
+      return rows;
+    }catch(e){
+      console.warn('share friends load failed',e);
+      return [];
+    }
+  }
+
+  window.openFunboxShare=async function(text,title='FunBox'){
+    fbSharePayload={text:String(text||''),title:String(title||'FunBox')};
+    const modal=document.getElementById('fbShareModal');
+    const preview=document.getElementById('fbSharePreview');
+    const list=document.getElementById('fbShareFriends');
+    if(preview)preview.textContent=fbSharePayload.text;
+    if(!modal||!list)return;
+    modal.classList.add('show');
+    list.innerHTML='<div class="fb-share-empty">Loading your FunBox friends...</div>';
+    const friends=await fbLoadShareFriends();
+    if(!friends.length){
+      list.innerHTML='<div class="fb-share-empty">Abhi friend list empty hai. Pehle Friend Radar se friend add karo.</div>';
+      return;
+    }
+    list.innerHTML=friends.map(f=>`<div class="fb-share-friend">
+      <div><div class="fb-share-friend-name">👤 ${escapeHTML(f.username)}</div><div class="fb-share-friend-meta">${f.online?'🟢 Online':'⚪ Offline'} • ⭐ ${f.xp} XP</div></div>
+      <button class="friend-action" type="button" onclick="sendFunboxShareToFriend('${f.uid}','${escapeHTML(f.username)}')">Send 📤</button>
+    </div>`).join('');
+  };
+
+  window.closeFunboxShare=function(){
+    document.getElementById('fbShareModal')?.classList.remove('show');
+    fbSharePayload=null;
+  };
+
+  window.sendFunboxShareToFriend=async function(uid,username){
+    if(!auth?.currentUser||!db||!fbSharePayload)return;
+    const chatId=friendPairId(auth.currentUser.uid,uid);
+    try{
+      await setDoc(doc(db,'friendChats',chatId),{participants:[auth.currentUser.uid,uid],updatedAt:serverTimestamp()},{merge:true});
+      const meSnap=await getDoc(doc(db,'publicProfiles',auth.currentUser.uid));
+      const me=meSnap.data()||{};
+      const msg={
+        id:auth.currentUser.uid+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+        uid:auth.currentUser.uid,
+        username:me.username||auth.currentUser.displayName||'You',
+        text:String(fbSharePayload.text).slice(0,1200),
+        type:'shared_result',
+        sharedTitle:fbSharePayload.title,
+        createdAt:Date.now()
+      };
+      await updateDoc(doc(db,'friendChats',chatId),{messages:arrayUnion(msg),updatedAt:serverTimestamp()});
+      closeFunboxShare();
+      alert('📤 '+username+' ko FunBox chat mein share ho gaya.');
+    }catch(e){
+      console.warn('friend share failed',e);
+      alert('Share nahi hua. Friend connection aur Firestore access check karo.');
+    }
+  };
+
+  function fbReadImage(file){
+    return new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onload=()=>{
+        const img=new Image();
+        img.onload=()=>{
+          const max=900, scale=Math.min(1,max/Math.max(img.width,img.height));
+          const c=document.createElement('canvas');
+          c.width=Math.max(1,Math.round(img.width*scale));
+          c.height=Math.max(1,Math.round(img.height*scale));
+          c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+          resolve(c.toDataURL('image/jpeg',.72));
+        };
+        img.onerror=reject; img.src=reader.result;
+      };
+      reader.onerror=reject; reader.readAsDataURL(file);
+    });
+  }
+
+  window.sendFriendPhoto=async function(input){
+    const file=input?.files?.[0];
+    if(!file||!activeFriendChatId||!auth?.currentUser||!db)return;
+    if(!file.type.startsWith('image/')){alert('Sirf image select karo.');input.value='';return;}
+    try{
+      const data=await fbReadImage(file);
+      if(data.length>850000){alert('Photo bahut badi hai. Smaller photo try karo.');input.value='';return;}
+      const meSnap=await getDoc(doc(db,'publicProfiles',auth.currentUser.uid));
+      const me=meSnap.data()||{};
+      const msg={
+        id:auth.currentUser.uid+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+        uid:auth.currentUser.uid,
+        username:me.username||auth.currentUser.displayName||'You',
+        type:'image',
+        image:data,
+        text:'📷 Photo',
+        createdAt:Date.now()
+      };
+      await updateDoc(doc(db,'friendChats',activeFriendChatId),{messages:arrayUnion(msg),updatedAt:serverTimestamp()});
+      input.value='';
+    }catch(e){console.warn(e);alert('Photo send nahi hui.');input.value='';}
+  };
+
+  function fbVideoStatus(t){
+    const el=document.getElementById('fbVideoStatus'); if(el)el.textContent=t;
+  }
+  function fbVideoShow(show){
+    document.getElementById('fbVideoModal')?.classList.toggle('show',show);
+  }
+  function fbVideoCleanupLocal(){
+    if(fbVideoLocalStream){fbVideoLocalStream.getTracks().forEach(t=>t.stop());fbVideoLocalStream=null;}
+    const l=document.getElementById('fbLocalVideo'); if(l)l.srcObject=null;
+    const r=document.getElementById('fbRemoteVideo'); if(r)r.srcObject=null;
+  }
+  async function fbVideoEnsureMedia(){
+    if(fbVideoLocalStream)return fbVideoLocalStream;
+    fbVideoLocalStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+    const v=document.getElementById('fbLocalVideo'); if(v)v.srcObject=fbVideoLocalStream;
+    return fbVideoLocalStream;
+  }
+
+  function fbVideoBuildPC(){
+    const pc=new RTCPeerConnection({
+      iceServers:[
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:'stun:stun1.l.google.com:19302'}
+      ]
+    });
+    pc.ontrack=e=>{
+      const v=document.getElementById('fbRemoteVideo');
+      if(v && e.streams[0])v.srcObject=e.streams[0];
+    };
+    pc.onconnectionstatechange=()=>{
+      if(['failed','disconnected','closed'].includes(pc.connectionState))fbVideoStatus('Connection '+pc.connectionState+'.');
+      if(pc.connectionState==='connected')fbVideoStatus('🟢 Video connected.');
+    };
+    pc.onicecandidate=async e=>{
+      if(!e.candidate||!fbVideoChatId||!db)return;
+      const field=fbVideoRole==='caller'?'videoCall.callerCandidates':'videoCall.calleeCandidates';
+      try{await updateDoc(doc(db,'friendChats',fbVideoChatId),{[field]:arrayUnion(e.candidate.toJSON())});}catch(err){console.warn('ICE candidate failed',err);}
+    };
+    return pc;
+  }
+
+  async function fbVideoProcessSnapshot(snap){
+    if(!snap.exists()||!fbVideoPC)return;
+    const call=snap.data()?.videoCall;
+    if(!call)return;
+    if(call.status==='ended'){fbVideoStatus('Call ended.');return;}
+    try{
+      if(fbVideoRole==='caller' && call.answer && !fbVideoPC.currentRemoteDescription){
+        await fbVideoPC.setRemoteDescription(new RTCSessionDescription(call.answer));
+        fbVideoStatus('Connecting video...');
+      }
+      const remoteList=fbVideoRole==='caller'?(call.calleeCandidates||[]):(call.callerCandidates||[]);
+      for(const c of remoteList){
+        const key=JSON.stringify(c);
+        if(fbVideoRemoteCandidates.has(key))continue;
+        fbVideoRemoteCandidates.add(key);
+        try{await fbVideoPC.addIceCandidate(new RTCIceCandidate(c));}catch(e){}
+      }
+    }catch(e){console.warn('video snapshot failed',e);}
+  }
+
+  async function fbVideoWatch(){
+    if(fbVideoUnsub)fbVideoUnsub();
+    if(!db||!fbVideoChatId)return;
+    fbVideoUnsub=onSnapshot(doc(db,'friendChats',fbVideoChatId),fbVideoProcessSnapshot,e=>console.warn('video watch',e));
+  }
+
+  window.startFunboxVideoCall=async function(){
+    if(!auth?.currentUser||!db||!activeFriend){
+      alert('Pehle friend chat open karo.');
+      return;
+    }
+    if(!navigator.mediaDevices?.getUserMedia||!window.RTCPeerConnection){
+      alert('Is browser mein video call supported nahi hai.');
+      return;
+    }
+    try{
+      fbVideoChatId=activeFriendChatId;
+      fbVideoRole='caller';
+      fbVideoRemoteCandidates=new Set();
+      fbVideoPC=fbVideoBuildPC();
+      const stream=await fbVideoEnsureMedia();
+      stream.getTracks().forEach(t=>fbVideoPC.addTrack(t,stream));
+      const offer=await fbVideoPC.createOffer();
+      await fbVideoPC.setLocalDescription(offer);
+      await setDoc(doc(db,'friendChats',fbVideoChatId),{
+        participants:[auth.currentUser.uid,activeFriend.uid],
+        updatedAt:serverTimestamp(),
+        videoCall:{
+          callerUid:auth.currentUser.uid,calleeUid:activeFriend.uid,status:'ringing',
+          offer:{type:offer.type,sdp:offer.sdp},answer:null,callerCandidates:[],calleeCandidates:[],startedAt:Date.now()
+        }
+      },{merge:true});
+      document.getElementById('fbVideoTitle').textContent='📹 Calling '+activeFriend.username;
+      fbVideoStatus('Ringing... friend ko call notification dikhegi.');
+      fbVideoShow(true);
+      await fbVideoWatch();
+    }catch(e){
+      console.warn('start video call failed',e);
+      alert('Camera/mic permission ya video call setup fail hua.');
+      endFunboxVideoCall();
+    }
+  };
+
+  window.acceptFunboxVideoCall=async function(){
+    if(!auth?.currentUser||!db||!activeFriend||!fbVideoChatId)return;
+    try{
+      fbVideoRole='callee';
+      fbVideoRemoteCandidates=new Set();
+      fbVideoPC=fbVideoBuildPC();
+      const stream=await fbVideoEnsureMedia();
+      stream.getTracks().forEach(t=>fbVideoPC.addTrack(t,stream));
+      const snap=await getDoc(doc(db,'friendChats',fbVideoChatId));
+      const call=snap.data()?.videoCall;
+      if(!call?.offer)throw new Error('Offer missing');
+      await fbVideoPC.setRemoteDescription(new RTCSessionDescription(call.offer));
+      const answer=await fbVideoPC.createAnswer();
+      await fbVideoPC.setLocalDescription(answer);
+      await updateDoc(doc(db,'friendChats',fbVideoChatId),{
+        'videoCall.answer':{type:answer.type,sdp:answer.sdp},
+        'videoCall.status':'active'
+      });
+      document.getElementById('fbVideoTitle').textContent='📹 Video Call with '+activeFriend.username;
+      fbVideoStatus('Connecting video...');
+      fbVideoShow(true);
+      await fbVideoWatch();
+    }catch(e){
+      console.warn('accept video call failed',e);
+      alert('Video call accept nahi hua.');
+      endFunboxVideoCall();
+    }
+  };
+
+  window.rejectFunboxVideoCall=async function(){
+    if(fbVideoChatId&&db){
+      try{await updateDoc(doc(db,'friendChats',fbVideoChatId),{'videoCall.status':'ended','videoCall.endedAt':Date.now()});}catch(e){}
+    }
+    fbVideoCleanupLocal();
+  };
+
+  window.endFunboxVideoCall=async function(){
+    if(fbVideoChatId&&db){
+      try{await updateDoc(doc(db,'friendChats',fbVideoChatId),{'videoCall.status':'ended','videoCall.endedAt':Date.now()});}catch(e){}
+    }
+    if(fbVideoUnsub){fbVideoUnsub();fbVideoUnsub=null;}
+    if(fbVideoPC){try{fbVideoPC.close();}catch(e){} fbVideoPC=null;}
+    fbVideoCleanupLocal();
+    fbVideoChatId=null; fbVideoRole=null; fbVideoRemoteCandidates=new Set();
+    fbVideoShow(false);
+  };
+
+  window.toggleFunboxVideoMute=function(){
+    const a=fbVideoLocalStream?.getAudioTracks?.()[0]; if(a)a.enabled=!a.enabled;
+  };
+  window.toggleFunboxCamera=function(){
+    const v=fbVideoLocalStream?.getVideoTracks?.()[0]; if(v)v.enabled=!v.enabled;
+  };
+
+  async function fbVideoCheckIncoming(){
+    if(!auth?.currentUser||!db||!activeFriendChatId)return;
+    try{
+      const snap=await getDoc(doc(db,'friendChats',activeFriendChatId));
+      const call=snap.data()?.videoCall;
+      if(call?.status==='ringing' && call.calleeUid===auth.currentUser.uid){
+        fbVideoChatId=activeFriendChatId;
+        const answer=confirm((activeFriend?.username||'Friend')+' tumhe video call kar raha hai. Accept?');
+        if(answer) await acceptFunboxVideoCall();
+        else await rejectFunboxVideoCall();
+      }
+    }catch(e){}
+  }
+
+
   async function openFriendChat(uid,username){
     if(!auth?.currentUser||!db)return;
     activeFriend={uid,username}; activeFriendChatId=friendPairId(auth.currentUser.uid,uid);
@@ -5361,11 +5807,21 @@ body:before,body:after{display:none!important}
       setChatReadAt(activeFriendChatId,latest);
       box.innerHTML=visible.slice(-50).map(({msg:m,i})=>{
         const mid=friendMessageId(m,i), own=m.uid===currentUid, deleted=Boolean(m.deletedForEveryone);
-        const body=deleted?'<div class="friend-msg-text friend-msg-deleted">🚫 This message was deleted</div>':`${friendReplyText(m)}<div class="friend-msg-text">${escapeHTML(m.text||'')}</div>`;
+        let body='';
+        if(deleted){
+          body='<div class="friend-msg-text friend-msg-deleted">🚫 This message was deleted</div>';
+        }else if(m.type==='image' && m.image){
+          body=`${friendReplyText(m)}<div class="friend-msg-text">${escapeHTML(m.text||'📷 Photo')}</div><img class="friend-image" src="${m.image}" alt="Shared photo" loading="lazy">`;
+        }else if(m.type==='shared_result'){
+          body=`<div class="friend-shared-card">📤 <b>${escapeHTML(m.sharedTitle||'FunBox Share')}</b><br>${escapeHTML(m.text||'')}</div>`;
+        }else{
+          body=`${friendReplyText(m)}<div class="friend-msg-text">${escapeHTML(m.text||'')}</div>`;
+        }
         const menu=`<div class="friend-msg-menu" id="friendMenu_${mid}"><button onclick="startFriendReply('${mid}')">↩️ Reply</button><button onclick="deleteFriendMessage('${mid}','me')">🗑️ Delete for me</button>${own&&!deleted?`<button onclick="deleteFriendMessage('${mid}','everyone')">🗑️ Delete for everyone</button>`:''}</div>`;
         return `<div class="friend-msg"><b>${escapeHTML(m.username||'Friend')}</b>${body}<div class="friend-msg-meta"><span>${escapeHTML(msgTime(m.createdAt))}</span><div class="friend-msg-actions"><button class="friend-msg-action" onclick="startFriendReply('${mid}')">↩️ Reply</button><button class="friend-msg-action" onclick="toggleFriendMessageMenu('${mid}')">⋮</button></div></div>${menu}</div>`;
       }).join('')||'<div style="opacity:.55">No messages yet. Say something less boring.</div>';
       box.scrollTop=box.scrollHeight;
+      setTimeout(fbVideoCheckIncoming,80);
     },e=>{const box=document.getElementById('friendChatBox');if(box)box.innerHTML='<div class="friend-msg">⚠️ Chat sync failed.</div>';console.warn(e)});
   }
   window.openFriendChat=openFriendChat;
