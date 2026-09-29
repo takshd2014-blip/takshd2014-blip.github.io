@@ -10,6 +10,18 @@
   <meta name="description" content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer and more.">
   <meta name="theme-color" content="#09090f">
 
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FunBox — Boredom? Not Today.">
+  <meta property="og:description" content="Jokes, roasts, games, daily challenges and random chaos. Try FunBox and send your result to a friend.">
+  <meta property="og:image" content="222.png">
+  <meta property="og:site_name" content="FunBox">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FunBox — Boredom? Not Today.">
+  <meta name="twitter:description" content="Jokes, roasts, games and daily challenges.">
+  <meta name="twitter:image" content="222.png">
+
+
   <link rel="icon" href="222.png">
 
   <!-- =========================
@@ -33,7 +45,111 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && typeof closeShop === "function") closeShop();
     });
-  </script>
+  
+
+/* =========================================================
+   FUNBOX VIEWS / RETURN-VISIT ENGINE
+========================================================= */
+const FB_DAILY_DROPS = [
+  {q:"Aaj ka mission: bina soche kisi friend ko FunBox bhejo. Unka reaction score karo.", action:"surprise"},
+  {q:"Aaj ka roast test: Roast Me dabao aur result friend ko bhejo. Dekhte hain kaun zyada jalta hai.", action:"roast"},
+  {q:"Aaj future scanner se apni next embarrassing prediction check karo.", action:"future"},
+  {q:"Random Fact chalao. Agar fact boring laga, friend ko blame kar dena.", action:"fact"},
+  {q:"Guess the Number mein friend ko challenge karo. 1–50. Bahane allowed nahi.", action:"guess"},
+  {q:"Aaj ka boredom test: I'm Bored dabao. FunBox jo bole, woh karo.", action:"surprise"},
+  {q:"Excuse Generator se ek excuse nikalo. Use karna tumhari responsibility hai.", action:"excuse"}
+];
+
+function fbDayKey(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function fbDailyIndex(){
+  const k=fbDayKey().replace(/\D/g,'');
+  let n=0; for(let i=0;i<k.length;i++) n=(n*31+Number(k[i]))>>>0;
+  return n%FB_DAILY_DROPS.length;
+}
+function fbDailyRender(){
+  const item=FB_DAILY_DROPS[fbDailyIndex()];
+  const q=document.getElementById('fbDailyQuestion');
+  const meta=document.getElementById('fbDailyMeta');
+  if(q) q.textContent=item.q;
+  if(meta){
+    const used=localStorage.getItem('funbox_daily_drop_used')===fbDayKey();
+    meta.textContent=used?'✅ Today completed • Come back tomorrow for a new drop.':'🆕 New daily drop • Send it to one friend.';
+  }
+}
+function fbScroll(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function fbToast(msg){
+  let t=document.getElementById('fbToast');
+  if(!t){
+    t=document.createElement('div'); t.id='fbToast'; t.className='fb-toast'; document.body.appendChild(t);
+  }
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(window.__fbToastTimer);
+  window.__fbToastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function fbDailyAction(){
+  const item=FB_DAILY_DROPS[fbDailyIndex()];
+  localStorage.setItem('funbox_daily_drop_used',fbDayKey());
+  fbDailyRender();
+  fbScroll('funGeneratorsSection');
+  setTimeout(()=>{
+    if(item.action==='surprise' && typeof surprise==='function') surprise();
+    else if(typeof runGenerator==='function') runGenerator(item.action);
+    trackEvent('funbox_daily_drop_used',{drop:fbDailyIndex(),action:item.action});
+  },350);
+}
+async function fbShareDaily(){
+  const item=FB_DAILY_DROPS[fbDailyIndex()];
+  const url=new URL(window.location.href);
+  url.searchParams.set('fbchallenge',String(fbDailyIndex()+1));
+  const text=`🔥 FunBox Daily Drop\n\n${item.q}\n\nTry it: ${url.toString()}`;
+  try{
+    if(navigator.share){
+      await navigator.share({title:'FunBox Daily Drop',text});
+      trackEvent('funbox_daily_shared',{method:'native_share',drop:fbDailyIndex()});
+    }else if(navigator.clipboard){
+      await navigator.clipboard.writeText(text);
+      fbToast('📋 Daily challenge copy ho gaya!');
+      trackEvent('funbox_daily_shared',{method:'clipboard',drop:fbDailyIndex()});
+    }else{
+      const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+      document.execCommand('copy');ta.remove();fbToast('📋 Challenge copy ho gaya!');
+      trackEvent('funbox_daily_shared',{method:'fallback_copy',drop:fbDailyIndex()});
+    }
+  }catch(e){
+    if(e?.name!=='AbortError') fbToast('Share nahi hua — dobara try karo.');
+  }
+}
+function fbHandleIncomingChallenge(){
+  const p=new URLSearchParams(location.search).get('fbchallenge');
+  if(!p)return;
+  const idx=Math.max(0,Math.min(FB_DAILY_DROPS.length-1,Number(p)-1));
+  const q=document.getElementById('fbDailyQuestion');
+  if(q) q.textContent='👀 Friend challenge: '+FB_DAILY_DROPS[idx].q;
+  const meta=document.getElementById('fbDailyMeta');
+  if(meta) meta.textContent='A friend sent you this challenge. Ab result nikalo.';
+  fbScroll('fbDailyDrop');
+  trackEvent('funbox_challenge_opened',{drop:idx});
+}
+function fbInitGrowthLayer(){
+  fbDailyRender();
+  fbHandleIncomingChallenge();
+  const re=document.getElementById('fbReengageText');
+  if(re){
+    const count=Number(localStorage.getItem('funbox_visit_count')||0)+1;
+    localStorage.setItem('funbox_visit_count',String(count));
+    re.textContent=count===1?'First visit. Ab 3 things try karo.':'Visit #'+count+' — aaj ka Daily Drop miss mat karna.';
+  }
+  trackEvent('funbox_growth_layer_loaded',{daily:fbDailyIndex()});
+}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(fbInitGrowthLayer,300));
+
+</script>
 
   <style>
     * {
@@ -708,7 +824,71 @@
     .shop-glow-active .stat{box-shadow:0 0 calc(12px + var(--shop-glow-strength,1) * 10px) rgba(168,85,247,.16);border-color:rgba(168,85,247,.28);filter:saturate(calc(1 + var(--shop-glow-strength,1) * .08))}
     .shop-chaos-theme{background:radial-gradient(circle at 20% 10%,#3a164d 0%,transparent 32%),radial-gradient(circle at 80% 90%,#102d48 0%,transparent 35%),#07070b}
 
-  </style>
+  
+/* =========================
+   VIEWS / RETURN-VISIT UPGRADE
+========================= */
+.fb-nav{
+  position:sticky;top:10px;z-index:80;display:flex;gap:7px;justify-content:center;
+  flex-wrap:wrap;margin:0 auto 14px;padding:9px;border:1px solid rgba(255,255,255,.09);
+  border-radius:18px;background:rgba(8,8,14,.88);backdrop-filter:blur(12px);
+}
+.fb-nav button{
+  border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:#ddd;
+  border-radius:11px;padding:8px 11px;font-size:12px;font-weight:800;cursor:pointer;
+}
+.fb-nav button:hover{border-color:rgba(168,85,247,.5);color:#fff}
+.fb-hero{
+  position:relative;overflow:hidden;text-align:center;padding:24px 20px;margin:10px 0 18px;
+  border-radius:24px;border:1px solid rgba(168,85,247,.28);
+  background:linear-gradient(145deg,rgba(124,58,237,.14),rgba(236,72,153,.06),rgba(255,255,255,.025));
+}
+.fb-hero-kicker{font-size:10px;letter-spacing:3px;color:#c084fc;font-weight:900}
+.fb-hero h1{font-size:clamp(25px,5vw,43px);margin:8px 0 7px}
+.fb-hero p{max-width:700px;margin:auto;color:#aaa;line-height:1.55}
+.fb-hero-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.fb-hero .btn{min-width:145px}
+.fb-trending-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.fb-trend{
+  padding:16px;border-radius:17px;background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:.18s;
+}
+.fb-trend:hover{transform:translateY(-2px);border-color:rgba(168,85,247,.4)}
+.fb-trend .icon{font-size:25px}.fb-trend strong{display:block;margin:6px 0 3px}.fb-trend span{font-size:12px;color:#888}
+.fb-daily{
+  padding:19px;border-radius:20px;border:1px solid rgba(236,72,153,.25);
+  background:linear-gradient(135deg,rgba(236,72,153,.09),rgba(124,58,237,.10));
+}
+.fb-daily-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.fb-badge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.07);white-space:nowrap}
+.fb-daily-question{font-size:19px;font-weight:900;line-height:1.4;margin:13px 0}
+.fb-daily-actions{display:flex;gap:9px;flex-wrap:wrap}
+.fb-share-count{
+  display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#999;margin-top:9px
+}
+.fb-reengage{
+  display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+}
+.fb-reengage strong{font-size:18px}.fb-reengage p{color:#888;font-size:13px;margin-top:4px}
+.fb-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}
+.fb-step{padding:13px;border-radius:14px;background:rgba(255,255,255,.04);text-align:center}
+.fb-step b{display:block;font-size:20px}.fb-step span{font-size:11px;color:#888}
+.fb-seo-faq{display:grid;gap:8px;margin-top:12px}
+.fb-seo-faq details{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px 13px}
+.fb-seo-faq summary{cursor:pointer;font-weight:800;font-size:13px}.fb-seo-faq p{color:#999;font-size:12px;line-height:1.5;margin-top:7px}
+.fb-toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  z-index:6000;padding:11px 15px;border-radius:13px;background:#171722;border:1px solid rgba(168,85,247,.35);
+  box-shadow:0 15px 40px rgba(0,0,0,.35);font-size:13px;font-weight:800;transition:.22s;
+}
+.fb-toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:700px){
+  .fb-trending-grid,.fb-steps{grid-template-columns:1fr}
+  .fb-reengage{grid-template-columns:1fr}
+  .fb-nav{top:5px}
+}
+
+</style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3529745369901340"
      crossorigin="anonymous"></script>
 
@@ -814,6 +994,16 @@ body:before,body:after{display:none!important}
 .daily-promo-row .guess-input{flex:1;min-width:0;box-sizing:border-box}
 @media(max-width:600px){.daily-promo-row{flex-direction:column}.daily-promo-row .guess-input,.daily-promo-row .btn{width:100%}}
 </style>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"FunBox",
+  "description":"Jokes, roasts, games, daily challenges and random entertainment."
+}
+</script>
+
 </head>
 
 <body>
@@ -945,6 +1135,70 @@ body:before,body:after{display:none!important}
     <img src="222.png" class="logo-img" alt="FunBox Logo">
     <div class="tagline">Boredom? Not Today.</div>
   </header>
+
+
+  <!-- =========================
+       VIEWS / VIRAL GROWTH HUB
+  ========================== -->
+  <nav class="fb-nav" aria-label="FunBox navigation">
+    <button type="button" onclick="fbScroll('fbDailyDrop')">🔥 Daily</button>
+    <button type="button" onclick="fbScroll('funGeneratorsSection')">🎲 Generators</button>
+    <button type="button" onclick="fbScroll('guessGameSection')">🎯 Games</button>
+    <button type="button" onclick="fbScroll('friendRadarSection')">👥 Friends</button>
+    <button type="button" onclick="fbScroll('funboxFaq')">❓ FAQ</button>
+  </nav>
+
+  <section class="fb-hero" id="fbHero">
+    <div class="fb-hero-kicker">THE INTERNET'S TINY CHAOS BUTTON</div>
+    <h1>😈 Bored? Prove It.</h1>
+    <p>Ek click. Ek result. Phir woh result kisi dost ko bhejo aur dekho kaun zyada unlucky hai.</p>
+    <div class="fb-hero-actions">
+      <button class="btn" type="button" onclick="fbDailyAction()">🔥 Try Today's Drop</button>
+      <button class="btn secondary" type="button" onclick="fbScroll('funGeneratorsSection')">🎲 Explore FunBox</button>
+    </div>
+  </section>
+
+  <section class="card" id="fbDailyDrop">
+    <div class="fb-daily">
+      <div class="fb-daily-head">
+        <div>
+          <div class="fb-hero-kicker" style="text-align:left">DAILY DROP</div>
+          <h2 id="fbDailyTitle" style="margin-top:4px">Today's Challenge</h2>
+        </div>
+        <div class="fb-badge" id="fbDailyBadge">1 DAY • 1 DROP</div>
+      </div>
+      <div class="fb-daily-question" id="fbDailyQuestion">Loading today's chaos...</div>
+      <div class="fb-daily-actions">
+        <button class="btn" type="button" onclick="fbDailyAction()">🎲 Get My Result</button>
+        <button class="btn secondary" type="button" onclick="fbShareDaily()">📤 Challenge a Friend</button>
+      </div>
+      <div class="fb-share-count" id="fbDailyMeta">Daily content changes automatically.</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🔥 What people come for</h2>
+    <p class="muted">Fast stuff first. Long scrolling later.</p>
+    <div class="fb-trending-grid">
+      <div class="fb-trend" onclick="fbScroll('funGeneratorsSection')">
+        <div class="icon">😂</div><strong>Roast & Random</strong><span>Instant result, zero thinking.</span>
+      </div>
+      <div class="fb-trend" onclick="fbScroll('guessGameSection')">
+        <div class="icon">🎯</div><strong>Mini Games</strong><span>Try, fail, retry. Classic.</span>
+      </div>
+      <div class="fb-trend" onclick="fbScroll('jockBobloRoomSection')">
+        <div class="icon">🎮</div><strong>Play With Friends</strong><span>Room code + live match.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card fb-reengage">
+    <div>
+      <strong>⚡ Don't leave empty-handed.</strong>
+      <p id="fbReengageText">Try 3 different FunBox things before leaving.</p>
+    </div>
+    <button class="btn" type="button" onclick="fbScroll('funGeneratorsSection')">Start Chaos</button>
+  </section>
 
   <section class="friend-notice-card" id="friendNewMessagesBar">
     <div class="friend-notice-head">
@@ -1131,7 +1385,7 @@ body:before,body:after{display:none!important}
        FUN GENERATORS
   ========================== -->
 
-  <section class="card">
+  <section class="card" id="funGeneratorsSection">
 
     <h2>🔥 Fun Generators</h2>
     <p class="muted">
@@ -1207,7 +1461,7 @@ body:before,body:after{display:none!important}
        GUESS GAME
   ========================== -->
 
-  <section class="card">
+  <section class="card" id="guessGameSection">
 
     <h2>🎯 Guess the Number</h2>
     <p class="muted">
