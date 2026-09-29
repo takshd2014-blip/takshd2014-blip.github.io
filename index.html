@@ -6,7 +6,7 @@
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
 
-  <!-- FunBox v3: Sigma language selector + friend share + photo chat + video call -->
+  <!-- FunBox v3 + Language fix v4: reliable Google Translate cookie/reload -->
 <title>FunBox — Boredom? Not Today.</title>
   <meta name="description" content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer and more.">
   <meta name="theme-color" content="#09090f">
@@ -1027,6 +1027,14 @@ body:before,body:after{display:none!important}
   .friend-msg-menu button{display:block;width:100%;border:0;background:transparent;color:inherit;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;font-size:12px}
   .friend-msg-menu button:hover{background:rgba(168,85,247,.14)}
   .friend-notice-card{display:none;margin:12px 0 0;padding:13px 15px;border:1px solid rgba(168,85,247,.35);background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,255,255,.035));border-radius:16px}
+  .friend-live-toast{position:fixed;right:18px;top:86px;z-index:99999;display:none;min-width:280px;max-width:380px;padding:13px 15px;border:1px solid rgba(168,85,247,.55);background:rgba(16,12,24,.96);backdrop-filter:blur(10px);border-radius:15px;box-shadow:0 12px 35px rgba(0,0,0,.45);cursor:pointer}
+  .friend-live-toast.show{display:block;animation:friendToastIn .22s ease-out}
+  .friend-live-toast b{display:block;margin-bottom:4px}
+  .friend-live-toast small{opacity:.72;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .friend-live-toast .friend-toast-actions{margin-top:9px;display:flex;gap:7px}
+  @keyframes friendToastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:620px){.friend-live-toast{left:12px;right:12px;top:75px;min-width:0;max-width:none}}
+
   .friend-notice-card.show{display:block}
   .friend-notice-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
   .friend-notice-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;margin-top:7px;border-radius:12px;background:rgba(0,0,0,.22)}
@@ -1081,31 +1089,37 @@ body:before,body:after{display:none!important}
       new google.translate.TranslateElement({
         pageLanguage:'en',
         includedLanguages:'en,hi,bn,ta,te,mr,gu,pa,es,fr,de,ar,pt,id,ja,ko',
-        autoDisplay:false
+        autoDisplay:false,
+        multilanguagePage:true
       },'google_translate_element');
-    }catch(e){}
+    }catch(e){ console.warn('Google Translate init:',e); }
   };
+
   window.fbSetLanguage = function(lang){
-    const select=document.getElementById('fbLanguageSelect');
-    if(lang==='xh'){
+    localStorage.setItem('funboxLanguage', lang || 'xh');
+
+    if(lang === 'xh'){
       try{
-        document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain='+location.hostname+';';
+        document.cookie='googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+        document.cookie='googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain='+location.hostname;
       }catch(e){}
-      localStorage.setItem('funboxLanguage','xh');
       location.reload();
       return;
     }
-    localStorage.setItem('funboxLanguage',lang);
-    const combo=document.querySelector('.goog-te-combo');
-    if(combo){
-      combo.value=lang;
-      combo.dispatchEvent(new Event('change'));
-    }else{
-      document.cookie='googtrans=/en/'+lang+'; path=/;';
-      location.reload();
-    }
+
+    // Google Translate reads this cookie when the page loads.
+    try{
+      document.cookie='googtrans=/en/'+lang+';path=/;SameSite=Lax';
+      document.cookie='googtrans=/en/'+lang+';path=/;domain='+location.hostname+';SameSite=Lax';
+    }catch(e){}
+    location.reload();
   };
+
+  document.addEventListener('DOMContentLoaded',function(){
+    const saved=localStorage.getItem('funboxLanguage')||'xh';
+    const sel=document.getElementById('fbLanguageSelect');
+    if(sel) sel.value=saved;
+  });
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
@@ -1136,13 +1150,7 @@ body:before,body:after{display:none!important}
   </div>
 </div>
 <div id="google_translate_element"></div>
-<script>
-(function(){
-  const lang=localStorage.getItem('funboxLanguage')||'xh';
-  const sel=document.getElementById('fbLanguageSelect');
-  if(sel) sel.value=lang;
-})();
-</script>
+
 
 
 <div class="jb-room-modal" id="jockRoomModal">
@@ -1315,6 +1323,12 @@ body:before,body:after{display:none!important}
     <img src="222.png" class="logo-img" alt="FunBox Logo">
     <div class="tagline">Boredom? Not Today.</div>
   </header>
+
+  <div class="friend-live-toast" id="friendLiveToast" onclick="openFriendToastChat()">
+    <b>📨 New message</b>
+    <small id="friendLiveToastText">Someone sent you a message.</small>
+    <div class="friend-toast-actions"><button class="friend-mini" type="button" onclick="event.stopPropagation();openFriendToastChat()">Open 💬</button><button class="friend-mini" type="button" onclick="event.stopPropagation();hideFriendToast()">✕</button></div>
+  </div>
 
 
   <!-- =========================
@@ -5298,6 +5312,30 @@ body:before,body:after{display:none!important}
     friendNotificationCache.clear();
     renderFriendNotifications();
   }
+  let friendToastUid=null;
+  let friendToastTimer=null;
+  function hideFriendToast(){
+    const t=document.getElementById('friendLiveToast');
+    if(t)t.classList.remove('show');
+    if(friendToastTimer)clearTimeout(friendToastTimer);
+  }
+  function openFriendToastChat(){
+    const uid=friendToastUid;
+    const profile=uid?friendProfileCache.get(uid):null;
+    hideFriendToast();
+    if(uid)openFriendChat(uid,profile?.data?.username||'Friend');
+  }
+  function showFriendToast(uid,username,text){
+    friendToastUid=uid;
+    const t=document.getElementById('friendLiveToast');
+    const tx=document.getElementById('friendLiveToastText');
+    if(!t||!tx)return;
+    tx.textContent=(username||'Friend')+' : '+String(text||'New message').slice(0,120);
+    t.classList.add('show');
+    if(friendToastTimer)clearTimeout(friendToastTimer);
+    friendToastTimer=setTimeout(hideFriendToast,6500);
+  }
+
   function renderFriendNotifications(){
     const bar=document.getElementById('friendNewMessagesBar');
     const list=document.getElementById('friendNewMessagesList');
@@ -5327,32 +5365,56 @@ body:before,body:after{display:none!important}
         const readAt=getChatReadAt(chatId);
         const unread=msgs.filter(m=>m.uid!==auth.currentUser.uid && Number(m.createdAt||0)>readAt);
         const latest=unread[unread.length-1]||null;
+        const previous=friendNotificationCache.get(x.uid);
+        const previousLatest=previous?.latest||null;
+        const wasReady=friendNotifyInitialized.get(x.uid);
+        const isNewMessage=Boolean(wasReady && latest && (!previousLatest || Number(latest.createdAt||0)>Number(previousLatest.createdAt||0)));
         friendNotificationCache.set(x.uid,{uid:x.uid,username:x.data?.username||x.data?.displayName||'Friend',messages:unread,latest});
         renderFriendNotifications();
-        const wasReady=friendNotifyInitialized.get(x.uid);
         friendNotifyInitialized.set(x.uid,true);
-        if(wasReady && latest && document.visibilityState!=='visible' && typeof Notification!=='undefined' && Notification.permission==='granted'){
-          try{new Notification('New message from '+(x.data?.username||'Friend'),{body:String(latest.text||'New message').slice(0,100),tag:'funbox-'+chatId});}catch(e){}
+        if(isNewMessage){
+          showFriendToast(x.uid,x.data?.username||x.data?.displayName||'Friend',latest.text||'New message');
+          if(typeof Notification!=='undefined' && Notification.permission==='granted' && document.visibilityState!=='visible'){
+            try{new Notification('New message from '+(x.data?.username||'Friend'),{body:String(latest.text||'New message').slice(0,100),tag:'funbox-'+chatId});}catch(e){}
+          }
         }
         const incomingCall=snap.data()?.videoCall;
-        if(incomingCall?.status==='ringing' && incomingCall.calleeUid===auth.currentUser.uid && incomingCall.callerUid===x.uid){
+        if(incomingCall?.status==='ringing' &&
+           incomingCall.calleeUid===auth.currentUser.uid &&
+           incomingCall.callerUid===x.uid){
+          const callStarted=Number(incomingCall.startedAt||0);
+          const callIsFresh=callStarted>0 && (Date.now()-callStarted)<120000;
           const callKey=chatId+'_'+String(incomingCall.startedAt||'');
-          if(window.__funboxSeenCalls?.has(callKey)===false || !window.__funboxSeenCalls){
-            window.__funboxSeenCalls=window.__funboxSeenCalls||new Set();
-            if(!window.__funboxSeenCalls.has(callKey)){
-              window.__funboxSeenCalls.add(callKey);
-              setTimeout(()=>{
-                const accept=confirm((x.data?.username||'Friend')+' tumhe FunBox video call kar raha hai. Accept?');
+          window.__funboxSeenCalls=window.__funboxSeenCalls||new Set();
+
+          // Ignore stale ringing calls and do not show an incoming prompt while
+          // this page is already the caller for the same chat.
+          if(callIsFresh &&
+             !(fbVideoChatId===chatId && fbVideoRole==='caller') &&
+             !window.__funboxSeenCalls.has(callKey)){
+            window.__funboxSeenCalls.add(callKey);
+            setTimeout(()=>{
+              // Re-check the Firestore document before showing the prompt.
+              getDoc(ref).then(latestSnap=>{
+                const latestCall=latestSnap.data()?.videoCall;
+                if(!latestCall ||
+                   latestCall.status!=='ringing' ||
+                   latestCall.startedAt!==incomingCall.startedAt ||
+                   latestCall.calleeUid!==auth.currentUser.uid ||
+                   latestCall.callerUid!==x.uid) return;
+
+                const accept=confirm((x.data?.username||'Friend')+' tumhe video call kar raha hai. Accept?');
                 if(accept && typeof window.acceptFunboxVideoCall==='function'){
                   activeFriend={uid:x.uid,username:x.data?.username||'Friend'};
                   activeFriendChatId=chatId;
+                  fbVideoChatId=chatId;
                   window.acceptFunboxVideoCall();
                 }else if(typeof window.rejectFunboxVideoCall==='function'){
                   fbVideoChatId=chatId;
                   window.rejectFunboxVideoCall();
                 }
-              },120);
-            }
+              }).catch(e=>console.warn('incoming call check failed',e));
+            },120);
           }
         }
       },e=>console.warn('chat notification listener',e));
