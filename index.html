@@ -107,7 +107,7 @@ async function fbShareDaily(){
   const item=FB_DAILY_DROPS[fbDailyIndex()];
   const url=new URL(window.location.href);
   url.searchParams.set('fbchallenge',String(fbDailyIndex()+1));
-  const text=`🔥 FunBox Daily Drop\n\n${item.q}\n\nTry it: ${url.toString()}`;
+  const text=`🔥 FUNBOX CHALLENGE\n\n${item.q}\n\nTum bhi try karo: ${url.toString()}\n\n#FunBox #DailyChallenge`;
   try{
     if(navigator.share){
       await navigator.share({title:'FunBox Daily Drop',text});
@@ -1004,6 +1004,21 @@ body:before,body:after{display:none!important}
 }
 </script>
 
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"FunBox kya hai?","acceptedAnswer":{"@type":"Answer","text":"FunBox ek quick entertainment site hai jahan jokes, roasts, random facts, mini-games, daily drops aur friend challenges milte hain."}},
+      {"@type":"Question","name":"Daily Drop kya karta hai?","acceptedAnswer":{"@type":"Answer","text":"Har din ek naya challenge prompt milta hai. Result nikalke friend ko share kar sakte ho."}},
+      {"@type":"Question","name":"Friend ko challenge kaise bheju?","acceptedAnswer":{"@type":"Answer","text":"Daily Drop ke Challenge a Friend button se share ya copy karo. Link khulne par friend ko wahi challenge dikhaya jayega."}},
+      {"@type":"Question","name":"XP aur coins same hain?","acceptedAnswer":{"@type":"Answer","text":"Nahi. FunBox mein XP progression ke liye hai aur coins alag reward/shop system ke liye."}},
+      {"@type":"Question","name":"FunBox mobile par chalega?","acceptedAnswer":{"@type":"Answer","text":"Haan, layout mobile screens ke liye responsive hai."}}
+    ]
+  }
+  </script>
+
 </head>
 
 <body>
@@ -1198,6 +1213,19 @@ body:before,body:after{display:none!important}
       <p id="fbReengageText">Try 3 different FunBox things before leaving.</p>
     </div>
     <button class="btn" type="button" onclick="fbScroll('funGeneratorsSection')">Start Chaos</button>
+  </section>
+
+
+  <section class="card" id="funboxFaq">
+    <h2>❓ FunBox FAQ</h2>
+    <p class="muted">Quick answers — no boring manual.</p>
+    <div class="fb-seo-faq">
+      <details><summary>FunBox kya hai?</summary><p>FunBox ek quick entertainment site hai jahan jokes, roasts, random facts, mini-games, daily drops aur friend challenges milte hain.</p></details>
+      <details><summary>Daily Drop kya karta hai?</summary><p>Har din ek naya challenge prompt milta hai. Result nikalke friend ko share kar sakte ho.</p></details>
+      <details><summary>Friend ko challenge kaise bheju?</summary><p>Daily Drop ke “Challenge a Friend” button se share/copy karo. Link khulne par friend ko wahi challenge dikhaya jayega.</p></details>
+      <details><summary>XP aur coins same hain?</summary><p>Nahi. FunBox mein XP progression ke liye hai aur coins alag reward/shop system ke liye.</p></details>
+      <details><summary>FunBox mobile par chalega?</summary><p>Haan, layout mobile screens ke liye responsive hai.</p></details>
+    </div>
   </section>
 
   <section class="friend-notice-card" id="friendNewMessagesBar">
