@@ -775,10 +775,22 @@ body:before,body:after{display:none!important}
   .friend-mini{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:800}
   .friend-chat{margin-top:12px}
   .friend-chat-box{height:190px;overflow:auto;padding:10px;border-radius:14px;background:#07070c;border:1px solid rgba(255,255,255,.08)}
-  .friend-msg{margin:7px 0;padding:8px 10px;border-radius:11px;background:rgba(168,85,247,.12);font-size:13px}
+  .friend-msg{margin:7px 0;padding:8px 10px;border-radius:11px;background:rgba(168,85,247,.12);font-size:13px;position:relative}
   .friend-msg b{font-size:11px;opacity:.7}
+  .friend-msg-text{white-space:pre-wrap;word-break:break-word}
   .friend-msg-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;opacity:.6}
-  .friend-msg-delete{border:0;background:transparent;color:#ff8b8b;cursor:pointer;font-size:11px;padding:2px 4px}
+  .friend-msg-actions{display:flex;gap:5px;align-items:center}
+  .friend-msg-action{border:0;background:transparent;color:#d9c5ff;cursor:pointer;font-size:11px;padding:2px 4px}
+  .friend-msg-action:hover{opacity:.8}
+  .friend-msg-deleted{font-style:italic;opacity:.55}
+  .friend-reply-preview{margin:5px 0 7px;padding:5px 7px;border-left:3px solid rgba(168,85,247,.7);background:rgba(0,0,0,.12);border-radius:5px;font-size:11px;opacity:.75}
+  .friend-reply-bar{display:none;margin-top:8px;padding:7px 9px;border-radius:8px;background:rgba(168,85,247,.12);font-size:11px;align-items:center;justify-content:space-between}
+  .friend-reply-bar.show{display:flex}
+  .friend-reply-cancel{border:0;background:transparent;cursor:pointer;font-size:12px}
+  .friend-msg-menu{position:absolute;right:8px;bottom:30px;display:none;z-index:5;min-width:150px;padding:6px;border-radius:9px;background:rgba(20,18,28,.98);border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+  .friend-msg-menu.show{display:block}
+  .friend-msg-menu button{display:block;width:100%;border:0;background:transparent;color:inherit;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;font-size:12px}
+  .friend-msg-menu button:hover{background:rgba(168,85,247,.14)}
   .friend-notice-card{display:none;margin:12px 0 0;padding:13px 15px;border:1px solid rgba(168,85,247,.35);background:linear-gradient(135deg,rgba(168,85,247,.15),rgba(255,255,255,.035));border-radius:16px}
   .friend-notice-card.show{display:block}
   .friend-notice-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
@@ -796,6 +808,12 @@ body:before,body:after{display:none!important}
   @media(max-width:620px){.friend-search-row{flex-direction:column}.friend-action{width:100%}.friend-user{align-items:flex-start;flex-direction:column}}
 </style>
 
+
+<style id="daily-promo-inline-css">
+.daily-promo-row{display:flex;gap:10px;align-items:center;margin-top:10px}
+.daily-promo-row .guess-input{flex:1;min-width:0;box-sizing:border-box}
+@media(max-width:600px){.daily-promo-row{flex-direction:column}.daily-promo-row .guess-input,.daily-promo-row .btn{width:100%}}
+</style>
 </head>
 
 <body>
@@ -1019,6 +1037,7 @@ body:before,body:after{display:none!important}
     <div id="friendChatPanel" class="friend-panel friend-chat" style="display:none">
       <div class="friend-user"><div><div id="friendChatTitle" class="friend-name">💬 Friend Chat</div><div id="friendChatMeta" class="friend-meta"></div></div><button class="friend-mini" onclick="closeFriendChat()">Close</button></div>
       <div id="friendChatBox" class="friend-chat-box" style="margin-top:10px"></div>
+      <div id="friendReplyBar" class="friend-reply-bar"><span id="friendReplyText"></span><button class="friend-reply-cancel" type="button" onclick="cancelFriendReply()">✕</button></div>
       <div class="friend-search-row" style="margin-top:10px">
         <input id="friendChatInput" class="friend-search-input" maxlength="200" placeholder="Type something less boring..." onkeydown="if(event.key==='Enter') sendFriendMessage()">
         <button class="friend-action" type="button" onclick="sendFriendMessage()">Send 💬</button>
@@ -1369,6 +1388,11 @@ body:before,body:after{display:none!important}
       <button class="btn" id="dailyRevealBtn" type="button" onclick="revealDailyCodeLetter()">✨ Reveal 1 Letter — 30 💎</button>
       <button class="btn secondary" type="button" onclick="resetDailyCodeView()">↻ Today Code</button>
     </div>
+    <div class="daily-promo-row">
+      <input id="dailyPromoInput" class="guess-input" maxlength=20 placeholder="Enter Promo Code" autocomplete="off">
+      <button class="btn" type="button" onclick="redeemDailyPromoCode()">🎟️ Enter Promo Code</button>
+    </div>
+    <div id="dailyPromoResult" class="code-status"></div>
     <div id="dailyCodeStatus" class="code-status">Aaj ka code ready hai.</div>
   </section>
 
@@ -4103,6 +4127,18 @@ body:before,body:after{display:none!important}
 
   }
 
+  window.redeemDailyPromoCode = function(){
+    const input=document.getElementById('dailyPromoInput');
+    const result=document.getElementById('dailyPromoResult');
+    if(!input||!result)return;
+    const code=input.value.trim().toUpperCase();
+    if(!code){result.textContent='Enter a promo code.';return;}
+    const oldInput=document.getElementById('codeInput');
+    const oldResult=document.getElementById('codeResult');
+    if(oldInput)oldInput.value=code;
+    redeemCode('codeInput','dailyPromoResult',false);
+  };
+
 
   const PROMO_CODES = {
     FUNBOX: 50,
@@ -4127,10 +4163,10 @@ body:before,body:after{display:none!important}
     BOBLO: 100
   };
 
-  function redeemCode() {
-    const input = document.getElementById("codeInput");
+  function redeemCode(sourceId="codeInput", resultId="codeResult", shouldClose=true) {
+    const input = document.getElementById(sourceId);
     const code = input.value.trim().toUpperCase();
-    const result = document.getElementById("codeResult");
+    const result = document.getElementById(resultId);
 
     if (!code) {
       result.textContent = "Enter a promo code.";
@@ -4154,7 +4190,7 @@ body:before,body:after{display:none!important}
       result.textContent = `🔓 Daily Code accepted! 24-hour unlimited access active.`;
       updateAccessStatus();
       if (window.funboxCloudSave) window.funboxCloudSave();
-      setTimeout(closeCodeModal, 1100);
+      if(shouldClose)setTimeout(closeCodeModal, 1100);
       return;
     }
 
@@ -4186,7 +4222,7 @@ body:before,body:after{display:none!important}
     updateAccessStatus();
     if (window.funboxCloudSave) window.funboxCloudSave();
 
-    setTimeout(closeCodeModal, 1100);
+    if(shouldClose)setTimeout(closeCodeModal, 1100);
   }
 
 
@@ -4993,28 +5029,66 @@ body:before,body:after{display:none!important}
     }
   });
 
+  function friendHiddenKey(chatId){ return 'funboxChatHidden_'+chatId; }
+  function getHiddenFriendMessages(chatId){
+    try{return new Set(JSON.parse(localStorage.getItem(friendHiddenKey(chatId))||'[]'));}catch(e){return new Set();}
+  }
+  function saveHiddenFriendMessages(chatId,set){ localStorage.setItem(friendHiddenKey(chatId),JSON.stringify([...set].slice(-300))); }
+  function friendMessageId(m,i){ return String(m?.id||('legacy_'+i+'_'+String(m?.createdAt||0))); }
+  function friendReplyText(m){
+    if(!m?.replyTo)return '';
+    return `<div class="friend-reply-preview">↩️ <b>${escapeHTML(m.replyTo.username||'Friend')}</b>: ${escapeHTML(String(m.replyTo.text||'').slice(0,100))}</div>`;
+  }
+  function closeAllFriendMessageMenus(){document.querySelectorAll('.friend-msg-menu.show').forEach(x=>x.classList.remove('show'));}
+  document.addEventListener('click',e=>{if(!e.target.closest('.friend-msg-actions')&&!e.target.closest('.friend-msg-menu'))closeAllFriendMessageMenus();});
+  window.toggleFriendMessageMenu=function(id){
+    const menu=document.getElementById('friendMenu_'+CSS.escape(id)); if(!menu)return;
+    const was=menu.classList.contains('show'); closeAllFriendMessageMenus(); if(!was)menu.classList.add('show');
+  };
+  window.startFriendReply=function(messageId){
+    const box=document.getElementById('friendChatBox'); if(!box||!activeFriendChatId)return;
+    const snapMsg=window.__friendChatMessages?.find(x=>friendMessageId(x.msg,x.i)===messageId);
+    if(!snapMsg)return;
+    window.__friendReply={id:messageId,username:snapMsg.msg.username||'Friend',text:snapMsg.msg.text||''};
+    const bar=document.getElementById('friendReplyBar'),txt=document.getElementById('friendReplyText');
+    if(bar)bar.classList.add('show'); if(txt)txt.textContent='↩️ Replying to '+(snapMsg.msg.username||'Friend')+': '+String(snapMsg.msg.text||'').slice(0,90);
+    const input=document.getElementById('friendChatInput'); if(input){input.focus();}
+    closeAllFriendMessageMenus();
+  };
+  window.cancelFriendReply=function(){window.__friendReply=null;const bar=document.getElementById('friendReplyBar');if(bar)bar.classList.remove('show');};
+
   async function openFriendChat(uid,username){
     if(!auth?.currentUser||!db)return;
     activeFriend={uid,username}; activeFriendChatId=friendPairId(auth.currentUser.uid,uid);
+    window.__friendReply=null;
     const panel=document.getElementById('friendChatPanel');if(panel)panel.style.display='block';
     document.getElementById('friendChatTitle').textContent='💬 '+username;
-    document.getElementById('friendChatMeta').textContent='Friend chat • messages show time • apna message delete kar sakte ho';
+    document.getElementById('friendChatMeta').textContent='Friend chat • Reply • Delete for me / everyone';
+    cancelFriendReply();
     if(friendChatUnsub)friendChatUnsub();
     const ref=doc(db,'friendChats',activeFriendChatId);
     try{await setDoc(ref,{participants:[auth.currentUser.uid,uid],updatedAt:serverTimestamp()},{merge:true});}catch(e){console.warn(e)}
     const currentUid=auth.currentUser.uid;
     friendChatUnsub=onSnapshot(ref,snap=>{
       const box=document.getElementById('friendChatBox');if(!box)return;
-      const msgs=snap.exists()?(snap.data().messages||[]):[];
-      const latest=msgs.length?Number(msgs[msgs.length-1].createdAt||Date.now()):Date.now();
+      const allMsgs=snap.exists()?(snap.data().messages||[]):[];
+      const hidden=getHiddenFriendMessages(activeFriendChatId);
+      const visible=allMsgs.map((m,i)=>({msg:m,i})).filter(x=>!hidden.has(friendMessageId(x.msg,x.i)));
+      window.__friendChatMessages=allMsgs.map((msg,i)=>({msg,i}));
+      const latest=allMsgs.length?Number(allMsgs[allMsgs.length-1].createdAt||Date.now()):Date.now();
       setChatReadAt(activeFriendChatId,latest);
-      box.innerHTML=msgs.slice(-50).map((m,i)=>{const own=m.uid===currentUid;const mid=m.id||('legacy_'+i+'_'+String(m.createdAt||0));return `<div class="friend-msg"><b>${escapeHTML(m.username||'Friend')}</b><br>${escapeHTML(m.text||'')}<div class="friend-msg-meta"><span>${escapeHTML(msgTime(m.createdAt))}</span>${own?`<button class="friend-msg-delete" onclick="deleteFriendMessage('${mid}')">Delete</button>`:''}</div></div>`;}).join('')||'<div style="opacity:.55">No messages yet. Say something less boring.</div>';
+      box.innerHTML=visible.slice(-50).map(({msg:m,i})=>{
+        const mid=friendMessageId(m,i), own=m.uid===currentUid, deleted=Boolean(m.deletedForEveryone);
+        const body=deleted?'<div class="friend-msg-text friend-msg-deleted">🚫 This message was deleted</div>':`${friendReplyText(m)}<div class="friend-msg-text">${escapeHTML(m.text||'')}</div>`;
+        const menu=`<div class="friend-msg-menu" id="friendMenu_${mid}"><button onclick="startFriendReply('${mid}')">↩️ Reply</button><button onclick="deleteFriendMessage('${mid}','me')">🗑️ Delete for me</button>${own&&!deleted?`<button onclick="deleteFriendMessage('${mid}','everyone')">🗑️ Delete for everyone</button>`:''}</div>`;
+        return `<div class="friend-msg"><b>${escapeHTML(m.username||'Friend')}</b>${body}<div class="friend-msg-meta"><span>${escapeHTML(msgTime(m.createdAt))}</span><div class="friend-msg-actions"><button class="friend-msg-action" onclick="startFriendReply('${mid}')">↩️ Reply</button><button class="friend-msg-action" onclick="toggleFriendMessageMenu('${mid}')">⋮</button></div></div>${menu}</div>`;
+      }).join('')||'<div style="opacity:.55">No messages yet. Say something less boring.</div>';
       box.scrollTop=box.scrollHeight;
     },e=>{const box=document.getElementById('friendChatBox');if(box)box.innerHTML='<div class="friend-msg">⚠️ Chat sync failed.</div>';console.warn(e)});
   }
   window.openFriendChat=openFriendChat;
 
-  function closeFriendChat(){if(friendChatUnsub){friendChatUnsub();friendChatUnsub=null;}activeFriendChatId=null;activeFriend=null;const p=document.getElementById('friendChatPanel');if(p)p.style.display='none';renderFriendNotifications();}
+  function closeFriendChat(){if(friendChatUnsub){friendChatUnsub();friendChatUnsub=null;}activeFriendChatId=null;activeFriend=null;window.__friendReply=null;const p=document.getElementById('friendChatPanel');if(p)p.style.display='none';renderFriendNotifications();}
   window.closeFriendChat=closeFriendChat;
 
   async function sendFriendMessage(){
@@ -5022,23 +5096,33 @@ body:before,body:after{display:none!important}
     if(!text||!activeFriendChatId||!auth?.currentUser||!db)return;
     const meSnap=await getDoc(doc(db,'publicProfiles',auth.currentUser.uid));const me=meSnap.data()||{};
     try{
+      const reply=window.__friendReply;
       const msg={id:auth.currentUser.uid+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),uid:auth.currentUser.uid,username:me.username||auth.currentUser.displayName||'You',text:text.slice(0,200),createdAt:Date.now()};
+      if(reply)msg.replyTo={id:reply.id,username:reply.username,text:String(reply.text||'').slice(0,120)};
       await updateDoc(doc(db,'friendChats',activeFriendChatId),{messages:arrayUnion(msg),updatedAt:serverTimestamp()});
-      setChatReadAt(activeFriendChatId,msg.createdAt); input.value='';
+      setChatReadAt(activeFriendChatId,msg.createdAt); input.value=''; cancelFriendReply();
     }catch(e){console.warn(e);}
   }
   window.sendFriendMessage=sendFriendMessage;
 
-  window.deleteFriendMessage=async function(messageId){
+  window.deleteFriendMessage=async function(messageId,mode='me'){
     if(!activeFriendChatId||!auth?.currentUser||!db)return;
     const ref=doc(db,'friendChats',activeFriendChatId);
     try{
-      await runTransaction(db,async tx=>{
-        const snap=await tx.get(ref);if(!snap.exists())return;
-        const data=snap.data();const msgs=Array.isArray(data.messages)?data.messages:[];
-        const filtered=msgs.filter((m,i)=>{const mid=m.id||('legacy_'+i+'_'+String(m.createdAt||0));if(mid!==messageId)return true;return m.uid!==auth.currentUser.uid;});
-        if(filtered.length!==msgs.length)tx.update(ref,{messages:filtered,updatedAt:serverTimestamp()});
-      });
+      const snap=await getDoc(ref); if(!snap.exists())return;
+      const msgs=Array.isArray(snap.data().messages)?snap.data().messages:[];
+      const index=msgs.findIndex((m,i)=>friendMessageId(m,i)===messageId); if(index<0)return;
+      const target=msgs[index];
+      if(mode==='me'){
+        const hidden=getHiddenFriendMessages(activeFriendChatId); hidden.add(messageId); saveHiddenFriendMessages(activeFriendChatId,hidden);
+        const box=document.getElementById('friendChatBox');
+        if(box){ const item=box.querySelector('[id^=friendMenu_]'); }
+        if(activeFriend) await openFriendChat(activeFriend.uid,activeFriend.username);
+        return;
+      }
+      if(target.uid!==auth.currentUser.uid){alert('Delete for everyone sirf apne message par kar sakte ho.');return;}
+      const updated=msgs.map((m,i)=>friendMessageId(m,i)===messageId?{...m,deletedForEveryone:true,text:'',replyTo:null,deletedAt:Date.now()}:m);
+      await updateDoc(ref,{messages:updated,updatedAt:serverTimestamp()});
     }catch(e){console.warn('delete message failed',e);}
   };
 
@@ -5105,7 +5189,65 @@ const JB_QUESTIONS=[
  {q:"Phone battery 1%:",a:["Main safe hoon.","Ab asli survival game start.","Charger ki zaroorat nahi."],c:1},
  {q:"Exam ke ek din pehle:",a:["Preparation complete.","Syllabus dekh ke confidence uninstall.","Aaj holiday hai."],c:1},
  {q:"Friend: Kal mil raha hai?",a:["Haan pakka.","Dekhte hain, calendar se poochta hoon.","Mujhe yaad hi nahi."],c:1},
- {q:"Jock Boblo ka rule:",a:["Serious rehna.","Fast answer, smart answer.","Answer Google kare bina dena."],c:1}
+ {q:"Jock Boblo ka rule:",a:["Serious rehna.","Fast answer, smart answer.","Answer Google kare bina dena."],c:1},
+ {q:"Alarm bajta hai:",a:["Bas 5 minute aur.","Main already school mein hoon.","Alarm ko thank you bolta hoon."],c:0},
+ {q:"Wi-Fi slow ho gaya:",a:["Router ko motivational speech.","Internet se breakup.","Phone charge karna."],c:0},
+ {q:"Mummy: Phone rakh do.",a:["Bas ek minute.","Phone ko table par respectfully park.","Main padh raha hoon."],c:0},
+ {q:"Group chat mein 99 messages:",a:["Sab ignore.","Ek saath sab padhna.","Pehle context maangna."],c:1},
+ {q:"Jab teacher bole 'surprise test':",a:["Surprise accepted.","Brain airplane mode.","Notes khud khul jaayenge."],c:1},
+ {q:"Battery 20% dekhkar:",a:["Charger abhi chahiye.","20% toh unlimited hai.","Phone ko goodbye bolna."],c:0},
+ {q:"Friend ka 'bro trust me':",a:["100% safe.","Risk meter on.","NASA ko call."],c:1},
+ {q:"Online class mein camera on ho gaya:",a:["Professional smile.","Instant panic.","Camera ko blame."],c:1},
+ {q:"Notebook ka last page:",a:["Important notes.","Random calculations.","Future plans."],c:1},
+ {q:"Jab pen exam mein chalna band kare:",a:["Pen ko recharge.","Dusra pen.","Paper se negotiate."],c:1},
+ {q:"Friend: '5 minute mein aa raha hoon'",a:["Exactly 5 minutes.","Time zone check karo.","Calendar reminder lagao."],c:1},
+ {q:"Jab password yaad na aaye:",a:["Password123 try karo.","Forgot password.","Computer ko guess karne do."],c:1},
+ {q:"Study table par phone rakha ho:",a:["Distraction zero.","Phone mysteriously unlock hoga.","Phone ko library card do."],c:1},
+ {q:"Jab teacher bole 'easy question':",a:["Easy hoga.","Question suspiciously dekho.","Answer sheet khud bhar do."],c:1},
+ {q:"Fridge kholkar kya dekhte ho?",a:["Future.","Kuch tasty.","Homework."],c:1},
+ {q:"Jab game mein lag aaye:",a:["Router ko blame.","Skill improve.","Game uninstall."],c:0},
+ {q:"Friend ne 'LOL' bheja:",a:["Woh actually hansa.","Usne bas LOL type kiya.","Phone ne bheja."],c:1},
+ {q:"Jab class mein neend aaye:",a:["Eyes open mode.","Notebook ko pillow.","Teacher ko blame."],c:0},
+ {q:"Exam result open karte waqt:",a:["Deep breath.","Wi-Fi off.","Result ko kal dekhna."],c:0},
+ {q:"Jab koi bole 'main busy hoon':",a:["Definitely busy.","Maybe phone dekh raha ho.","Uska schedule check."],c:0},
+ {q:"Jab charger kisi aur ke paas ho:",a:["Please maango.","Charger ke liye treasure hunt.","Phone ko 1% par chalao."],c:0},
+ {q:"Jab teacher attendance le:",a:["Present.","Present sir, mentally bhi.","Network issue."],c:0},
+ {q:"Jab friend bole 'ek secret hai':",a:["Interesting.","Secret ko public announcement.","Topic change."],c:0},
+ {q:"Jab homework complete na ho:",a:["Honest answer.","File corruption story.","Homework invisible hai."],c:0},
+ {q:"Jab phone 100% charge ho:",a:["Ab toh safe hoon.","5 minute mein 90%.","Battery ko celebrate."],c:1},
+ {q:"Jab notification aaye aur phone paas na ho:",a:["Ignore.","Instant curiosity.","Notification ko wait karwao."],c:1},
+ {q:"Jab friend ka answer bahut confident ho:",a:["Trust.","Confidence ko evidence chahiye.","Usko teacher bana do."],c:1},
+ {q:"Jab alarm Sunday ko baj jaye:",a:["Happy Monday.","Alarm ko stare.","Sunday ko Monday bana do."],c:1},
+ {q:"Jab notebook ghar reh jaye:",a:["Friend se page maango.","Invisible notebook.","Teacher ko explain."],c:0},
+ {q:"Jab internet wapas aaye:",a:["Sabse pehle messages.","Weather check.","Router ko award."],c:0},
+ {q:"Jab friend bole 'last round':",a:["Actually last.","Ek aur round.","Game band."],c:1},
+ {q:"Jab answer 50-50 ho:",a:["Random click.","Question dobara padho.","Coin toss."],c:1},
+ {q:"Jab koi tumhara naam galat bole:",a:["Correct kar do.","Naya naam accept.","Naam change kar do."],c:0},
+ {q:"Jab teacher board saaf karne lage:",a:["Notes complete.","Photo le lo.","Memory se likh lo."],c:1},
+ {q:"Jab friend 20 memes bheje:",a:["One by one.","Sab save.","Phone ko rest."],c:0},
+ {q:"Jab tumhe answer pata ho:",a:["Answer karo.","Overthink karo.","Question se argue."],c:0},
+ {q:"Jab laptop update maange:",a:["Abhi nahi.","Update kar do jab free ho.","Laptop ko ignore forever."],c:1},
+ {q:"Jab notebook mein doodle mil jaye:",a:["Art exhibition.","Notes continue.","Teacher ko credit."],c:1},
+ {q:"Jab friend bole 'simple hai':",a:["Simple ho sakta hai.","Suspicious.","Question delete."],c:1},
+ {q:"Jab timer 1 second dikhaye:",a:["Answer lock karo.","Aur socho.","Phone restart."],c:0},
+ {q:"Jab room mein sab ready ho:",a:["Match start.","Sabko 20 minute wait.","Chat hi karo."],c:0},
+ {q:"Jab opponent fast answer kare:",a:["Panic.","Apna answer calmly do.","Uska internet band."],c:1},
+ {q:"Jab score close ho:",a:["Focus.","Chat spam.","Game quit."],c:0},
+ {q:"Jab round khatam ho:",a:["Next question ke liye ready.","Purana answer edit.","Timer ko blame."],c:0},
+ {q:"Jab question unexpected ho:",a:["Options padho.","Randomly click.","Screen band."],c:0},
+ {q:"Jab tumhara friend win kare:",a:["GG bolo.","Phone chhupa do.","Room leave."],c:0},
+ {q:"Jab match 1-1 ho:",a:["Focus maintain.","Winner announce.","Questions skip."],c:0},
+ {q:"Jab tum galat answer do:",a:["Next round par focus.","Game delete.","Friend ko blame."],c:0},
+ {q:"Jab question easy lage:",a:["Options carefully padho.","Jaldi click.","Aankhen band."],c:0},
+ {q:"Jab timer start ho:",a:["Question padho.","Chat kholo.","Room se bahar jao."],c:0},
+ {q:"Jab friend bole 'main ready hoon':",a:["Match start kar sakte ho.","Usko test karo.","Room delete."],c:0},
+ {q:"Jab final round aaye:",a:["Full focus.","Answer skip.","Score reset."],c:0},
+ {q:"Jab match complete ho:",a:["Final result dekho.","Questions dobara wahi.","Timer chalu rakho."],c:0},
+ {q:"Jock Boblo mein best habit:",a:["Question dhyan se padhna.","Random click karna.","Timer ko ignore karna."],c:0},
+ {q:"Jab answer button active ho:",a:["Apna option choose karo.","Sab buttons dabao.","Room refresh karo."],c:0},
+ {q:"Jab next round load ho:",a:["Naya question padho.","Previous answer repeat.","Browser close."],c:0},
+ {q:"Jab opponent galat kare:",a:["Apna answer do.","Usko distract karo.","Match cancel."],c:0},
+ {q:"Jab XP milne wala ho:",a:["Fast aur accurate raho.","Answer mat do.","Timer reset karo."],c:0}
 ];
 
 function jbStatus(t){const e=document.getElementById('jbRoomStatus');if(e)e.textContent=t;}
@@ -5172,7 +5314,7 @@ window.createJockRoom=async()=>{
     let code=jbCode(),ref=doc(jbDb,'jockRooms',code),snap=await getDoc(ref);
     while(snap.exists()){code=jbCode();ref=doc(jbDb,'jockRooms',code);snap=await getDoc(ref);}
     const me={uid:jbUser.uid,name:jbName(),avatar:jbAvatarFor(jbUser.uid),score:0,answeredRound:0,joinedAt:Date.now(),host:true};
-    await setDoc(ref,{roomId:code,roomName:name,hostUid:jbUser.uid,status:'waiting',round:0,questionIndex:0,players:{[jbUser.uid]:me},messages:[],createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    await setDoc(ref,{roomId:code,roomName:name,hostUid:jbUser.uid,status:'waiting',round:0,questionIndex:0,questionOrder:[],questionHistory:[],players:{[jbUser.uid]:me},messages:[],createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
     jbRoomId=code;
     document.getElementById('jbCreatedRoomName').textContent=name;
     document.getElementById('jbCreatedRoomCode').textContent='ROOM CODE: '+code;
@@ -5351,7 +5493,9 @@ function renderJBRoom(){
   renderJBFinalResult(d);
   if(d.status==='playing'){
     document.getElementById('jbQuestion').textContent=q.q;
-    document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button onclick="answerJock(${i})" ${Number(d.players?.[jbUser?.uid]?.answeredRound||0)>=Number(d.round||0)?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
+    const myAnsweredRound=Number(d.players?.[jbUser?.uid]?.answeredRound||0);
+    const currentRound=Number(d.round||0);
+    document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button type="button" data-round="${currentRound}" onclick="answerJock(${i})" ${myAnsweredRound===currentRound?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
     document.getElementById('jbMatchResult').textContent=`Round ${d.round}/5 — answer fast.`;
     startJBTimer(d.roundStartedAt||Date.now());
   }else if(d.status==='finished'){
@@ -5383,10 +5527,21 @@ function startJBTimer(ts){
 }
 function stopJBTimer(){clearInterval(jbTimer);document.getElementById('jbTimer').textContent='--';}
 
+function jbPickQuestionOrder(history){
+  const seen=new Set((Array.isArray(history)?history:[]).map(Number));
+  let pool=JB_QUESTIONS.map((_,i)=>i).filter(i=>!seen.has(i));
+  if(pool.length<5) pool=JB_QUESTIONS.map((_,i)=>i);
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  return pool.slice(0,5);
+}
+
 window.startJockMatch=async()=>{
   if(!jbRoomId||!jbRoomData||jbRoomData.hostUid!==jbUser?.uid)return jbStatus('Sirf room host match start kar sakta hai.');
   if(Object.keys(jbRoomData.players||{}).length<2)return jbStatus('Friend ko join karao. 2+ players chahiye.');
-  await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{status:'playing',round:1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'MATCH START! 10 seconds.',at:Date.now()})});
+  const order=jbPickQuestionOrder(jbRoomData.questionHistory||[]);
+  const history=[...(jbRoomData.questionHistory||[]),...order].slice(-Math.max(20,JB_QUESTIONS.length));
+  const freshPlayers=Object.fromEntries(Object.entries(jbRoomData.players||{}).map(([uid,p])=>[uid,{...p,score:0,answeredRound:0}]));
+  await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{status:'playing',round:1,questionOrder:order,questionHistory:history,questionIndex:order[0],players:freshPlayers,roundStartedAt:Date.now(),updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'MATCH START! 5 fresh questions — 10 seconds each.',at:Date.now()})});
   jbAnsweredRound=0;
   showJBReaction('GO!','🚀');
 };
@@ -5459,7 +5614,9 @@ async function jbAdvanceIfReady(){
         });
         finished=true; return;
       }
-      tx.update(ref,{round:round+1,questionIndex:Math.floor(Math.random()*JB_QUESTIONS.length),roundStartedAt:Date.now(),updatedAt:serverTimestamp()});
+      const order=Array.isArray(d.questionOrder)?d.questionOrder:[];
+      const nextIndex=order[round] ?? Math.floor(Math.random()*JB_QUESTIONS.length);
+      tx.update(ref,{round:round+1,questionIndex:Number(nextIndex),roundStartedAt:Date.now(),updatedAt:serverTimestamp()});
       advanced=true;
     });
     if(advanced)showJBReaction('NEXT ROUND!','⚡');
