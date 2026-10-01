@@ -1123,11 +1123,25 @@ body:before,body:after{display:none!important}
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+<style id="global-leaderboard-style">
+.fb-global-rank-btn{width:42px;height:42px;border:1px solid rgba(255,255,255,.16);border-radius:13px;background:rgba(20,20,28,.86);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.fb-global-rank-btn:hover{transform:translateY(-1px);background:rgba(38,38,50,.95)}
+.fb-global-rank-modal{position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}
+.fb-global-rank-modal.show{display:flex}.fb-global-rank-box{width:min(560px,96vw);max-height:88vh;overflow:auto;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:linear-gradient(180deg,#15151d,#0d0d12);box-shadow:0 24px 80px rgba(0,0,0,.55);padding:20px}
+.fb-global-rank-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.fb-global-rank-head h2{margin:0}.fb-global-rank-close{border:0;background:rgba(255,255,255,.08);color:#fff;border-radius:10px;width:38px;height:38px;font-size:22px;cursor:pointer}
+.fb-global-rank-sub{color:#a9a9b6;font-size:13px;margin:7px 0 16px}.fb-global-rewards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 16px}
+.fb-global-reward{padding:11px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.035);text-align:center}.fb-global-reward b{display:block;font-size:15px}.fb-global-reward span{font-size:12px;color:#aaa}
+.fb-global-row{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:10px;padding:12px;border:1px solid rgba(255,255,255,.09);border-radius:15px;margin:8px 0;background:rgba(255,255,255,.035)}
+.fb-global-rank{font-size:22px;text-align:center}.fb-global-name{font-weight:800}.fb-global-xp{color:#c9c9d4;font-size:13px;margin-top:3px}.fb-global-diamond{font-weight:800;white-space:nowrap}.fb-global-status{min-height:20px;margin-top:10px;font-size:13px;color:#bdbdca}
+@media(max-width:600px){.fb-global-rewards{grid-template-columns:1fr}.fb-global-rank-box{padding:16px}}
+</style>
+
 </head>
 
 <body>
 <div class="fb-language-bar">
   <div class="fb-language-inner">
+    <button class="fb-global-rank-btn" type="button" onclick="openGlobalLeaderboard()" title="Worldwide Top XP">🏆</button>
     <select id="fbLanguageSelect" class="fb-language-select" aria-label="FunBox language" onchange="fbSetLanguage(this.value)">
       <option value="xh">Σ Hinglish — Default</option>
       <option value="en">English</option>
@@ -1150,6 +1164,22 @@ body:before,body:after{display:none!important}
   </div>
 </div>
 <div id="google_translate_element"></div>
+<div id="globalLeaderboardModal" class="fb-global-rank-modal" onclick="if(event.target===this)closeGlobalLeaderboard()">
+  <div class="fb-global-rank-box">
+    <div class="fb-global-rank-head">
+      <div><h2>🌍 Global XP Leaderboard</h2><div class="fb-global-rank-sub">Worldwide FunBox users • Top 3 XP • Weekly Diamond Rewards</div></div>
+      <button class="fb-global-rank-close" type="button" onclick="closeGlobalLeaderboard()">×</button>
+    </div>
+    <div class="fb-global-rewards">
+      <div class="fb-global-reward"><b>🥇 #1</b><span>200 💎 / week</span></div>
+      <div class="fb-global-reward"><b>🥈 #2</b><span>100 💎 / week</span></div>
+      <div class="fb-global-reward"><b>🥉 #3</b><span>75 💎 / week</span></div>
+    </div>
+    <div id="globalLeaderboardList"><div class="friend-meta">Loading global ranking...</div></div>
+    <div id="globalLeaderboardStatus" class="fb-global-status"></div>
+  </div>
+</div>
+
 
 
 
@@ -2778,7 +2808,7 @@ body:before,body:after{display:none!important}
 
     // Normal Diamond earning has a strict 100 💎 daily cap.
     // Diamond Maker's one-time +500 reward bypasses this cap.
-    const special = source === "diamond_maker";
+    const special = source === "diamond_maker" || source === "weekly_rank";
     let allowed = value;
     if (!special) {
       const state = getDailyDiamondState();
@@ -2807,6 +2837,9 @@ body:before,body:after{display:none!important}
     if (window.funboxCloudSave) window.funboxCloudSave();
     return allowed;
   }
+
+  // Used by the global leaderboard module for weekly rank rewards.
+  window.funboxAddCoins = addCoins;
 
 
   function updateCoinShop() {
@@ -6431,10 +6464,62 @@ window.sendJockChat=async()=>{
   try{await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{messages:arrayUnion({name:jbName(),text:text.slice(0,120),at:Date.now()})});input.value='';}catch(e){jbStatus('Chat failed: '+e.message);}
 };
 
+
+/* =========================================================
+   GLOBAL XP LEADERBOARD
+   Uses existing publicProfiles. No Firebase rules changed.
+========================================================= */
+const FB_WEEKLY_RANK_REWARDS={1:200,2:100,3:75};
+function fbGlobalRankEsc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+async function fbLoadGlobalLeaderboard(){
+  const list=document.getElementById('globalLeaderboardList'),status=document.getElementById('globalLeaderboardStatus');
+  if(!list)return;
+  list.innerHTML='<div class="friend-meta">🌍 Global XP ranking load ho rahi hai...</div>';
+  if(!jbDb){list.innerHTML='<div class="friend-msg">🔐 Firebase connection required.</div>';return;}
+  try{
+    const q=query(collection(jbDb,'publicProfiles'),orderBy('xp','desc'),limit(3));
+    const snap=await getDocs(q);
+    if(snap.empty){list.innerHTML='<div class="friend-meta">Abhi global ranking mein koi public profile nahi mili.</div>';return;}
+    const rows=snap.docs.map((d,i)=>{const x=d.data()||{};return {rank:i+1,uid:x.uid||d.id,username:x.username||x.displayName||'FunBox User',xp:Number(x.xp||0),reward:FB_WEEKLY_RANK_REWARDS[i+1]};});
+    list.innerHTML=rows.map(x=>`<div class="fb-global-row"><div class="fb-global-rank">${x.rank===1?'🥇':x.rank===2?'🥈':'🥉'}</div><div><div class="fb-global-name">${fbGlobalRankEsc(x.username)}</div><div class="fb-global-xp">⭐ ${x.xp.toLocaleString()} XP</div></div><div class="fb-global-diamond">+${x.reward} 💎</div></div>`).join('');
+    const me=jbAuth?.currentUser;
+    if(me){const mine=rows.find(x=>x.uid===me.uid);if(mine)await fbClaimWeeklyRankReward(mine.rank,mine.reward);}
+    if(status)status.textContent='🏆 Global Top 3 live hai. Weekly reward current Top 3 ko milta hai.';
+  }catch(e){
+    console.warn('global leaderboard failed',e);
+    list.innerHTML='<div class="friend-msg">⚠️ Global leaderboard load failed: '+fbGlobalRankEsc(e.message)+'</div>';
+    if(status)status.textContent='Firebase query/permissions check karo.';
+  }
+}
+async function fbClaimWeeklyRankReward(rank,reward){
+  const me=jbAuth?.currentUser;if(!me||!jbDb||!reward)return;
+  const d=new Date(),day=d.getDay()||7;d.setDate(d.getDate()+4-day);
+  const ys=new Date(d.getFullYear(),0,1);
+  const weekKey=`${d.getFullYear()}-W${String(Math.ceil((((d-ys)/86400000)+1)/7)).padStart(2,'0')}`;
+  const ref=doc(jbDb,'publicProfiles',me.uid);
+  try{
+    let granted=false;
+    await runTransaction(jbDb,async tx=>{
+      const snap=await tx.get(ref);if(!snap.exists())return;
+      const data=snap.data()||{},claims=(data.weeklyRankClaims&&typeof data.weeklyRankClaims==='object')?data.weeklyRankClaims:{};
+      if(claims[weekKey])return;
+      tx.update(ref,{[`weeklyRankClaims.${weekKey}`]:{rank:Number(rank),reward:Number(reward),claimedAt:Date.now()}});
+      granted=true;
+    });
+    if(granted&&typeof window.funboxAddCoins==='function'){
+      const added=window.funboxAddCoins(reward,'weekly_rank');
+      const status=document.getElementById('globalLeaderboardStatus');
+      if(status)status.textContent=`🎉 Tum global #${rank} ho — +${added||reward} 💎 weekly reward credited.`;
+    }
+  }catch(e){console.warn('weekly leaderboard reward failed',e);}
+}
+window.openGlobalLeaderboard=async function(){const modal=document.getElementById('globalLeaderboardModal');if(!modal)return;modal.classList.add('show');await fbLoadGlobalLeaderboard();};
+window.closeGlobalLeaderboard=function(){document.getElementById('globalLeaderboardModal')?.classList.remove('show');};
+
 window.leaveJockRoom=async()=>{if(!jbRoomId||!jbUser)return;try{const ref=doc(jbDb,'jockRooms',jbRoomId);await runTransaction(jbDb,async tx=>{const s=await tx.get(ref);if(!s.exists())return;const d=s.data();const players={...(d.players||{})};delete players[jbUser.uid];if(Object.keys(players).length===0){tx.delete(ref);}else{let hostUid=d.hostUid;if(hostUid===jbUser.uid)hostUid=Object.values(players)[0].uid;tx.update(ref,{players,hostUid,updatedAt:serverTimestamp()});}});}catch(e){console.warn(e);}if(jbRoomUnsub)jbRoomUnsub();jbRoomUnsub=null;jbRoomId=null;jbRoomData=null;stopJBTimer();stopJBVoice();jbLastRoomStatus='';document.getElementById('jbRoomCode').textContent='No room joined';document.getElementById('jbRoomView').style.display='none';document.getElementById('jbRoomFlow').style.display='block';showJBFlow('choice');jbStatus('Left room. Create ya Join Room karo.');renderJBRoom();};
 
 onAuthStateChanged(jbAuth,u=>{jbUser=u;if(!u){jbStatus('Firebase login required.');return;}jbStatus('Logged in as '+jbName()+'. Create / Join Room.');});
-window.addEventListener('keydown',e=>{if(e.key==='Escape')closeJockRoom();});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJockRoom();closeGlobalLeaderboard();}});
 </script>
 
 
