@@ -882,6 +882,40 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(fbInitGrowthLayer,30
   .fb-nav{top:5px}
 }
 
+
+
+/* FUNBOX MOBILE GAMING + MEME FEED REDESIGN (preserves original features) */
+:root{color-scheme:dark;--fb-accent:#a855f7;--fb-cyan:#22d3ee;--fb-panel:#11111b;--fb-line:rgba(255,255,255,.10)}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{padding-bottom:calc(88px + env(safe-area-inset-bottom))!important;background:radial-gradient(ellipse at 50% -15%,rgba(124,58,237,.20),transparent 48%),#09090f!important}
+.fb-language-bar{position:sticky!important;top:0;z-index:999!important;backdrop-filter:blur(16px);background:rgba(9,9,15,.88)!important;border-bottom:1px solid var(--fb-line)}
+.fb-language-inner{max-width:1080px!important;margin:auto!important;padding:8px 12px!important}
+#fbHero{max-width:1080px;margin:12px auto!important;border-radius:22px!important;overflow:hidden}
+.card,.shop-launch-card{border:1px solid var(--fb-line)!important;background:linear-gradient(145deg,rgba(22,22,34,.98),rgba(13,13,21,.98))!important;box-shadow:0 12px 35px rgba(0,0,0,.18);border-radius:18px!important}
+body>section,body>main>section{max-width:1080px;margin-left:auto!important;margin-right:auto!important}
+#fbDailyDrop{border:1px solid rgba(168,85,247,.42)!important;background:linear-gradient(125deg,rgba(88,28,135,.35),rgba(8,145,178,.12),rgba(17,17,27,.96))!important;border-radius:20px!important}
+#fbDailyQuestion{font-size:clamp(16px,3vw,22px);line-height:1.45;font-weight:850}
+button,.btn,.friend-action,.shop-launch-btn{touch-action:manipulation;transition:transform .16s ease,filter .16s ease}
+button:active,.btn:active,.friend-action:active,.shop-launch-btn:active{transform:scale(.97)}
+input,select,textarea{font-size:16px!important;max-width:100%}
+img,video{max-width:100%}
+.fb-bottom-nav{position:fixed;z-index:9998;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:7px;background:rgba(15,15,24,.94);border:1px solid rgba(255,255,255,.13);border-radius:18px;box-shadow:0 10px 35px rgba(0,0,0,.48);backdrop-filter:blur(18px)}
+.fb-bottom-nav button{min-width:0;border:0;border-radius:12px;background:transparent;color:#d8d5e5;padding:8px 2px 7px;font-size:10px;font-weight:850;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15}
+.fb-bottom-nav button span{font-size:19px;line-height:1.1}.fb-bottom-nav button.active{background:linear-gradient(135deg,rgba(168,85,247,.28),rgba(34,211,238,.13));color:#fff;outline:1px solid rgba(168,85,247,.38)}
+.fb-toast{position:fixed;z-index:10020;left:50%;bottom:100px;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#171323;border:1px solid rgba(168,85,247,.45);border-radius:13px;padding:11px 15px;max-width:calc(100vw - 32px);font-size:13px;font-weight:800;box-shadow:0 12px 35px #0008;transition:all .2s ease}.fb-toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:800px){body{padding-bottom:28px!important}.fb-bottom-nav{left:50%;right:auto;bottom:14px;transform:translateX(-50%);width:min(520px,calc(100vw - 32px));opacity:.94}.fb-bottom-nav button{font-size:11px}}
+@media(max-width:600px){
+ body{font-size:14px!important}.fb-language-inner{gap:8px!important}.fb-language-select{max-width:72vw;padding:8px!important;font-size:13px!important}
+ #fbHero{margin:8px 8px 12px!important;padding:16px!important}
+ .card,.shop-launch-card{margin:10px 9px!important;padding:14px!important;border-radius:16px!important}
+ h1{font-size:clamp(25px,7vw,36px)!important}h2{font-size:19px!important}h3{font-size:16px!important}
+ .buttons,.friend-buttons,.fb-video-actions{gap:7px!important}.buttons button,.buttons .btn{flex:1 1 135px;min-height:42px}
+ .fb-video-grid{grid-template-columns:1fr!important}.fb-video-box,.fb-share-box{width:100%!important;max-height:84vh!important;padding:13px!important}
+ .friend-chat-tools button{flex:1}.friend-search-row{display:flex;gap:6px}.friend-search-input{min-width:0;width:100%}
+ .friend-chat-box{max-height:45vh!important}.fb-bottom-nav{left:7px;right:7px;gap:2px;padding:6px}.fb-bottom-nav button{font-size:9px}.fb-bottom-nav button span{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3529745369901340"
      crossorigin="anonymous"></script>
@@ -1194,6 +1228,14 @@ body:before,body:after{display:none!important}
 </head>
 
 <body>
+<nav class="fb-bottom-nav" id="fbBottomNav" aria-label="Quick navigation">
+  <button type="button" data-target="fbHero" class="active"><span>🏠</span>Home</button>
+  <button type="button" data-target="funGeneratorsSection"><span>🎮</span>Games</button>
+  <button type="button" data-target="friendRadarSection"><span>👥</span>Friends</button>
+  <button type="button" data-action="shop"><span>💎</span>Shop</button>
+  <button type="button" data-target="themeCard"><span>👤</span>Profile</button>
+</nav>
+
 <div class="fb-language-bar">
   <div class="fb-language-inner">
     <button class="fb-global-rank-btn" type="button" onclick="openGlobalLeaderboard()" title="Worldwide Top XP">🏆</button>
@@ -5830,14 +5872,20 @@ body:before,body:after{display:none!important}
   }
 
   window.startFunboxVideoCall=async function(){
+    if(window.__funboxCallStarting){return;}
     if(!auth?.currentUser||!db||!activeFriend){
-      alert('Pehle friend chat open karo.');
+      alert('Video call ke liye login karo aur pehle kisi friend ka chat open karo.');
       return;
     }
-    if(!navigator.mediaDevices?.getUserMedia||!window.RTCPeerConnection){
-      alert('Is browser mein video call supported nahi hai.');
+    if(!activeFriendChatId){
+      alert('Friend chat ID nahi mili. Friends list se chat dobara open karke try karo.');
       return;
     }
+    if(!window.isSecureContext || !navigator.mediaDevices?.getUserMedia || !window.RTCPeerConnection){
+      alert('Video call ke liye HTTPS page aur camera/mic support chahiye. Chrome mein site permissions se Camera aur Microphone allow karo.');
+      return;
+    }
+    window.__funboxCallStarting=true;
     try{
       fbVideoChatId=activeFriendChatId;
       fbVideoRole='caller';
@@ -5861,8 +5909,11 @@ body:before,body:after{display:none!important}
       await fbVideoWatch();
     }catch(e){
       console.warn('start video call failed',e);
-      alert('Camera/mic permission ya video call setup fail hua.');
+      const reason = e?.name==='NotAllowedError' ? 'Camera/mic permission block hai. Chrome site settings mein dono allow karo.' : e?.name==='NotFoundError' ? 'Camera ya microphone device nahi mila.' : e?.message || 'Unknown setup error';
+      alert('Video call start nahi hui: '+reason);
       endFunboxVideoCall();
+    }finally{
+      window.__funboxCallStarting=false;
     }
   };
 
@@ -6579,6 +6630,24 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJockRoom();close
 
 
 
+
+
+<script>
+(function(){
+  const nav=document.getElementById('fbBottomNav');
+  if(!nav)return;
+  nav.addEventListener('click',function(e){
+    const b=e.target.closest('button');if(!b)return;
+    nav.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));
+    if(b.dataset.action==='shop'){if(typeof window.openShop==='function')window.openShop();else{const el=document.getElementById('shopModal');if(el)el.classList.add('show');}return;}
+    const target=document.getElementById(b.dataset.target);
+    if(target){target.scrollIntoView({behavior:'smooth',block:'start'});}
+    else if(b.dataset.target==='themeCard'){const profile=document.querySelector('.profile');if(profile)profile.scrollIntoView({behavior:'smooth',block:'start'});else if(typeof window.fbToast==='function')window.fbToast('Profile section neeche milega.');}
+  });
+  // Keep the top-level page from getting hidden behind the fixed navigation.
+  window.addEventListener('load',()=>{document.body.style.paddingBottom='calc(88px + env(safe-area-inset-bottom))';});
+})();
+</script>
 
 </body>
 </html>
