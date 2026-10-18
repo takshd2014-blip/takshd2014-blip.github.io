@@ -1264,6 +1264,14 @@ body:before,body:after{display:none!important}
   @media(prefers-reduced-motion:reduce){.fb-quicktile{transition:none}}
 </style>
 
+<style id="funbox-hide-duplicate-mobile-nav">
+/* Hide only the extra Home/Games/Friends/Shop/Profile bar on phones.
+   Keep the existing navigation underneath it and leave desktop unchanged. */
+@media (max-width: 700px) {
+  #fbBottomNav { display: none !important; }
+  body { padding-bottom: 16px !important; }
+}
+</style>
 </head>
 
 <body>
