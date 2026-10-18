@@ -7,19 +7,20 @@
   <link rel="preconnect" href="https://firebaseinstallations.googleapis.com" crossorigin>
 
   <!-- FunBox v3 + Language fix v4: reliable Google Translate cookie/reload -->
-<title>FunBox — Boredom? Not Today.</title>
-  <meta name="description" content="FunBox — jokes, roasts, random facts, future scanner, fate randomizer and more.">
+<title>FunBox — Mini Games, Jokes & Daily Challenges</title>
+  <meta name="description" content="Play quick mini-games, try daily challenges, generate jokes and funny results, earn virtual XP and diamonds, and share results with friends on FunBox.">
+  <link rel="canonical" href="https://funbox12.pages.dev/">
   <meta name="theme-color" content="#09090f">
 
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="FunBox — Boredom? Not Today.">
-  <meta property="og:description" content="Jokes, roasts, games, daily challenges and random chaos. Try FunBox and send your result to a friend.">
+  <meta property="og:title" content="FunBox — Mini Games, Jokes & Daily Challenges">
+  <meta property="og:description" content="Play quick mini-games, try daily challenges, generate funny results, earn virtual XP and diamonds, and share with friends.">
   <meta property="og:image" content="222.png">
   <meta property="og:site_name" content="FunBox">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="FunBox — Boredom? Not Today.">
-  <meta name="twitter:description" content="Jokes, roasts, games and daily challenges.">
+  <meta name="twitter:title" content="FunBox — Mini Games, Jokes & Daily Challenges">
+  <meta name="twitter:description" content="Play mini-games, try daily challenges, generate jokes and share results with friends.">
   <meta name="twitter:image" content="222.png">
 
 
@@ -1225,6 +1226,44 @@ body:before,body:after{display:none!important}
 }
 </style>
 
+
+<style id="funbox-layout-refresh">
+  .fb-quickhub{max-width:1100px;margin:16px auto 22px;padding:16px;border:1px solid rgba(255,255,255,.1);border-radius:22px;background:linear-gradient(145deg,rgba(22,22,35,.96),rgba(10,10,18,.96));}
+  .fb-quickhub-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:0 2px 13px}
+  .fb-quickhub-head h2{margin:0;font-size:clamp(20px,3vw,25px)}
+  .fb-quickhub-head p{margin:4px 0 0;opacity:.68;font-size:12px}
+  .fb-quickgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .fb-quicktile{min-width:0;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:12px 7px;border:1px solid rgba(255,255,255,.09);border-radius:16px;background:rgba(255,255,255,.045);color:inherit;text-align:center;font-weight:800;cursor:pointer;transition:transform .16s,border-color .16s,background .16s}
+  .fb-quicktile:hover{transform:translateY(-2px);border-color:rgba(168,85,247,.5);background:rgba(168,85,247,.1)}
+  .fb-quicktile .fb-quickicon{width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,rgba(168,85,247,.22),rgba(34,211,238,.12));font-size:24px}
+  .fb-quicktile .fb-quicklabel{font-size:12px;line-height:1.2}
+  .fb-info-section{max-width:1100px;margin:18px auto;padding:clamp(16px,3vw,26px);border:1px solid rgba(255,255,255,.1);border-radius:20px;background:rgba(15,18,31,.76);color:inherit;scroll-margin-top:18px}
+  .fb-info-section h2{margin:0 0 12px;font-size:clamp(21px,4vw,29px)}
+  .fb-info-section h3{margin:20px 0 7px;font-size:17px}
+  .fb-info-section p,.fb-info-section li{line-height:1.65;opacity:.9}
+  .fb-info-section ul,.fb-info-section ol{padding-left:22px}
+  .fb-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .fb-info-card{padding:14px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+  .fb-info-card h3{margin-top:0}
+  .fb-info-note{padding:12px;border-radius:12px;background:rgba(255,255,255,.055);font-size:13px}
+  .fb-info-section details{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+  .fb-info-section details:last-child{border-bottom:0}
+  .fb-info-section summary{cursor:pointer;font-weight:800}
+  .fb-footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;padding:14px 12px 110px}
+  .fb-footer-links a{color:inherit;opacity:.82;text-decoration:underline;text-underline-offset:3px;font-size:13px}
+  @media(max-width:650px){
+    .fb-quickhub{margin:12px 9px;padding:12px;border-radius:18px}
+    .fb-quickgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+    .fb-quicktile{min-height:79px;padding:8px 3px;border-radius:13px;gap:5px}
+    .fb-quicktile .fb-quickicon{width:36px;height:36px;border-radius:12px;font-size:21px}
+    .fb-quicktile .fb-quicklabel{font-size:10px}
+    .fb-info-section{margin:13px 9px;padding:15px;border-radius:16px}
+    .fb-info-grid{grid-template-columns:1fr}
+    .fb-footer-links{gap:10px;padding-bottom:110px}
+  }
+  @media(prefers-reduced-motion:reduce){.fb-quicktile{transition:none}}
+</style>
+
 </head>
 
 <body>
@@ -1467,6 +1506,7 @@ body:before,body:after{display:none!important}
     <button type="button" onclick="fbScroll('guessGameSection')">🎯 Games</button>
     <button type="button" onclick="fbScroll('friendRadarSection')">👥 Friends</button>
     <button type="button" onclick="fbScroll('funboxFaq')">❓ FAQ</button>
+    <button type="button" onclick="fbScroll('funboxGuides')">📘 Guides</button>
   </nav>
 
   <section class="fb-hero" id="fbHero">
@@ -1478,6 +1518,24 @@ body:before,body:after{display:none!important}
       <button class="btn secondary" type="button" onclick="fbScroll('funGeneratorsSection')">🎲 Explore FunBox</button>
     </div>
   </section>
+
+<section class="fb-quickhub" aria-label="FunBox quick access">
+  <div class="fb-quickhub-head">
+    <div><h2>⚡ Quick Access</h2><p>Tap an icon and jump straight in.</p></div>
+  </div>
+  <div class="fb-quickgrid">
+    <button class="fb-quicktile" type="button" onclick="fbDailyAction()"><span class="fb-quickicon">🔥</span><span class="fb-quicklabel">Daily Drop</span></button>
+    <button class="fb-quicktile" type="button" onclick="fbScroll('funGeneratorsSection')"><span class="fb-quickicon">🎲</span><span class="fb-quicklabel">Generators</span></button>
+    <button class="fb-quicktile" type="button" onclick="fbScroll('guessGameSection')"><span class="fb-quickicon">🎮</span><span class="fb-quicklabel">Mini Games</span></button>
+    <button class="fb-quicktile" type="button" onclick="openShop()"><span class="fb-quickicon">💎</span><span class="fb-quicklabel">Shop</span></button>
+    <button class="fb-quicktile" type="button" onclick="fbScroll('friendRadarSection')"><span class="fb-quickicon">👥</span><span class="fb-quicklabel">Friends</span></button>
+    <button class="fb-quicktile" type="button" onclick="fbScroll('jockBobloRoomSection')"><span class="fb-quickicon">🕹️</span><span class="fb-quicklabel">Online Room</span></button>
+    <button class="fb-quicktile" type="button" onclick="fbScroll('funboxFaq')"><span class="fb-quickicon">❓</span><span class="fb-quicklabel">FAQ & Help</span></button>
+    <button class="fb-quicktile" type="button" onclick="fbScroll('funboxGuides')"><span class="fb-quickicon">📘</span><span class="fb-quicklabel">Guides</span></button>
+  </div>
+</section>
+
+
 
   <section class="card" id="fbDailyDrop">
     <div class="fb-daily">
@@ -2094,8 +2152,81 @@ body:before,body:after{display:none!important}
 </div>
 
 
+
+<section id="funboxGuides" class="fb-info-section" aria-labelledby="funboxGuidesTitle">
+  <h2 id="funboxGuidesTitle">📘 FunBox Guides & Help</h2>
+  <p>Quick guides for using FunBox. Follow the instructions shown inside each game, because individual rounds and features may change as the site is updated.</p>
+  <div class="fb-info-grid">
+    <article class="fb-info-card"><h3>🎯 Guess the Number</h3><ol><li>Check the number range displayed by the game.</li><li>Enter one guess and submit it.</li><li>Use the higher/lower hint, if shown, to narrow the range.</li><li>Try to solve it in fewer attempts while following the round counter.</li></ol><p><strong>Tip:</strong> Start near the middle of the range; a higher/lower hint can help remove many possibilities.</p></article>
+    <article class="fb-info-card"><h3>⏱️ 10-Second Challenge</h3><ol><li>Read the target and instructions for the round.</li><li>Press start and follow the on-screen timer.</li><li>Compare your result with the target when the round ends.</li><li>Use the score and daily-use counter shown in the game.</li></ol><p><strong>Tip:</strong> Targets may change between rounds, so read the current instructions each time.</p></article>
+    <article class="fb-info-card"><h3>🏆 XP, Levels & Titles</h3><p>XP tracks your progress in FunBox. Supported activities may increase XP and update your level or title. Your profile shows the progress saved by the current version.</p><p>XP is a virtual score, not money, and cannot be exchanged for cash.</p></article>
+    <article class="fb-info-card"><h3>💎 Diamonds & Shop</h3><p>Diamonds are a separate virtual balance for eligible in-site rewards or shop unlocks. The Shop displays item costs and ownership status before you buy.</p><p>Diamonds are not cryptocurrency, have no cash value, and cannot be redeemed for money.</p></article>
+    <article class="fb-info-card"><h3>🎲 Daily Drop & Challenges</h3><p>Open Daily Drop, read the prompt, generate or complete the result, then use the available share or copy control. Daily availability and rewards follow the counter shown on the site.</p></article>
+    <article class="fb-info-card"><h3>👥 Friends, Chat & Sharing</h3><p>Sign in when asked, connect with a friend using the friend controls, then use chat or sharing. Only share images and messages you have permission to share. Avoid sending private information to people you do not know.</p></article>
+  </div>
+  <h3>🧰 Troubleshooting</h3>
+  <ul>
+    <li><strong>Progress not syncing:</strong> Make sure both devices use the same signed-in account, then refresh and check your internet connection.</li>
+    <li><strong>Friends or chat are empty:</strong> Sign in, complete the friend connection steps, and refresh the page.</li>
+    <li><strong>Camera or microphone prompt repeats:</strong> Check this site's browser permissions and confirm no other app is using the device. Calls are optional; games can be used without starting a call.</li>
+    <li><strong>Language did not change:</strong> Select the language again and allow the translation service to load. Some dynamically generated game text may not translate immediately.</li>
+    <li><strong>Mobile page looks broken:</strong> Refresh, update your browser, and check whether an extension is blocking scripts.</li>
+  </ul>
+  <p class="fb-info-note">FunBox is for entertainment. Generated jokes, random results, and game outcomes are not predictions or professional advice.</p>
+</section>
+
+<section id="funboxPrivacy" class="fb-info-section" aria-labelledby="funboxPrivacyTitle">
+  <h2 id="funboxPrivacyTitle">🔐 Privacy Policy</h2>
+  <p><strong>Last updated: 18 October 2026</strong></p>
+  <p>This policy describes how FunBox at <strong>https://funbox12.pages.dev/</strong> may handle information. The information involved depends on which features you choose to use.</p>
+  <h3>Information that may be processed</h3>
+  <ul>
+    <li><strong>Account:</strong> If you sign in, Firebase Authentication processes account identifiers and sign-in details needed to authenticate you.</li>
+    <li><strong>Profile and progress:</strong> Username/profile details, XP, virtual diamonds, streaks, unlocks and game progress may be stored in your browser and, when cloud sync is used, in Firebase Firestore.</li>
+    <li><strong>Friends and chat:</strong> If you use social features, friend connections, messages, shared results and images you send may be processed and stored to make those features work.</li>
+    <li><strong>Browser storage:</strong> Local storage may remember settings, preferences and game progress on your device. Clearing site data can remove locally saved or unsynced information.</li>
+  </ul>
+  <h3>Analytics, cookies and advertising</h3>
+  <p>Google Analytics is configured on this site to help understand visits and feature usage. Analytics services may use cookies or similar technologies and process technical or usage information such as pages viewed, interaction events, browser/device details and identifiers, according to the provider's settings and policies.</p>
+  <p>FunBox may use Google AdSense or other advertising services if enabled and approved. Google and its partners may use cookies or similar technologies to serve, measure, limit or personalize ads where permitted by law and applicable consent/settings. Third-party vendors, including Google, may use information from visits to this and other sites to provide advertising services. You can review available ad-personalization choices in Google Ads Settings and consult Google's privacy/advertising resources. This statement does not mean ads are currently serving or that AdSense has approved the site.</p>
+  <h3>Camera and microphone</h3>
+  <p>Camera and microphone access is requested when you choose to start a supported voice/video call. Your browser asks for permission. If you deny permission, the call may not work, but ordinary browsing and games should remain available. Close the call or leave the page to stop the local media stream.</p>
+  <h3>How information is used and shared</h3>
+  <p>Information may be used to provide sign-in, profiles, progress sync, friends, chat, sharing, site settings, analytics, reliability and security. FunBox uses third-party providers including Firebase, Google Analytics and translation or advertising services where enabled. Those providers process information under their own terms and privacy policies.</p>
+  <h3>Your choices</h3>
+  <ul><li>Use available sign-out controls to end a session.</li><li>Manage camera/microphone permissions and cookies in your browser.</li><li>Clear browser site data to remove local data, keeping in mind that unsynced progress may be lost.</li><li>Use available Google account/ad settings to manage ad-personalization choices.</li><li>For privacy or data questions, use the support contact published by the site operator. Never send passwords or verification codes.</li></ul>
+  <h3>Updates</h3><p>This policy may change when the site or its service providers change. The date above should be updated whenever a meaningful revision is published.</p>
+</section>
+
+<section id="funboxTerms" class="fb-info-section" aria-labelledby="funboxTermsTitle">
+  <h2 id="funboxTermsTitle">📄 Terms of Use</h2>
+  <p><strong>Last updated: 18 October 2026</strong></p>
+  <p>FunBox provides entertainment tools, jokes, generated results, mini-games, profiles, virtual rewards and optional social features. By using the site, you agree to use it lawfully and responsibly.</p>
+  <h3>Respectful and safe use</h3>
+  <ul><li>Do not harass, threaten, impersonate, spam or target other users.</li><li>Do not attempt to access another user's account, messages or data without permission.</li><li>Do not share content that violates another person's rights or applicable law.</li><li>Do not post passwords, authentication codes, financial information or other sensitive personal data in profiles or chats.</li></ul>
+  <h3>Virtual items and generated results</h3>
+  <p>XP, levels, titles, diamonds and unlocks are virtual in-site features. They have no cash value, are not transferable money, and are not redeemable for cash. Jokes, randomizers and game outputs are for entertainment and may be inaccurate or unexpected.</p>
+  <h3>Availability and changes</h3>
+  <p>Features may be updated, temporarily unavailable or changed to maintain the site. We do not promise uninterrupted access or that every feature will work on every device or network.</p>
+  <h3>Third-party services</h3>
+  <p>Sign-in, cloud data, analytics, translation, and any enabled advertising may depend on third-party services and their own terms and policies.</p>
+</section>
+
+<section id="funboxContact" class="fb-info-section" aria-labelledby="funboxContactTitle">
+  <h2 id="funboxContactTitle">✉️ Contact & Support</h2>
+  <p>Need help with a game, account sync, or a site issue? Before contacting support, include the feature name, device/browser, and a short description of what happened. Never send your password or verification code.</p>
+  <p class="fb-info-note"><strong>Support email:</strong> A public support email has not been provided in the current site source, so this page does not display a made-up address. Add an email you control here before publishing if you want visitors to contact you directly.</p>
+</section>
+
 <footer>
   FunBox © 2026 • Boredom? Not Today.
+  <nav class="fb-footer-links" aria-label="Helpful pages">
+    <a href="#funboxGuides">📘 Guides</a>
+    <a href="#funboxFaq">❓ FAQ</a>
+    <a href="#funboxPrivacy">🔐 Privacy Policy</a>
+    <a href="#funboxTerms">📄 Terms of Use</a>
+    <a href="#funboxContact">✉️ Contact</a>
+  </nav>
 </footer>
 
 
