@@ -1686,8 +1686,8 @@ body:before,body:after{display:none!important}
       <div id="friendChatBox" class="friend-chat-box" style="margin-top:10px"></div>
       <div id="friendReplyBar" class="friend-reply-bar"><span id="friendReplyText"></span><button class="friend-reply-cancel" type="button" onclick="cancelFriendReply()">✕</button></div>
       <div class="friend-chat-tools">
-        <button class="friend-chat-tool fb-file-tool" type="button" onclick="document.getElementById('friendPhotoInput').click()">📎 File</button>
-        <input id="friendPhotoInput" type="file" style="display:none" onchange="sendFriendPhoto(this)">
+        <button class="friend-chat-tool fb-file-tool" type="button" onclick="document.getElementById('friendPhotoInput').click()">📷 Photo / 🎵 Audio</button>
+        <input id="friendPhotoInput" type="file" accept="image/*,audio/*" style="display:none" onchange="sendFriendPhoto(this)">
         <button class="friend-chat-tool" type="button" onclick="startFunboxVideoCall()">📹 Video Call</button>
       </div>
       <div class="friend-search-row" style="margin-top:10px">
@@ -6830,28 +6830,31 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJockRoom();close
     btn.setAttribute('aria-expanded',String(expanded));
     btn.innerHTML=expanded?'− Read less':'＋ Read more';
   };
-  // Replace the existing photo-only sender with file attachment support. Small files are embedded
-  // in the chat document; larger files need Firebase Storage, which is not configured in this HTML.
+  // Keep the original photo sender/compression. Small audio/video clips are optional
+  // and embedded in Firestore only under a conservative size limit; no Storage billing required.
+  const originalPhotoSender = window.sendFriendPhoto;
   window.sendFriendPhoto=async function(input){
-    const file=input?.files?.[0];
-    if(!file||!window.activeFriendChatId && !document.getElementById('friendChatBox') || !window.auth?.currentUser || !window.db){
-      // The app's auth/db/chat identifiers live inside its main closure, so use the original sender as fallback if unavailable.
-      if(typeof window.__funboxOriginalSendFriendPhoto==='function')return window.__funboxOriginalSendFriendPhoto(input);
+    const file=input?.files?.[0]; if(!file)return;
+    if(file.type.startsWith('image/')){
+      if(typeof originalPhotoSender==='function') return originalPhotoSender(input);
+      alert('Photo sender load nahi hua. Page refresh karke try karo.'); input.value=''; return;
     }
-    if(!file)return;
-    if(file.size>MAX_FILE_BYTES){alert('File 430 KB se badi hai. Is version mein Firestore ki safe limit ke liye chhoti file bhejo. Badi files ke liye Firebase Storage setup karna hoga.');input.value='';return;}
-    // The original sender owns private closure variables (activeFriendChatId, auth, db), so bridge through a helper installed below.
-    if(typeof window.__funboxSendAnyFile!=='function'){
-      alert('File sharing setup load nahi hua. Page refresh karke try karo.');input.value='';return;
+    if(!file.type.startsWith('audio/')){
+      alert('Photo ya audio select karo.');input.value='';return;
     }
+    if(file.size>MAX_FILE_BYTES){alert('Audio clip 430 KB se chhoti honi chahiye. Free Firestore setup mein badi media files reliably send nahi ho sakti.');input.value='';return;}
+    if(typeof window.__funboxSendAnyFile!=='function'){alert('Media sharing setup load nahi hua. Page refresh karke try karo.');input.value='';return;}
     try{await window.__funboxSendAnyFile(file);input.value='';}
-    catch(e){console.warn('FunBox file send failed',e);alert('File send nahi hui. Connection aur chat open hona check karo.');input.value='';}
+    catch(e){console.warn('FunBox media send failed',e);alert('Media send nahi hui. Chat open aur internet connection check karo.');input.value='';}
   };
   window.__funboxRenderFileMessage=function(m){
     if(m.type==='file'&&m.fileData){
       const name=esc(m.fileName||'attachment');
-      const mime=esc(m.fileMime||'application/octet-stream');
-      return '<div class="friend-file-card"><span class="friend-file-icon">📎</span><div><div class="friend-file-name">'+name+'</div><div class="friend-file-meta">'+esc(formatBytes(Number(m.fileSize||0)))+'</div><a href="'+m.fileData+'" download="'+name+'" target="_blank" rel="noopener noreferrer">Download file</a></div></div>';
+      const mime=String(m.fileMime||'application/octet-stream');
+      const safeData=/^data:audio\//i.test(m.fileData)?m.fileData:'';
+      let media='';
+      if(safeData&&mime.startsWith('audio/'))media='<audio controls preload="metadata" src="'+safeData+'" style="display:block;max-width:100%;margin-top:7px"></audio>';
+      return '<div class="friend-file-card"><span class="friend-file-icon">'+(mime.startsWith('audio/')?'🎵':'📎')+'</span><div style="min-width:0"><div class="friend-file-name">'+name+'</div><div class="friend-file-meta">'+esc(formatBytes(Number(m.fileSize||0)))+'</div>'+media+(safeData?'<a href="'+safeData+'" download="'+name+'" target="_blank" rel="noopener noreferrer">Download</a>':'')+'</div></div>';
     }
     if(m.type==='image'&&m.image)return '<div class="friend-msg-text">'+esc(m.text||'📷 Photo')+'</div><img class="friend-image" src="'+m.image+'" alt="Shared photo" loading="lazy">';
     return '<div class="friend-msg-text">'+linkify(m.text||'')+'</div>';
