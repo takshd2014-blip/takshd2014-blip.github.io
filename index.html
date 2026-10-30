@@ -2192,7 +2192,7 @@ body:before,body:after{display:none!important}
 <section id="funboxContact" class="fb-info-section" aria-labelledby="funboxContactTitle">
   <h2 id="funboxContactTitle">✉️ Contact & Feedback</h2>
   <p>Have an idea, opinion, suggestion, or feedback about FunBox? Share it with us! Tell us what you liked, what could be improved, or let us know if you find a bug. Every thoughtful suggestion helps make FunBox better.</p>
-  <p class="fb-info-note"><strong>📩 Email us:</strong> <a href="mailto:takshd2014@gmail.com" style="color:#3b82f6;text-decoration:underline;text-underline-offset:3px;font-weight:700;overflow-wrap:anywhere">takshd2014@gmail.com</a></p>
+  <p class="fb-info-note"><strong>📩 Email us:</strong> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=takshd2014%40gmail.com" target="_blank" rel="noopener noreferrer" style="color:#3b82f6;text-decoration:underline;text-underline-offset:3px;font-weight:700;overflow-wrap:anywhere">takshd2014@gmail.com</a></p>
   <p class="fb-info-note">Click the email link to send your thoughts. Please never include passwords or verification codes in your message.</p>
 </section>
 
@@ -6865,6 +6865,67 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJockRoom();close
     }catch(e){ console.warn('Copy result failed',e); if(typeof window.fbToast==='function')window.fbToast('Copy nahi hua.'); }
   };
   window.addEventListener('keydown',e=>{ if(e.key==='Escape') window.closeFunboxResultMail(); });
+})();
+</script>
+
+
+<style id="funbox-final-visual-fix">
+  /* Cleaner, more consistent layout and avoid GPU/backdrop-filter artefacts. */
+  html { scroll-behavior:smooth; }
+  body { overflow-x:hidden; }
+  .fb-language-bar, .fb-bottom-nav, .fb-result-mail-modal,
+  .friend-live-toast, .fb-global-rank-modal { -webkit-backdrop-filter:none!important; backdrop-filter:none!important; }
+  .fb-language-bar { background:rgba(9,9,15,.98)!important; }
+  .fb-bottom-nav { background:rgba(15,15,24,.98)!important; }
+  .fb-quickhub, .fb-readmore-shell, .fb-info-section, .card, .generator, .mini-game {
+    box-shadow:0 12px 32px rgba(0,0,0,.22);
+  }
+  .fb-quicktile, .btn, .fb-read-toggle, .fb-footer-links a, .fb-info-section a {
+    transition:background .18s ease,border-color .18s ease,transform .18s ease,color .18s ease;
+  }
+  .fb-quicktile:focus-visible, .btn:focus-visible, .fb-read-toggle:focus-visible,
+  a:focus-visible, button:focus-visible { outline:2px solid #b794ff; outline-offset:3px; }
+  .fb-readmore-shell { border-color:rgba(168,85,247,.38); }
+  .fb-readmore-shell .fb-read-toggle { font-size:14px; }
+  #fbMoreContent { width:min(1100px,calc(100% - 20px)); }
+  #fbMoreContent.fb-more-collapsed { display:none!important; }
+  #fbMoreContent:not(.fb-more-collapsed) { display:block!important; animation:fbMoreReveal .24s ease both; }
+  @keyframes fbMoreReveal { from {opacity:0;transform:translateY(-7px)} to {opacity:1;transform:translateY(0)} }
+  #funboxContact a[href*="mail.google.com"] { display:inline-flex;align-items:center;gap:7px;padding:9px 13px;margin-top:4px;border:1px solid rgba(59,130,246,.35);border-radius:12px;background:rgba(37,99,235,.12);color:#60a5fa!important;font-weight:850;text-decoration:none!important; }
+  #funboxContact a[href*="mail.google.com"]:hover { background:rgba(37,99,235,.22);border-color:#60a5fa;transform:translateY(-1px); }
+  .fb-result-mail-card { -webkit-backdrop-filter:none!important;backdrop-filter:none!important; }
+  @media(max-width:650px) { #fbMoreContent{width:calc(100% - 12px)} }
+  @media(prefers-reduced-motion:reduce) { html{scroll-behavior:auto}.fb-readmore-shell,.fb-quicktile,.btn{animation:none!important;transition:none!important} }
+</style>
+<script id="funbox-final-interaction-fixes">
+(function(){
+  function setMore(open){
+    const content=document.getElementById('fbMoreContent');
+    const btn=document.getElementById('fbReadMoreToggle');
+    if(!content||!btn)return false;
+    content.classList.toggle('fb-more-collapsed',!open);
+    content.hidden=!open;
+    btn.setAttribute('aria-expanded',String(open));
+    btn.textContent=open?'− Read less':'＋ Read more';
+    return true;
+  }
+  window.toggleFunboxMore=function(forceOpen){
+    const content=document.getElementById('fbMoreContent');
+    const currentlyOpen=!!content && !content.classList.contains('fb-more-collapsed') && !content.hidden;
+    setMore(typeof forceOpen==='boolean'?forceOpen:!currentlyOpen);
+  };
+  document.addEventListener('click',function(e){
+    const toggle=e.target.closest('#fbReadMoreToggle');
+    if(toggle){e.preventDefault();window.toggleFunboxMore();return;}
+    const faqLink=e.target.closest('a[href="#funboxFaq"],button[onclick*="funboxFaq"]');
+    if(faqLink){
+      const faq=document.getElementById('funboxFaq');
+      if(faq){setMore(true);requestAnimationFrame(()=>faq.scrollIntoView({behavior:'smooth',block:'start'}));}
+    }
+  });
+  // The information panel starts closed consistently, including after browser restore.
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setMore(false),{once:true});
+  else setMore(false);
 })();
 </script>
 
