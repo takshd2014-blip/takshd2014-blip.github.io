@@ -83,7 +83,11 @@ function fbDailyRender(){
 }
 function fbScroll(id){
   const el=document.getElementById(id);
-  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  const content=document.getElementById('fbMoreContent');
+  if(el && content && content.contains(el) && content.classList.contains('fb-more-collapsed') && typeof window.toggleFunboxMore==='function'){
+    window.toggleFunboxMore(true);
+  }
+  if(el) requestAnimationFrame(()=>el.scrollIntoView({behavior:'smooth',block:'start'}));
 }
 function fbToast(msg){
   let t=document.getElementById('fbToast');
@@ -1218,7 +1222,7 @@ body:before,body:after{display:none!important}
   .fb-trend:last-child { grid-column: 1 / -1; }
   #fbDailyDrop { scroll-margin-top: 12px; }
   #funGeneratorsSection, #guessGameSection, #friendRadarSection, #funboxFaq,
-  #jockBobloRoomSection, #accessCodeSection, #dailyCodeSection { scroll-margin-top: 14px; }
+  #jockBobloRoomSection, #jockBobloGameSection, #dailyCodeSection { scroll-margin-top: 14px; }
 }
 @media (max-width: 380px) {
   .fb-nav { left: 5px !important; right: 5px !important; padding: 4px !important; }
@@ -1262,6 +1266,21 @@ body:before,body:after{display:none!important}
     .fb-footer-links{gap:10px;padding-bottom:110px}
   }
   @media(prefers-reduced-motion:reduce){.fb-quicktile{transition:none}}
+</style>
+
+<style id="funbox-result-and-readmore-polish">
+.fb-result-mail-source{display:none!important}
+.fb-readmore-shell{max-width:1100px;margin:26px auto 12px;padding:17px 18px;border:1px solid rgba(139,92,246,.28);border-radius:20px;background:linear-gradient(135deg,rgba(24,22,42,.96),rgba(10,14,27,.96));box-shadow:0 12px 35px rgba(0,0,0,.18)}
+.fb-readmore-intro{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}.fb-readmore-intro strong{font-size:17px}.fb-readmore-intro span{font-size:12px;color:#a9acc1}
+.fb-readmore-shell .fb-read-toggle{width:100%;justify-content:center;margin:0;min-height:46px;border:1px solid rgba(168,85,247,.48)!important;background:rgba(139,92,246,.12)!important;color:#f4eaff!important;font-weight:850;letter-spacing:.3px}
+#fbMoreContent{max-width:1100px;margin:0 auto 22px}#fbMoreContent .fb-info-section{margin-top:13px;margin-bottom:13px}#funboxFaq{margin-bottom:24px}
+.fb-result-mail-modal{z-index:1200;backdrop-filter:blur(10px);background:rgba(3,5,12,.82)}
+.fb-result-mail-card{width:min(520px,100%);max-height:min(88vh,820px);overflow:auto;padding:clamp(20px,4vw,30px);border:1px solid rgba(130,150,255,.28);border-radius:24px;background:radial-gradient(circle at 100% 0,rgba(91,75,170,.19),transparent 36%),linear-gradient(155deg,#171827,#0c0e18 74%);box-shadow:0 30px 100px rgba(0,0,0,.62);color:#f5f6ff}
+.fb-mail-topline{display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:2.5px;font-weight:900;color:#aeb3d2}.fb-mail-close{width:34px;height:34px;border-radius:11px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:16px}
+.fb-mail-envelope{width:62px;height:62px;display:grid;place-items:center;margin:20px auto 10px;border-radius:19px;background:linear-gradient(145deg,rgba(139,92,246,.28),rgba(59,130,246,.18));font-size:30px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.fb-mail-caption{text-align:center;font-size:10px;letter-spacing:1.8px;color:#a9a2df;font-weight:900;margin-bottom:20px}.fb-mail-meta{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:13px}.fb-mail-meta span{width:46px;color:#8d93a9}.fb-mail-meta strong{font-weight:750;color:#e9ebfa}.fb-mail-subject-label{margin-top:20px;color:#9299b4;font-size:11px;text-transform:uppercase;letter-spacing:1.4px}.fb-result-mail-card h2{font-size:clamp(21px,5vw,28px);line-height:1.2;margin:6px 0 15px;color:#fff}.fb-mail-body{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;font-size:15px;color:#e0e4f2;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:rgba(255,255,255,.045);padding:18px;min-height:88px}.fb-mail-time{margin-top:12px;color:#8289a4;font-size:11px}.fb-mail-actions{display:grid;grid-template-columns:1.2fr 1fr .8fr;gap:8px;margin-top:20px}.fb-mail-actions .btn{margin:0;min-width:0;padding:11px 8px;font-size:12px}
+@media(max-width:700px){.fb-readmore-shell{margin:18px 10px 10px;padding:14px;border-radius:17px}#fbMoreContent{padding:0 9px}.fb-mail-actions{grid-template-columns:1fr 1fr}.fb-mail-actions .btn:last-child{grid-column:1/-1}.fb-result-mail-card{border-radius:20px}}
+@media(prefers-reduced-motion:reduce){.fb-result-mail-card{scroll-behavior:auto}}
 </style>
 
 </head>
@@ -1579,21 +1598,7 @@ body:before,body:after{display:none!important}
     <button class="btn" type="button" onclick="fbScroll('funGeneratorsSection')">Start Chaos</button>
   </section>
 
-
-  <section class="card" id="funboxFaq">
-    <h2>❓ FunBox FAQ</h2>
-    <p class="muted">Quick answers — no boring manual.</p>
-    <button class="btn secondary fb-read-toggle" id="fbReadMoreToggle" type="button" aria-expanded="false" onclick="window.toggleFunboxMore()">＋ Read more</button>
-    <div class="fb-seo-faq fb-more-collapsed" id="fbFaqAnswers">
-      <details><summary>FunBox kya hai?</summary><p>FunBox ek quick entertainment site hai jahan jokes, roasts, random facts, mini-games, daily drops aur friend challenges milte hain.</p></details>
-      <details><summary>Daily Drop kya karta hai?</summary><p>Har din ek naya challenge prompt milta hai. Result nikalke friend ko share kar sakte ho.</p></details>
-      <details><summary>Friend ko challenge kaise bheju?</summary><p>Daily Drop ke “Challenge a Friend” button se share/copy karo. Link khulne par friend ko wahi challenge dikhaya jayega.</p></details>
-      <details><summary>XP aur coins same hain?</summary><p>Nahi. FunBox mein XP progression ke liye hai aur coins alag reward/shop system ke liye.</p></details>
-      <details><summary>FunBox mobile par chalega?</summary><p>Haan, layout mobile screens ke liye responsive hai.</p></details>
-    </div>
-  </section>
-
-  <section class="friend-notice-card" id="friendNewMessagesBar">
+<section class="friend-notice-card" id="friendNewMessagesBar">
     <div class="friend-notice-head">
       <strong>📨 New messages from</strong>
       <button class="friend-mini" type="button" onclick="enableFriendNotifications()">🔔 Notifications</button>
@@ -1842,17 +1847,11 @@ body:before,body:after{display:none!important}
 
     </div>
 
-    <div id="result" class="result empty">
+    <div id="result" class="result empty fb-result-mail-source" aria-hidden="true">
       Your result will appear here...
     </div>
 
-    <div class="share-result-wrap">
-      <button class="btn secondary share-result-btn" onclick="shareResult()">
-        📤 Share Result
-      </button>
-    </div>
-
-  </section>
+</section>
 
 
   <!-- =========================
@@ -1996,22 +1995,11 @@ body:before,body:after{display:none!important}
 
 
 
-  <!-- =========================
-       ACCESS CODE + JOCK BOBLO GAME
-  ========================== -->
-
-  <section class="card" id="accessCodeSection">
-    <h2>🔑 Access Code</h2>
-    <p class="muted">Promo code pata hai? Direct enter karo. Jock Boblo game alag hai — uska access code se koi connection nahi.</p>
-
-    <div class="buttons">
-      <button class="btn" onclick="openCodeModal()">🔓 Enter Promo Code</button>
-    </div>
-
+  <!-- JOKE GAME (promo-code entry is kept in the Daily Code section below) -->
+  <section class="card" id="jockBobloGameSection">
+    <h2>😂 JOCK BOBLO — JOKE BOLO GAME</h2>
+    <p class="muted">Punchline choose karo. Sahi jawab hua to XP + 💎 Coins milenge.</p>
     <div class="code-find-game" style="margin-top:16px;">
-      <h3>😂 JOCK BOBLO GAME</h3>
-      <p class="muted" style="margin-top:6px;">Punchline choose karo. Sahi jawab hua to XP + 💎 Coins milenge.</p>
-
       <div id="jockQuestion" class="joke-status" style="margin-top:12px;">Question load ho raha hai...</div>
 
       <div id="jockOptions" class="buttons" style="display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;"></div>
@@ -2022,8 +2010,6 @@ body:before,body:after{display:none!important}
 
       <div id="jockStatus" class="code-status"></div>
     </div>
-
-    <div id="codeQuickStatus" class="joke-status">Promo code se 24-hour unlimited access unlock karo.</div>
   </section>
 
   <section class="card daily-code-card" id="dailyCodeSection">
@@ -2116,28 +2102,22 @@ body:before,body:after{display:none!important}
 
   </section>
 
-
-  <!-- =========================
-       RECENT RESULTS
-  ========================== -->
-
-  <section class="card">
-
-    <h2>🕘 Recent Results</h2>
-
-    <div id="recentList" class="recent-list" style="margin-top:15px;">
-      <div class="recent-item">
-        Nothing here yet.
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- =========================
+<!-- =========================
        ABOUT
   ========================== -->
 
+</div>
+
+
+
+<section class="fb-readmore-shell" id="fbReadMoreSection" aria-label="More information">
+  <div class="fb-readmore-intro">
+    <strong>📚 More about FunBox</strong>
+    <span>Guides, details, privacy and help — all in one place.</span>
+  </div>
+  <button class="btn secondary fb-read-toggle" id="fbReadMoreToggle" type="button" aria-expanded="false" aria-controls="fbMoreContent" onclick="window.toggleFunboxMore()">＋ Read more</button>
+</section>
+<div id="fbMoreContent" class="fb-more-collapsed">
   <section class="card">
 
     <h2>ℹ️ About FunBox</h2>
@@ -2150,11 +2130,7 @@ body:before,body:after{display:none!important}
 
   </section>
 
-</div>
-
-
-
-<section id="funboxGuides" class="fb-info-section" aria-labelledby="funboxGuidesTitle">
+  <section id="funboxGuides" class="fb-info-section" aria-labelledby="funboxGuidesTitle">
   <h2 id="funboxGuidesTitle">📘 FunBox Guides & Help</h2>
   <p>Quick guides for using FunBox. Follow the instructions shown inside each game, because individual rounds and features may change as the site is updated.</p>
   <div class="fb-info-grid">
@@ -2220,6 +2196,19 @@ body:before,body:after{display:none!important}
   <p class="fb-info-note">Click the email link to send your thoughts. Please never include passwords or verification codes in your message.</p>
 </section>
 
+  <section class="fb-info-section" id="funboxFaq" aria-labelledby="funboxFaqTitle">
+  <h2 id="funboxFaqTitle">❓ FunBox FAQ</h2>
+  <p>Quick answers — no boring manual.</p>
+  <div class="fb-seo-faq" id="fbFaqAnswers">
+      <details><summary>FunBox kya hai?</summary><p>FunBox ek quick entertainment site hai jahan jokes, roasts, random facts, mini-games, daily drops aur friend challenges milte hain.</p></details>
+      <details><summary>Daily Drop kya karta hai?</summary><p>Har din ek naya challenge prompt milta hai. Result nikalke friend ko share kar sakte ho.</p></details>
+      <details><summary>Friend ko challenge kaise bheju?</summary><p>Daily Drop ke “Challenge a Friend” button se share/copy karo. Link khulne par friend ko wahi challenge dikhaya jayega.</p></details>
+      <details><summary>XP aur coins same hain?</summary><p>Nahi. FunBox mein XP progression ke liye hai aur coins alag reward/shop system ke liye.</p></details>
+      <details><summary>FunBox mobile par chalega?</summary><p>Haan, layout mobile screens ke liye responsive hai.</p></details>
+    </div>
+</section>
+</div>
+
 <footer>
   FunBox © 2026 • Boredom? Not Today.
   <nav class="fb-footer-links" aria-label="Helpful pages">
@@ -2231,6 +2220,26 @@ body:before,body:after{display:none!important}
   </nav>
 </footer>
 
+
+<!-- FUNBOX RESULT MESSAGE MODAL -->
+<div id="fbResultMailModal" class="modal fb-result-mail-modal" role="dialog" aria-modal="true" aria-labelledby="fbResultMailSubject" onclick="if(event.target===this)closeFunboxResultMail()">
+  <article class="fb-result-mail-card">
+    <div class="fb-mail-topline"><span>FUNBOX INBOX</span><button type="button" class="fb-mail-close" aria-label="Close result" onclick="closeFunboxResultMail()">✕</button></div>
+    <div class="fb-mail-envelope">📨</div>
+    <div class="fb-mail-caption">NEW MESSAGE · YOUR RESULT IS READY</div>
+    <div class="fb-mail-meta"><span>From</span><strong>FunBox</strong></div>
+    <div class="fb-mail-meta"><span>To</span><strong>You</strong></div>
+    <div class="fb-mail-subject-label">Subject</div>
+    <h2 id="fbResultMailSubject">Your FunBox result</h2>
+    <div class="fb-mail-body" id="fbResultMailBody" aria-live="polite"></div>
+    <div class="fb-mail-time" id="fbResultMailTime"></div>
+    <div class="fb-mail-actions">
+      <button class="btn" type="button" onclick="shareResult()">📤 Share result</button>
+      <button class="btn secondary" type="button" onclick="copyFunboxResultMail()">📋 Copy</button>
+      <button class="btn secondary" type="button" onclick="closeFunboxResultMail()">Close</button>
+    </div>
+  </article>
+</div>
 
 <!-- =========================
      FUNBOX SHOP MODAL
@@ -3296,7 +3305,7 @@ body:before,body:after{display:none!important}
   function scrollToAccessCode() {
 
     const section =
-      document.getElementById("accessCodeSection");
+      document.getElementById("dailyCodeSection");
 
     if (!section) return;
 
@@ -3462,55 +3471,15 @@ body:before,body:after{display:none!important}
 
 
   /* =========================================================
-     RECENT RESULTS
+     RECENT RESULTS REMOVED — clear old local history.
   ========================================================= */
 
-  function addRecent(text) {
-
-    let recent =
-      JSON.parse(
-        localStorage.getItem(STORAGE.recent) || "[]"
-      );
-
-    recent.unshift(text);
-
-    recent = recent.slice(0, 8);
-
-    localStorage.setItem(
-      STORAGE.recent,
-      JSON.stringify(recent)
-    );
-
-    renderRecent();
-    if (window.funboxCloudSave) window.funboxCloudSave();
-
+  function addRecent() {
+    try { localStorage.removeItem(STORAGE.recent); } catch (e) {}
   }
 
-
   function renderRecent() {
-
-    const list =
-      document.getElementById("recentList");
-
-    const recent =
-      JSON.parse(
-        localStorage.getItem(STORAGE.recent) || "[]"
-      );
-
-    if (!recent.length) {
-
-      list.innerHTML =
-        '<div class="recent-item">Nothing here yet.</div>';
-
-      return;
-
-    }
-
-    list.innerHTML =
-      recent.map(item =>
-        `<div class="recent-item">${escapeHTML(item)}</div>`
-      ).join("");
-
+    try { localStorage.removeItem(STORAGE.recent); } catch (e) {}
   }
 
 
@@ -3557,12 +3526,18 @@ body:before,body:after{display:none!important}
 
     }
 
-    document.getElementById("result").textContent = text;
+    const resultBox = document.getElementById("result");
+    resultBox.textContent = text;
+    resultBox.classList.remove("empty");
 
-    document.getElementById("result")
-      .classList.remove("empty");
-
-    addRecent(text);
+    const subjects = {
+      excuse: "Your excuse has arrived",
+      future: "A message from your future",
+      fact: "A random fact for you",
+      roast: "You have been roasted",
+      fate: "Your fate update is here"
+    };
+    openFunboxResultMail(subjects[type] || "Your FunBox result", text);
 
     addPoints(2, "generator");
       addCoins(2, "generator");
@@ -3616,13 +3591,10 @@ body:before,body:after{display:none!important}
     const text =
       randomItem(surpriseIdeas);
 
-    document.getElementById("result").textContent =
-      text;
-
-    document.getElementById("result")
-      .classList.remove("empty");
-
-    addRecent(text);
+    const resultBox = document.getElementById("result");
+    resultBox.textContent = text;
+    resultBox.classList.remove("empty");
+    openFunboxResultMail("Your FunBox surprise is here", text);
 
     addPoints(2, "surprise");
       addCoins(2, "surprise");
@@ -5103,7 +5075,7 @@ body:before,body:after{display:none!important}
       useDate: localStorage.getItem(STORAGE.useDate) || getToday(),
       extraUses: extraUses,
       unlimitedUntil: unlimitedUntil,
-      recent: JSON.parse(localStorage.getItem(STORAGE.recent) || "[]"),
+      recent: [],
       challenge: localStorage.getItem(STORAGE.challenge) || "",
       rewards: JSON.parse(localStorage.getItem(STORAGE.rewards) || "{}"),
       themePass: localStorage.getItem(STORAGE.themePass) === "1",
@@ -5135,7 +5107,7 @@ body:before,body:after{display:none!important}
     localStorage.setItem(STORAGE.unlimited, String(unlimitedUntil));
     localStorage.setItem(STORAGE.lastDay, data.lastDay || "");
     localStorage.setItem(STORAGE.useDate, data.useDate || getToday());
-    localStorage.setItem(STORAGE.recent, JSON.stringify(Array.isArray(data.recent) ? data.recent.slice(0,8) : []));
+    localStorage.removeItem(STORAGE.recent);
     localStorage.setItem(STORAGE.challenge, data.challenge || "");
     localStorage.setItem(STORAGE.rewards, JSON.stringify(data.rewards || {}));
     if (data.themePass) localStorage.setItem(STORAGE.themePass, "1");
@@ -6820,14 +6792,12 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJockRoom();close
       return '<a class="friend-msg-link" href="'+clean+'" target="_blank" rel="noopener noreferrer">'+url+'</a>';
     });
   }
-  window.toggleFunboxMore=function(){
-    const faq=document.getElementById('fbFaqAnswers');
-    const guides=document.getElementById('funboxGuides');
+  window.toggleFunboxMore=function(forceOpen){
+    const content=document.getElementById('fbMoreContent');
     const btn=document.getElementById('fbReadMoreToggle');
-    if(!faq||!btn)return;
-    const expanded=btn.getAttribute('aria-expanded')!=='true';
-    faq.classList.toggle('fb-more-collapsed',!expanded);
-    if(guides)guides.classList.toggle('fb-more-collapsed',!expanded);
+    if(!content||!btn)return;
+    const expanded=typeof forceOpen==='boolean' ? forceOpen : content.classList.contains('fb-more-collapsed');
+    content.classList.toggle('fb-more-collapsed',!expanded);
     btn.setAttribute('aria-expanded',String(expanded));
     btn.innerHTML=expanded?'− Read less':'＋ Read more';
   };
@@ -6860,6 +6830,41 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJockRoom();close
     if(m.type==='image'&&m.image)return '<div class="friend-msg-text">'+esc(m.text||'📷 Photo')+'</div><img class="friend-image" src="'+m.image+'" alt="Shared photo" loading="lazy">';
     return '<div class="friend-msg-text">'+linkify(m.text||'')+'</div>';
   };
+})();
+</script>
+
+<script id="funbox-result-mail-ui">
+(function(){
+  const modal = () => document.getElementById('fbResultMailModal');
+  window.openFunboxResultMail = function(subject, body){
+    const box = modal();
+    if(!box) return;
+    const subjectEl = document.getElementById('fbResultMailSubject');
+    const bodyEl = document.getElementById('fbResultMailBody');
+    const timeEl = document.getElementById('fbResultMailTime');
+    if(subjectEl) subjectEl.textContent = String(subject || 'Your FunBox result');
+    if(bodyEl) bodyEl.textContent = String(body || '');
+    if(timeEl) timeEl.textContent = 'Received just now · ' + new Date().toLocaleString();
+    box.classList.add('show');
+    document.body.classList.add('fb-mail-open');
+  };
+  window.closeFunboxResultMail = function(){
+    const box = modal();
+    if(box) box.classList.remove('show');
+    document.body.classList.remove('fb-mail-open');
+  };
+  window.copyFunboxResultMail = async function(){
+    const text = document.getElementById('fbResultMailBody')?.textContent || '';
+    try{
+      if(navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+      else {
+        const field=document.createElement('textarea'); field.value=text; field.style.position='fixed'; field.style.opacity='0'; document.body.appendChild(field); field.select();
+        const ok=document.execCommand('copy'); field.remove(); if(!ok) throw new Error('copy unavailable');
+      }
+      if(typeof window.fbToast==='function') window.fbToast('📋 Result copied.');
+    }catch(e){ console.warn('Copy result failed',e); if(typeof window.fbToast==='function')window.fbToast('Copy nahi hua.'); }
+  };
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape') window.closeFunboxResultMail(); });
 })();
 </script>
 
