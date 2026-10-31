@@ -921,6 +921,45 @@ img,video{max-width:100%}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
+
+/* JOCK BOBLO — GAME UI REFRESH */
+.code-find-game{
+  position:relative;overflow:hidden;padding:clamp(18px,3vw,26px)!important;border-radius:24px!important;
+  border:1px solid rgba(168,85,247,.34)!important;
+  background:radial-gradient(circle at 95% 0%,rgba(236,72,153,.15),transparent 34%),linear-gradient(145deg,#171326,#10101b 58%,#111827)!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.06)!important;
+}
+.code-find-game h3{font-size:clamp(19px,3vw,25px)!important;letter-spacing:-.5px;margin:0 0 7px!important}
+.code-find-game>p{max-width:650px;color:#b8b2c8!important;line-height:1.55}
+.jb-solo-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 9px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);font-size:10px;letter-spacing:1.2px;color:#aaa}
+.jb-solo-meta strong{color:#d8b4fe;font-size:11px;letter-spacing:.5px}
+#jockQuestion{min-height:86px;display:flex;align-items:center;justify-content:center;padding:22px!important;margin:0!important;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.16),rgba(236,72,153,.09));border:1px solid rgba(192,132,252,.2);color:#fff!important;font-size:clamp(17px,2.4vw,22px)!important;font-weight:900;line-height:1.45;text-align:center}
+#jockOptions{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;margin-top:13px!important}
+#jockOptions .btn{width:100%;min-height:52px;padding:13px 16px!important;text-align:left!important;justify-content:flex-start;border:1px solid rgba(255,255,255,.1)!important;border-radius:14px!important;background:rgba(255,255,255,.055)!important;color:#f4f1fa!important;font-weight:750!important;white-space:normal;line-height:1.4}
+#jockOptions .btn:hover{border-color:rgba(192,132,252,.65)!important;background:rgba(139,92,246,.16)!important;transform:translateY(-1px)}
+#jockOptions .btn.shop-owned{background:linear-gradient(100deg,rgba(34,197,94,.18),rgba(34,197,94,.07))!important;border-color:rgba(74,222,128,.5)!important;color:#dcfce7!important}
+#jockOptions .btn:disabled{opacity:.58}
+#jockStatus{min-height:24px;padding:8px 10px;border-radius:12px;font-weight:800;line-height:1.45}
+#jockBobloRoomSection{border:1px solid rgba(34,211,238,.23)!important;background:radial-gradient(circle at 0% 0%,rgba(34,211,238,.1),transparent 34%),linear-gradient(145deg,#111827,#11101b)!important}
+.jb-room-launch>h3{font-size:clamp(21px,3vw,27px)!important}
+.jb-room-modal{backdrop-filter:blur(12px);background:rgba(3,5,12,.82)!important}
+.jb-room-box{background:linear-gradient(145deg,#171525,#0e111b)!important;border:1px solid rgba(168,85,247,.28)!important;border-radius:24px!important;padding:clamp(14px,3vw,25px)!important}
+.jb-room-head{padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.jb-room-head h2{font-size:clamp(19px,3vw,25px)!important}
+.jb-scorebar{margin:14px 0;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.07);gap:8px!important}
+.jb-scorebar>div{flex:1 1 100px;text-align:center;padding:7px 4px;color:#aaa;font-size:12px}
+.jb-scorebar strong{display:block;color:#fff;font-size:18px;margin-top:3px}
+.jb-player{background:linear-gradient(145deg,rgba(139,92,246,.13),rgba(255,255,255,.035))!important;border-color:rgba(255,255,255,.1)!important}
+.jb-question-card{margin:14px 0;padding:clamp(16px,3vw,24px)!important;border-radius:22px!important;background:radial-gradient(circle at 100% 0%,rgba(34,211,238,.1),transparent 35%),linear-gradient(145deg,rgba(124,58,237,.12),rgba(255,255,255,.035))!important;border-color:rgba(168,85,247,.2)!important}
+.jb-question-card #jbQuestion{font-size:clamp(19px,3vw,25px)!important;line-height:1.4!important;min-height:76px;display:flex;align-items:center}
+.jb-answer-grid{grid-template-columns:1fr!important;gap:10px!important}
+.jb-answer-grid button{min-height:50px;padding:14px 16px!important;border-radius:14px!important;background:rgba(255,255,255,.065)!important;border-color:rgba(255,255,255,.1)!important;line-height:1.4}
+.jb-answer-grid button:not(:disabled):hover{background:rgba(139,92,246,.2)!important;border-color:rgba(192,132,252,.5)!important}
+.jb-match-controls button,.jb-flow-big,.jb-room-btn{min-height:44px;transition:filter .16s,transform .16s}
+.jb-match-controls button:hover,.jb-flow-big:hover,.jb-room-btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+@media(min-width:700px){#jockOptions{grid-template-columns:1fr 1fr!important} .jb-answer-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:600px){.jb-room-box{width:100%;max-height:94dvh;padding:13px!important}.jb-question-card #jbQuestion{min-height:88px}.jb-room-grid{gap:8px}.jb-player{padding:10px}.jb-avatar{font-size:38px}.jb-chat{gap:10px}.jb-tools{grid-template-columns:1fr!important}}
+
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3529745369901340"
      crossorigin="anonymous"></script>
@@ -1609,7 +1648,7 @@ body:before,body:after{display:none!important}
 
   <section class="card jb-room-launch" id="jockBobloRoomSection">
     <h3>🎮 JOCK BOBLO — ONLINE ROOM</h3>
-    <p>Friend ke saath real-time room banao, code share karo, aur live score dekho.</p>
+    <p>Friend ke saath real-time room banao, code share karo aur 10-round match khelo. Har match mein question bank se fresh sawal aayenge.</p>
     <div class="jb-actions">
       <button class="jb-room-btn" onclick="openJockRoom()">🚪 Create / Join Room</button>
     </div>
@@ -1998,8 +2037,9 @@ body:before,body:after{display:none!important}
   <!-- JOKE GAME (promo-code entry is kept in the Daily Code section below) -->
   <section class="card" id="jockBobloGameSection">
     <h2>😂 JOCK BOBLO — JOKE BOLO GAME</h2>
-    <p class="muted">Punchline choose karo. Sahi jawab hua to XP + 💎 Coins milenge.</p>
+    <p class="muted">Punchline choose karo. Har baar naya sawal milega — 45+ questions ka bank. Sahi jawab par XP + 💎 Coins.</p>
     <div class="code-find-game" style="margin-top:16px;">
+      <div class="jb-solo-meta"><span>BOBLO QUESTION</span><strong id="jockCounter">READY</strong></div>
       <div id="jockQuestion" class="joke-status" style="margin-top:12px;">Question load ho raha hai...</div>
 
       <div id="jockOptions" class="buttons" style="display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;"></div>
@@ -4878,19 +4918,67 @@ body:before,body:after{display:none!important}
     {q:"Friend: Itna late kyun aaye?", a:["Traffic tha.","Time se mera personal issue hai.","Main jaldi nikla tha."], c:1},
     {q:"Brain at 2 AM:", a:["Chalo so jaate hain.","Kal ka kaam yaad hai?", "Ek random embarrassing memory yaad karte hain."], c:2},
     {q:"Phone battery 1%:", a:["Main safe hoon.","Ab asli survival game start.","Charger ki zaroorat nahi."], c:1},
-    {q:"Exam ke ek din pehle:", a:["Preparation complete.","Syllabus dekh ke confidence uninstall.","Aaj holiday hai."], c:1}
+    {q:"Exam ke ek din pehle:", a:["Preparation complete.","Syllabus dekh ke confidence uninstall.","Aaj holiday hai."], c:1},
+{q:"Group project mein tumhara role?",a:["Ideas dena aur gayab hona.", "Kaam karna aur credit sabko dena.", "Deadline yaad dilana."],c:0},
+{q:"Jab teacher bole 'surprise test'…",a:["Surprise party samjho.", "Brain loading screen par atak gaya.", "Pehle date confirm karo."],c:1},
+{q:"Phone 1% par aur charger doosre room mein:",a:["Mission impossible start.", "Brightness 100% kar do.", "Battery ko ignore karo."],c:0},
+{q:"Friend bole 'ek secret bataun?'",a:["Pehle NDA sign karao.", "Haan, par popcorn ke saath.", "Group chat mein bhej do."],c:1},
+{q:"Online class mein teacher naam le le:",a:["Present ma'am, soul bhi present.", "Wi-Fi ko blame karo.", "Camera ke peeche chhup jao."],c:0},
+{q:"Jab tum 'bas 5 minute' ke liye phone uthao:",a:["5 minute hi hote hain.", "Achanak 2 ghante teleport.", "Phone khud band ho jata hai."],c:1},
+{q:"Exam paper dekhte hi pehla thought:",a:["Ye chapter syllabus mein tha?", "Aaj handwriting improve karunga.", "Paper ko good morning."],c:0},
+{q:"Friend tumhara charger maang kar wapas na kare:",a:["Charger ka missing poster.", "Uske phone ko adopt kar lo.", "Charger ko retirement do."],c:0},
+{q:"Jab ghar mein koi bole 'guests aa rahe hain':",a:["Room clean? Main kaun?", "Snacks ka stock check.", "Doorbell ko mute."],c:0},
+{q:"Autocorrect tumhara message bigaad de:",a:["Phone ko explain karo.", "Message ko legal notice bhejo.", "Autocorrect ko promotion."],c:0},
+{q:"Jab tumhara favourite song shuffle mein aaye:",a:["Skip kar do.", "Concert mode ON.", "Volume zero."],c:1},
+{q:"Friend bole 'main raste mein hoon' aur location ghar ki ho:",a:["GPS ko bhi acting sikha di.", "Traffic ka excuse ready.", "Usko medal do."],c:0},
+{q:"Jab alarm snooze 7th time ho:",a:["Ab alarm hi thak gaya.", "Naya alarm hire karo.", "Aaj Monday cancel."],c:0},
+{q:"Fridge 4th time kholne par:",a:["Naya food spawn hoga.", "Fridge se life advice lo.", "Light band karke dekho."],c:0},
+{q:"Jab kisi ne 'we need to talk' bheja:",a:["Heart rate update.", "Reply: meeting link bhejo.", "Phone airplane mode."],c:0},
+{q:"Photo lene ke baad 38 retakes:",a:["Ek perfect angle abhi baaki.", "Camera ko blame.", "Pehli photo hi best."],c:0},
+{q:"Jab Wi-Fi disconnect ho aur mobile data bhi khatam:",a:["Digital detox forced.", "Router ko poem sunao.", "Internet ko call karo."],c:0},
+{q:"Jab koi bole 'main bas ek episode dekhunga':",a:["Season finale tak seedha.", "Credits ke baad band.", "TV ko timer do."],c:0},
+{q:"Tumhara pen exam ke beech band ho jaye:",a:["Pen ko pep talk.", "Backup pen nikalo.", "Ink ko email karo."],c:1},
+{q:"Jab dost tumhari joke par na hase:",a:["Audience change karo.", "Joke ko second chance.", "Khud hi laugh track."],c:2},
+{q:"Jab camera accidentally front camera khol de:",a:["Unexpected reality check.", "Phone ko sorry bolo.", "Camera ko uninstall."],c:0},
+{q:"Jab teacher bole 'pair bana lo':",a:["Mera partner? Wi-Fi.", "Dost ko scan karo.", "Solo mode activate."],c:1},
+{q:"Jab tumhara naam attendance mein miss ho:",a:["Free period ka sapna.", "Present loudly bolo.", "Attendance ko update do."],c:1},
+{q:"Jab phone storage full ho:",a:["10,000 screenshots review.", "Phone ko extra pocket do.", "Gallery se negotiation."],c:0},
+{q:"Jab kisi ne tumhe 'kal yaad dilana' bola:",a:["Kal ka kal dekhenge.", "Reminder abhi set.", "Usko khud yaad rahega."],c:1},
+{q:"Jab tum kisi room mein jaakar bhool jao kyun aaye:",a:["Brain ne tab switch kiya.", "Room se clue maango.", "Wapas jao, memory refresh."],c:2},
+{q:"Jab friend bole 'honest opinion dena':",a:["Diplomatic mode ON.", "Sach ka premium version.", "Pehle disclaimer."],c:2},
+{q:"Jab laptop update 99% par ruk jaye:",a:["99 hi final number hai.", "Patience ka final boss.", "Laptop ko chai do."],c:1},
+{q:"Jab tum galti se old message par react kar do:",a:["Internet se gaayab.", "Phone ko lock karo.", "Reaction ko explain karo."],c:0},
+{q:"Jab koi bole 'bas ek bite':",a:["Plate ka 80% missing.", "Ek bite measured hota hai.", "Fork ko witness banao."],c:0},
+{q:"Jab tumhara favourite snack khatam ho:",a:["Aaj ka din officially cancel.", "Packet ko check again.", "Snack ko tribute."],c:0},
+{q:"Jab group photo mein tumhari aankh band ho:",a:["Sabki photo retake.", "Blink timing legendary.", "Photo ko crop."],c:0},
+{q:"Jab kisi ka 'typing…' 3 minute chale:",a:["Novel likh raha hai.", "Message ka trailer aa raha.", "Network ko blame."],c:1},
+{q:"Jab tumhe kisi ka naam yaad na aaye:",a:["Bhai/yaar universal solution.", "Seedha surname pucho.", "Naam guess roulette."],c:0},
+{q:"Jab tumhara plan cancel ho jaye:",a:["Unexpected free time unlocked.", "Calendar ko thank you.", "Plan ko refund."],c:0},
+{q:"Jab teacher bole 'last warning':",a:["Warning ka season 2.", "Ab seriously suno.", "Notebook mein quote likho."],c:1},
+{q:"Jab tum ek word Google karne jao aur 12 tabs khul jaaye:",a:["Research rabbit hole.", "Tabs ko attendance do.", "Browser ko nap."],c:0},
+{q:"Jab dost tumhari fries mein se bina pooche le:",a:["Friendship terms update.", "Fries par boundary line.", "Ketchup security."],c:1},
+{q:"Jab tumhara favourite creator naya video daale:",a:["Notifications ka kaam safal.", "Video ko kal dekhenge.", "Comment pehle, video baad."],c:0},
+{q:"Jab tumhe neend aaye par phone interesting ho:",a:["Sleep mode negotiate.", "Bas ek aur scroll.", "Phone ko bedtime story."],c:1}
   ];
 
   let jockRound = null;
   let jockLocked = false;
+  let jockDeck = [];
+  let jockSeen = 0;
 
   function newJockBoblo() {
-    jockRound = randomItem(jockRounds);
+    if (!jockDeck.length) {
+      jockDeck = jockRounds.map((_, i) => i);
+      for (let i = jockDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [jockDeck[i], jockDeck[j]] = [jockDeck[j], jockDeck[i]]; }
+    }
+    jockRound = jockRounds[jockDeck.pop()];
+    jockSeen++;
     jockLocked = false;
     const q = document.getElementById("jockQuestion");
     const options = document.getElementById("jockOptions");
     const status = document.getElementById("jockStatus");
     if (q) q.textContent = "😂 " + jockRound.q;
+    const counter = document.getElementById("jockCounter"); if (counter) counter.textContent = `QUESTION ${jockSeen} • ${jockRounds.length} IN BANK`;
     if (status) status.textContent = "";
     if (options) {
       options.innerHTML = jockRound.a.map((text, i) =>
@@ -6302,7 +6390,80 @@ const JB_QUESTIONS=[
  {q:"Jab answer button active ho:",a:["Apna option choose karo.","Sab buttons dabao.","Room refresh karo."],c:0},
  {q:"Jab next round load ho:",a:["Naya question padho.","Previous answer repeat.","Browser close."],c:0},
  {q:"Jab opponent galat kare:",a:["Apna answer do.","Usko distract karo.","Match cancel."],c:0},
- {q:"Jab XP milne wala ho:",a:["Fast aur accurate raho.","Answer mat do.","Timer reset karo."],c:0}
+ {q:"Jab XP milne wala ho:",a:["Fast aur accurate raho.","Answer mat do.","Timer reset karo."],c:0},
+{q:"School bell bajte hi sabse pehle kya hota hai?",a:["Bag zip race.", "Class se exit speedrun.", "Teacher se extra homework."],c:1},
+{q:"Exam mein question familiar lage par answer yaad na aaye:",a:["Brain cache clear.", "Question ko stare karo.", "Option se dosti."],c:0},
+{q:"Friend ka '5 min away' ka actual matlab?",a:["5 minute exact.", "Abhi shoes dhoond raha.", "Time ka flexible version."],c:2},
+{q:"Jab group chat mein 'guys urgent' aaye:",a:["Sab online.", "Koi context nahi.", "100 memes pehle."],c:0},
+{q:"Phone ki battery 2% aur map open hai:",a:["Brightness badhao.", "Charger ka GPS.", "Har turn par dua."],c:2},
+{q:"Teacher bole 'ye bahut important hai':",a:["Exam mein aa sakta hai.", "Notebook mein star.", "Dono, aur tension bhi."],c:2},
+{q:"Jab tumhara naam galat pronounce ho:",a:["Naya identity unlock.", "Politely correct.", "Naam ka remix."],c:1},
+{q:"Online meeting mein mic unmute reh jaaye:",a:["Room ki awaaz broadcast.", "Mic ko blame.", "Meeting se vanish."],c:0},
+{q:"Dost tumhari seat par baith jaye:",a:["Seat reservation proof.", "Rock-paper-scissors.", "Nayi seat adopt."],c:0},
+{q:"Jab teacher 'randomly kisi ko solve karne bulaun' kahe:",a:["Eye contact avoid.", "Board marker chhupa do.", "Confident walk, blank mind."],c:2},
+{q:"Jab tumhara favourite snack lunchbox mein na ho:",a:["Lunchbox conspiracy.", "Trade market khol do.", "Water se kaam."],c:0},
+{q:"Jab class ka topper bole 'maine kuch nahi padha':",a:["Trust issues unlocked.", "Uske notes maango.", "Exam postpone."],c:0},
+{q:"Jab friend tumhe spoiler dene lage:",a:["Ears airplane mode.", "Story mute.", "Spoiler tax lagao."],c:0},
+{q:"Jab tumhare phone par 'Storage almost full' aaye:",a:["Screenshots ka audit.", "Apps ko eviction notice.", "Gallery se negotiation."],c:0},
+{q:"Jab group assignment mein sab 'I'll do my part' bole:",a:["Google Doc empty.", "Ek banda sab kare.", "Deadline sabko yaad aaye."],c:2},
+{q:"Jab teacher homework check karne aaye:",a:["Notebook open, confidence closed.", "Page number guess.", "Pencil se speed writing."],c:0},
+{q:"Jab tumhara alarm bajta hai aur sapna best part par ho:",a:["Snooze cinematic.", "Dream ka sequel.", "Alarm ko villain."],c:1},
+{q:"Jab kisi ne tumhe 'seen' karke reply na diya:",a:["Message museum.", "Busy assume.", "Typing bubble ka wait."],c:1},
+{q:"Jab dost bole 'ek match aur':",a:["Bas ek.", "Aaj raat tournament.", "Controller hide."],c:1},
+{q:"Jab tumhara favourite app update ho kar layout badal de:",a:["Settings treasure hunt.", "Old version ko yaad.", "Tutorial dekhna."],c:0},
+{q:"Jab tumhe kisi ka birthday yaad aaye ek din late:",a:["Time-zone excuse.", "Late but legendary wish.", "Calendar ko blame."],c:1},
+{q:"Jab teacher bole 'books band':",a:["Relief unlocked.", "Ab oral test.", "Page ko bookmark."],c:1},
+{q:"Jab tumhara pen kisi aur ke paas reh jaaye:",a:["Pen adoption case.", "Wapas maango.", "Naya pen se dosti."],c:1},
+{q:"Jab tum 10 minute ke liye nap lo:",a:["10 minute exact.", "Sunset tak offline.", "Alarm snooze marathon."],c:1},
+{q:"Jab tum kisi ko wave karo aur woh kisi aur ko wave kar raha ho:",a:["Wave ko stretch.", "Phone check acting.", "Ground open ho jaye."],c:1},
+{q:"Jab tumhare headphones ek side se hi chale:",a:["Mono DJ mode.", "Wire ko angle do.", "Headphones ko retirement."],c:0},
+{q:"Jab tumhara internet speed test 0.2 Mbps dikhaye:",a:["Loading ka meditation.", "Router ko pep talk.", "Data ko ration."],c:2},
+{q:"Jab friend bole 'main secret rakhunga':",a:["Screenshot risk.", "Pehle test secret.", "Trust but verify."],c:2},
+{q:"Jab tumhare saamne last pizza slice ho:",a:["Diplomacy meeting.", "Rock-paper-scissors.", "Slice ko equal divide."],c:2},
+{q:"Jab tum exam hall mein extra sheet maango:",a:["Confidence ka trailer.", "Handwriting ka workout.", "Paper ka expansion pack."],c:0},
+{q:"Jab teacher bole 'parents ko bulao':",a:["Calendar suddenly busy.", "Reason calmly pucho.", "School gate se reverse."],c:1},
+{q:"Jab tumhare phone par 47 notifications ho:",a:["Sab ek saath clear.", "Important pehle.", "Notification archaeology."],c:2},
+{q:"Jab tumhare dost ka joke samajh na aaye:",a:["Hanso aur baad mein pucho.", "Context maango.", "Joke ko repeat karao."],c:1},
+{q:"Jab tumhe class mein presentation deni ho:",a:["Slides ready, confidence loading.", "Mic ko stare.", "Topic ko improvise."],c:0},
+{q:"Jab tumhara favourite player/character lose kare:",a:["Match analysis mode.", "Referee ko blame.", "Next episode ka wait."],c:0},
+{q:"Jab group selfie mein sab ready aur ek banda blink kare:",a:["Retake number 19.", "Blink champion award.", "Photo ko candid bolo."],c:0},
+{q:"Jab tumhare room mein koi cheez kho jaye:",a:["Last seen location.", "Bed ke neeche search.", "Ghar walon ko detective."],c:1},
+{q:"Jab tum ek simple calculation galat kar do:",a:["Calculator se appeal.", "Maths ko block.", "Step dobara check."],c:2},
+{q:"Jab friend bole 'don't laugh':",a:["Ab toh laugh aayegi.", "Poker face.", "Pehle story suno."],c:0},
+{q:"Jab tumhara phone 100% charge ho jaye:",a:["Charger unplug mission.", "100% screenshot.", "Abhi 101% ka wait."],c:0},
+{q:"Jab tumhare paas free period ho:",a:["Rest ya revision.", "Classroom tournament.", "Homework complete karne ka rare chance."],c:2},
+{q:"Jab koi tumhari playlist maange:",a:["Music taste expose.", "One song only.", "Playlist ka interview."],c:0},
+{q:"Jab tum galat classroom mein enter kar jao:",a:["Guest appearance.", "Map check.", "Confidence se reverse."],c:0},
+{q:"Jab teacher bole 'simple question hai':",a:["Simple kis ke liye?", "Question ko respect.", "Pehle options padho."],c:0},
+{q:"Jab tumhara dost har game mein rules badle:",a:["Rulebook print.", "Referee appoint.", "Usko game designer banao."],c:1},
+{q:"Jab tumhe ek hi din mein 3 deadlines milen:",a:["Priority list banao.", "Calendar ko resign.", "Sabko 'coming soon'."],c:0},
+{q:"Jab tumhare phone par unknown number call kare:",a:["Pehle caller ID.", "Dramatic hello.", "Phone ko answer karne do."],c:0},
+{q:"Jab tumhare dost ka 'I'm fine' suspicious lage:",a:["Pucho kya hua.", "Meme bhejo.", "Tea ready rakho."],c:0},
+{q:"Jab tumhara favourite show cliffhanger par ruk jaye:",a:["Next episode immediately.", "Theory thread banao.", "Writer ko email."],c:1},
+{q:"Jab tum ek kaam karne jao aur doosra kaam yaad aa jaye:",a:["Task switching champion.", "List mein note.", "Pehla kaam bhool jao."],c:1},
+{q:"Jab tumhe kisi ka message samajh na aaye:",a:["Clarify pucho.", "3 interpretations banao.", "'Haan' reply."],c:0},
+{q:"Jab dost tumhe game mein carry karne bole:",a:["Teamwork mode.", "Skill issue speech.", "Training montage."],c:0},
+{q:"Jab tumhara favourite snack share karna pade:",a:["Equal pieces.", "Share with conditions.", "Packet ko hide."],c:0},
+{q:"Jab tumne 20 tabs khol rakhe hon:",a:["Research genius.", "Tab cleanup day.", "Ek tab mein sab."],c:1},
+{q:"Jab tumhara phone update ke baad restart ho:",a:["Update complete check.", "Phone ko welcome back.", "Password yaad karo."],c:1},
+{q:"Jab tumhare dost ka plan 'dekhte hain' ho:",a:["Date aur time confirm.", "Plan ko pending rakho.", "Calendar ko suspense."],c:0},
+{q:"Jab tum class mein answer jaante ho par sure nahi:",a:["Reason ke saath answer.", "Pehle confidence build.", "Question ko pass."],c:0},
+{q:"Jab tumhare room mein sab log ready aur host missing:",a:["Host ko call.", "Snacks start.", "Room ka naam change."],c:0},
+{q:"Jab match ka score tie ho:",a:["Last round full focus.", "Chat spam.", "Scoreboard refresh."],c:0},
+{q:"Jab tumhe pata chale kal holiday hai:",a:["Instant celebration.", "Homework ka kya?", "Alarm ko uninstall nahi, off."],c:0},
+{q:"Jab tumhari favourite app crash ho:",a:["Reopen aur check.", "Phone ko restart only if needed.", "App ko dramatic goodbye."],c:0},
+{q:"Jab tumhara friend tumhe 'one last question' puche:",a:["Question number 12.", "Answer do, phir break.", "Quiz show start."],c:1},
+{q:"Jab tumhara team member late join kare:",a:["Quick recap do.", "Rules repeat.", "Score ka screenshot."],c:0},
+{q:"Jab tumhare saamne do equally good choices hon:",a:["Pros-cons compare.", "Random pick.", "Decision postpone."],c:0},
+{q:"Jab tum apni hi old post dekh lo:",a:["Nostalgia mode.", "Caption audit.", "Like count check."],c:0},
+{q:"Jab koi bole 'trust the process':",a:["Process ka status pucho.", "Step by step chalo.", "Process ko follow request."],c:1},
+{q:"Jab tumhari team ek point se lead kare:",a:["Calm rehkar play.", "Celebration early.", "Opponent ko underestimate."],c:0},
+{q:"Jab room mein sab ek saath bolne lagen:",a:["One by one baat.", "Mute all button dhoondo.", "Chat mein vote."],c:0},
+{q:"Jab tum question ka answer jaldi de do:",a:["Submit se pehle check.", "Victory dance.", "Next question ready."],c:0},
+{q:"Jab friend bole 'main nahi hara, game lag hua':",a:["Replay check.", "Friendly rematch.", "Wi-Fi ko judge."],c:1},
+{q:"Jab tumhe ek naya skill seekhna ho:",a:["Small practice daily.", "Ek tutorial dekho aur expert.", "Pehle gear kharido."],c:0},
+{q:"Jab tumhare paas sirf 10 seconds ho:",a:["Question pe focus.", "Chat mein type.", "Options ko carefully scan."],c:0},
+{q:"Jab tumhare friend ko answer galat mile:",a:["Correct answer explain.", "Uska mazaak banao.", "Next round encourage."],c:0}
 ];
 
 function jbStatus(t){const e=document.getElementById('jbRoomStatus');if(e)e.textContent=t;}
@@ -6536,7 +6697,7 @@ function renderJBRoom(){
   document.getElementById('jbRoomNameDisplay').textContent=d.roomName?('🏠 '+d.roomName):'';
   const players=jbPlayerList(d);
   document.getElementById('jbPlayerCount').textContent=players.length+'/4';
-  document.getElementById('jbRoundText').textContent=d.status==='playing'?`${d.round}/5`:(d.status==='finished'?'Finished':'Waiting');
+  document.getElementById('jbRoundText').textContent=d.status==='playing'?`${d.round}/10`:(d.status==='finished'?'Finished':'Waiting');
   document.getElementById('jbPlayers').innerHTML=players.map(p=>`<div class="jb-player"><div class="jb-avatar">${p.avatar||'🙂'}</div><strong>${jbEsc(p.name)}</strong><div class="jb-status">${p.uid===d.hostUid?'👑 HOST':''} • ${p.uid===jbUser?.uid?'YOU':''}</div><div class="jb-player-score">⭐ ${Number(p.score||0)} XP</div></div>`).join('');
   document.getElementById('jbScoreList').innerHTML=[...players].sort((a,b)=>Number(b.score||0)-Number(a.score||0)).map((p,i)=>`<div class="jb-score-row"><span>#${i+1} ${jbEsc(p.name)}</span><strong>${Number(p.score||0)} XP</strong></div>`).join('');
   const q=JB_QUESTIONS[Number(d.questionIndex||0)%JB_QUESTIONS.length];
@@ -6551,7 +6712,7 @@ function renderJBRoom(){
     const myAnsweredRound=Number(d.players?.[jbUser?.uid]?.answeredRound||0);
     const currentRound=Number(d.round||0);
     document.getElementById('jbAnswers').innerHTML=q.a.map((a,i)=>`<button type="button" data-round="${currentRound}" onclick="answerJock(${i})" ${myAnsweredRound===currentRound?'disabled':''}>${i+1}. ${jbEsc(a)}</button>`).join('');
-    document.getElementById('jbMatchResult').textContent=`Round ${d.round}/5 — answer fast.`;
+    document.getElementById('jbMatchResult').textContent=`Round ${d.round}/10 — answer fast. ${JB_QUESTIONS.length} questions in the room bank.`;
     startJBTimer(d.roundStartedAt||Date.now());
   }else if(d.status==='finished'){
     const results=Array.isArray(d.finalResults)&&d.finalResults.length?d.finalResults:jbFinalResultData(d);
@@ -6563,7 +6724,7 @@ function renderJBRoom(){
     document.getElementById('jbMatchResult').textContent=tied.length>1?`🤝 Draw — ${topScore} XP`:(winner?`🏆 ${winner.name} wins with ${topScore} XP.`:'Result unavailable.');
     stopJBTimer();
   }else{
-    document.getElementById('jbQuestion').textContent=players.length<2?'Friend ko room code bhejo — at least 2 players needed.':'Players ready. Host can start match.';
+    document.getElementById('jbQuestion').textContent=players.length<2?'Friend ko room code bhejo — at least 2 players needed.':'Players ready. Host can start a 10-question match.';
     document.getElementById('jbAnswers').innerHTML='';
     document.getElementById('jbMatchResult').textContent=''; stopJBTimer();
   }
@@ -6587,7 +6748,7 @@ function jbPickQuestionOrder(history){
   let pool=JB_QUESTIONS.map((_,i)=>i).filter(i=>!seen.has(i));
   if(pool.length<5) pool=JB_QUESTIONS.map((_,i)=>i);
   for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
-  return pool.slice(0,5);
+  return pool.slice(0,10);
 }
 
 window.startJockMatch=async()=>{
@@ -6596,7 +6757,7 @@ window.startJockMatch=async()=>{
   const order=jbPickQuestionOrder(jbRoomData.questionHistory||[]);
   const history=[...(jbRoomData.questionHistory||[]),...order].slice(-Math.max(20,JB_QUESTIONS.length));
   const freshPlayers=Object.fromEntries(Object.entries(jbRoomData.players||{}).map(([uid,p])=>[uid,{...p,score:0,answeredRound:0}]));
-  await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{status:'playing',round:1,questionOrder:order,questionHistory:history,questionIndex:order[0],players:freshPlayers,roundStartedAt:Date.now(),updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'MATCH START! 5 fresh questions — 10 seconds each.',at:Date.now()})});
+  await updateDoc(doc(jbDb,'jockRooms',jbRoomId),{status:'playing',round:1,questionOrder:order,questionHistory:history,questionIndex:order[0],players:freshPlayers,roundStartedAt:Date.now(),updatedAt:serverTimestamp(),messages:arrayUnion({name:'🤖 Boblo',text:'MATCH START! 10 fresh questions — 10 seconds each.',at:Date.now()})});
   jbAnsweredRound=0;
   showJBReaction('GO!','🚀');
 };
@@ -6654,7 +6815,7 @@ async function jbAdvanceIfReady(){
       const everyone=players.length>0&&players.every(p=>Number(p.answeredRound||0)>=round);
       const timedOut=Date.now()-Number(d.roundStartedAt||0)>=10000;
       if(!everyone&&!timedOut)return;
-      if(round>=5){
+      if(round>=10){
         const finalResults=players
           .map(p=>({uid:p.uid,name:p.name,avatar:p.avatar||'🙂',score:Number(p.score||0)}))
           .sort((a,b)=>Number(b.score||0)-Number(a.score||0)||String(a.name||'').localeCompare(String(b.name||'')));
